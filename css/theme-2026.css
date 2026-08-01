@@ -318,3 +318,193 @@ a:hover { color: var(--p-brand); }
   .products-item, .btn, .header { transition: none; }
   .products-item:hover { transform: none; }
 }
+
+
+/* =========================================================================
+   بخش دوم — صفحات داخلی
+   (همان توکن‌های بالا؛ چیزی جز رنگ، فاصله و گردی تغییر نمی‌کند)
+   ========================================================================= */
+
+
+/* ------------------------------------------- 13. لیست فروشگاه و فیلترها */
+.store-sidebar-categories,
+.store-sidebar-search,
+.store-sidebar-filters-item {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+}
+.store-sidebar-categories { padding: 16px; }
+.store-sidebar-categories-title { font-size: 15px; font-weight: 600; }
+.store-sidebar-categories-link { font-size: 13px; color: var(--p-ink-2); }
+.store-sidebar-categories-link:hover { color: var(--p-brand); }
+.store-sidebar-categories-item { margin-top: 8px; }
+
+.store-sidebar-filters-item { margin: 0 0 12px; overflow: hidden; }
+.store-sidebar-filters-item-title { font-size: 14px; font-weight: 600; }
+.store-sidebar-filters-item-link { padding: 12px 16px; color: var(--p-ink); }
+.store-sidebar-filters-item-link:hover { background: #F5F7FA; }
+.store-sidebar-filters-item-label { font-size: 13px; color: var(--p-ink-2); cursor: pointer; }
+
+.store-sorting {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 10px 14px;
+}
+.store-sorting-title { font-size: 13px; color: var(--p-ink-3); font-weight: 500; }
+.store-sorting-item { font-size: 13px; color: var(--p-ink-2); padding: 4px 10px; border-radius: var(--p-radius-pill); }
+.store-sorting-item.active,
+.store-sorting-item:hover { background: #EEF1F6; color: var(--p-ink); }
+
+/* نوار فیلتر شناور موبایل: از نوار چسبیده به کف به دو دکمهٔ معلق */
+.store-filters-buttons {
+  padding: 0 14px 14px;
+  background: linear-gradient(to top, rgba(241,243,247,.96) 55%, rgba(241,243,247,0));
+  border: 0;
+}
+.store-filters-buttons .btn {
+  border-radius: var(--p-radius-pill);
+  box-shadow: var(--p-shadow-2);
+}
+.store-filters-search { border-radius: var(--p-radius) var(--p-radius) 0 0; }
+
+
+/* ------------------------------------------------ 14. سبد خرید و تسویه */
+.cart-item {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.cart-item-image-element { border-radius: var(--p-radius-sm); background: #F7F9FC; }
+.cart-item-title { font-size: 15px; font-weight: 500; }
+.cart-item-subtitle, .cart-item-id { font-size: 13px; color: var(--p-ink-3); }
+.cart-item-price-compare { color: var(--p-ink-3); }
+.cart-item-remove { color: var(--p-ink-3); font-size: 13px; }
+.cart-item-remove:hover { color: var(--p-brand); }
+.cart-item-quantity-input { text-align: center; }
+
+.cart-details {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 18px;
+}
+.cart-details-total-value { font-size: 20px; font-weight: 700; color: var(--p-ink); }
+.cart-details-discount-value { color: var(--p-brand); }
+.cart-coupons-code-input { border-radius: var(--p-radius-sm); }
+
+.cart-checkout-form,
+.cart-checkout-shipping,
+.cart-checkout-contact {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 18px;
+}
+.cart-checkout-title, .cart-auth-title { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
+.cart-checkout-shipping-item-label { cursor: pointer; }
+.cart-checkout-shipping-badge {
+  border-radius: var(--p-radius-pill);
+  background: var(--p-brand-soft);
+  color: var(--p-brand);
+  padding: 2px 9px;
+  font-size: 12px;
+}
+
+
+/* --------------------------------------------- 15. ورود، ثبت‌نام، بازیابی */
+.authentication-container, .cart-auth-form {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-1);
+  padding: 26px;
+}
+.cart-auth-separator, .authentication-separator { border-color: var(--p-line); }
+.cart-auth-mode-signin-label,
+.cart-auth-mode-signup-label { cursor: pointer; }
+
+
+/* ----------------------------------------------------------- 16. وبلاگ */
+.blog-compact-post,
+.blog-full-post,
+.blog-masonry-post,
+.blog-cover-post {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  overflow: hidden;
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.blog-compact-post:hover,
+.blog-full-post:hover,
+.blog-masonry-post:hover,
+.blog-cover-post:hover { transform: translateY(-3px); box-shadow: var(--p-shadow-2); }
+
+.blog-compact-post-image-element,
+.blog-full-post-image-element,
+.blog-masonry-post-image-element,
+.blog-cover-post-image-element { width: 100%; object-fit: cover; }
+
+.blog-compact-post-title,
+.blog-full-post-title,
+.blog-masonry-post-title,
+.blog-cover-post-title { font-size: 17px; font-weight: 600; line-height: 1.75; }
+
+.blog-compact-post-excerpt,
+.blog-full-post-excerpt,
+.blog-masonry-post-excerpt { color: var(--p-ink-2); font-size: 14px; }
+
+.blog-compact-post-meta,
+.blog-full-post-meta,
+.blog-plain-post-meta { color: var(--p-ink-3); font-size: 12px; }
+
+.blog-post-category, .blog-compact-post-category, .blog-full-post-category {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--p-radius-pill);
+  background: #EEF1F6;
+  color: var(--p-ink-2);
+  font-size: 12px;
+}
+
+
+/* ---------------------------------------------------------- 17. گالری */
+.gallery-small-item-element,
+.gallery-medium-item-element,
+.gallery-large-item-element,
+.gallery-catalog-item-element { border-radius: var(--p-radius); }
+.gallery-small-item-title,
+.gallery-medium-item-title,
+.gallery-large-item-title { font-size: 17px; font-weight: 600; }
+.gallery-catalog-item-title { font-size: 20px; font-weight: 600; }
+
+
+/* ------------------------------------------------- 18. منوی کشویی موبایل */
+.offcanvas-sidebar { width: 320px; box-shadow: var(--p-shadow-2); }
+.offcanvas-header { background: var(--p-surface); border-bottom: 1px solid var(--p-line); padding: 14px 16px; }
+.offcanvas-brand { font-size: 18px; font-weight: 600; color: var(--p-ink); }
+.offcanvas-overlay { background: rgba(20,25,34,.45); }
+.offcanvas-nav { border-top-color: var(--p-line); }
+.offcanvas-nav-link { color: var(--p-ink); padding: 13px 16px 13px 44px; font-size: 15px; }
+.offcanvas-nav-link:hover { background: #F5F7FA; color: var(--p-brand); }
+.offcanvas-navbar-toggler { color: var(--p-ink) !important; }
+
+
+/* --------------------------------------------- 19. مودال، هشدار، تب، جدول */
+.modal-content { border: 0; border-radius: var(--p-radius); box-shadow: var(--p-shadow-2); }
+.modal-header, .modal-footer { border-color: var(--p-line); }
+
+.alert { border-radius: var(--p-radius-sm); border: 1px solid transparent; }
+.alert-success { background: #E8F6EE; border-color: #C9E9D8; color: #1B6B42; }
+.alert-danger  { background: var(--p-brand-soft); border-color: rgba(200,30,54,.18); color: var(--p-brand-dark); }
+
+.nav-tabs { border-bottom-color: var(--p-line); }
+.nav-tabs .nav-link { color: var(--p-ink-2); border: 0; border-bottom: 2px solid transparent; padding: 12px 18px; }
+.nav-tabs .nav-link.active { color: var(--p-ink); border-bottom-color: var(--p-brand); background: transparent; }
+
+.table th { color: var(--p-ink-2); font-weight: 600; border-color: var(--p-line); }
+.table td { border-color: var(--p-line); }
