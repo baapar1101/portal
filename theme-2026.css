@@ -1,0 +1,510 @@
+/* =========================================================================
+   theme-2026.css — لایهٔ بازطراحی ظاهری قالب Portal
+   -------------------------------------------------------------------------
+   این فایل هیچ فایل دیگری را تغییر نمی‌دهد؛ فقط بعد از app.css بارگذاری
+   می‌شود و روی آن می‌نشیند. برای برگرداندن همه‌چیز به حالت قبل کافی است
+   تگ <link> مربوط به این فایل را از layouts/header.html حذف کنید.
+
+   ساختار HTML، کلاس‌ها و منطق ویجت‌ها دست‌نخورده باقی مانده‌اند.
+   ========================================================================= */
+
+
+/* ---------------------------------------------------------------- 1. توکن‌ها
+   قرمز برند حفظ شده اما تیره‌تر شده: #fb3449 با متن سفید نسبت کنتراست ۳٫۴
+   داشت (زیر حد WCAG). #C81E36 همان هویت را دارد و به ۵٫۰ می‌رسد.
+   فیروزه‌ای #00bfd6 هم به #0E7C86 عمیق شده تا دکمه‌های ثانویه خوانا شوند. */
+:root {
+  --p-ink:        #141922;
+  --p-ink-2:      #5C6675;
+  --p-ink-3:      #8B95A5;
+  --p-line:       #E5E9F0;
+  --p-canvas:     #F1F3F7;
+  --p-surface:    #FFFFFF;
+
+  --p-brand:      #C81E36;
+  --p-brand-dark: #A81730;
+  --p-brand-soft: #FDECEF;
+
+  --p-action:     #0E7C86;
+  --p-action-dark:#0A6169;
+
+  --p-radius:     14px;
+  --p-radius-sm:  10px;
+  --p-radius-pill:999px;
+
+  --p-shadow-1: 0 1px 2px rgba(20,25,34,.04), 0 4px 16px rgba(20,25,34,.06);
+  --p-shadow-2: 0 2px 6px rgba(20,25,34,.06), 0 14px 34px rgba(20,25,34,.10);
+}
+
+
+/* ------------------------------------------------------------ 2. تایپوگرافی
+   خانوادهٔ فونت از پلتفرم می‌آید (@@theme.fonts) و دست‌کاری نشده؛ فقط مقیاس،
+   وزن و فاصلهٔ سطرها اصلاح شده. اگر خواستید Vazirmatn را self-host کنید،
+   فایل‌های woff2 را در theme/fonts/ بگذارید و اینجا @font-face اضافه کنید. */
+body {
+  background-color: var(--p-canvas);
+  color: var(--p-ink);
+  font-size: 15px;
+  line-height: 1.9;
+}
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 { color: var(--p-ink); font-weight: 600; line-height: 1.6; }
+h1, .h1 { font-size: 28px; letter-spacing: -.2px; }
+h2, .h2 { font-size: 22px; letter-spacing: -.2px; }
+h3, .h3 { font-size: 18px; }
+a { color: var(--p-ink); }
+a:hover { color: var(--p-brand); }
+
+/* اعداد فارسی/لاتین قیمت‌ها هم‌عرض شوند تا در ستون‌ها نلرزند */
+.products-item-price,
+.products-item-compare-price,
+.products-item-discount,
+.product-price,
+.product-compare-price,
+.product-discount,
+.cart-details-total-value,
+.cart-details-subtotal-value {
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* -------------------------------------------------------------- 3. سطح‌ها */
+.rounded { border-radius: var(--p-radius) !important; }
+.shadow, .shadow-sm { box-shadow: var(--p-shadow-1) !important; }
+.shadow-lg { box-shadow: var(--p-shadow-2) !important; }
+.card { border-color: var(--p-line); border-radius: var(--p-radius); }
+
+
+/* -------------------------------------------------------------- 4. دکمه‌ها */
+.btn {
+  border-radius: var(--p-radius-sm);
+  font-weight: 600;
+  padding: .625rem 1.125rem;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+.btn:active { transform: translateY(1px); }
+
+.btn-primary, .btn-danger, .btn-red {
+  background-color: var(--p-brand);
+  border-color: var(--p-brand);
+}
+.btn-primary:hover, .btn-danger:hover, .btn-red:hover,
+.btn-primary:focus, .btn-danger:focus, .btn-red:focus {
+  background-color: var(--p-brand-dark);
+  border-color: var(--p-brand-dark);
+}
+.btn-secondary, .btn-blue {
+  background-color: var(--p-action);
+  border-color: var(--p-action);
+}
+.btn-secondary:hover, .btn-blue:hover,
+.btn-secondary:focus, .btn-blue:focus {
+  background-color: var(--p-action-dark);
+  border-color: var(--p-action-dark);
+}
+.btn-outline-primary, .btn-outline-red, .btn-outline-danger {
+  color: var(--p-brand); border-color: var(--p-brand);
+}
+.btn-outline-primary:hover, .btn-outline-red:hover, .btn-outline-danger:hover {
+  background-color: var(--p-brand); border-color: var(--p-brand);
+}
+.btn-light { background-color: #EEF1F6; border-color: #EEF1F6; color: var(--p-ink); }
+
+
+/* ------------------------------------------------------------- 5. فرم‌ها */
+.form-control {
+  height: calc(1.65em + 1.25rem + 2px);
+  border-color: var(--p-line);
+  border-radius: var(--p-radius-sm);
+  color: var(--p-ink);
+  box-shadow: none;
+}
+.form-control:focus {
+  border-color: var(--p-action);
+  box-shadow: 0 0 0 3px rgba(14,124,134,.15);
+}
+.form-control::placeholder { color: var(--p-ink-3); }
+.input-group-text { background-color: #EEF1F6; border-color: var(--p-line); border-radius: var(--p-radius-sm); }
+
+
+/* --------------------------------------------------- 6. کارت محصول (امضای طرح)
+   قیمت به عنصر اصلی کارت تبدیل می‌شود: قیمت قبلی ریزتر و خط‌خورده بالای آن،
+   درصد تخفیف به‌جای مربع توپر قرمز، یک نشان شناور روی گوشهٔ تصویر.
+   ارتفاع‌های ثابت (۷۵px عنوان / ۶۵px قیمت) با clamp و min-height جایگزین شده
+   تا در بریدگی متن فارسی حروف نصفه دیده نشوند. */
+.products-item {
+  position: relative;
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 14px 14px 18px !important;
+  transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease;
+}
+.products-item:hover {
+  transform: translateY(-3px);
+  border-color: #D7DDE8;
+  box-shadow: var(--p-shadow-2);
+}
+.products-item-link:hover { box-shadow: none; }
+
+.products-item-image {
+  background: #F7F9FC;
+  border-radius: var(--p-radius-sm);
+  overflow: hidden;
+}
+.products-item-image-element {
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  width: 100%;
+  mix-blend-mode: multiply;   /* تصاویر پس‌زمینه‌سفید روی پلیت خاکستری تمیز می‌نشینند */
+}
+
+.products-item-title {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.85;
+  color: var(--p-ink);
+  height: auto;
+  min-height: 52px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.products-item-price-wrap {
+  height: auto;
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 10px;
+}
+.products-item-compare-price {
+  order: 1;
+  font-size: 12px;
+  color: var(--p-ink-3);
+}
+.products-item-price {
+  order: 2;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--p-ink);
+  line-height: 1.4;
+}
+.products-item-price span {           /* واژهٔ «تومان» */
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--p-ink-3);
+  margin-right: 3px;
+}
+
+/* نشان تخفیف: از مربع قرمز توپر به قرص شناور روی گوشهٔ کارت */
+.products-item-discount {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  min-width: 0;
+  padding: 3px 9px;
+  background: var(--p-brand-soft);
+  color: var(--p-brand);
+  border: 1px solid rgba(200,30,54,.18);
+  border-radius: var(--p-radius-pill);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.products-item-outofstock { opacity: .72; }
+.products-item-outofstock-message {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: var(--p-radius-pill);
+  background: #EEF1F6;
+  color: var(--p-ink-2);
+  font-size: 12px;
+}
+
+
+/* --------------------------------------------- 7. صفحهٔ محصول (هماهنگ‌سازی) */
+.product-header, .product-description, .product-info-buy {
+  border-color: var(--p-line);
+  border-radius: var(--p-radius);
+}
+.product-title { font-size: 20px; font-weight: 600; line-height: 1.8; }
+.product-price { font-size: 24px; font-weight: 700; color: var(--p-ink); }
+.product-compare-price { font-size: 14px; color: var(--p-ink-3); }
+.product-discount {
+  min-width: 0;
+  padding: 4px 11px;
+  background: var(--p-brand-soft);
+  color: var(--p-brand);
+  border: 1px solid rgba(200,30,54,.18);
+  border-radius: var(--p-radius-pill);
+  font-size: 14px;
+}
+.product-images-item { border-color: var(--p-line); border-radius: var(--p-radius-sm); }
+
+
+/* ----------------------------------------------- 8. نوار ویژه (بنر قرمز خانه) */
+.special-products.bg-red {
+  background: linear-gradient(135deg, var(--p-brand) 0%, var(--p-brand-dark) 100%) !important;
+}
+.special-products-item { border-radius: var(--p-radius) !important; }
+
+
+/* -------------------------------------------------------------- 9. هدر
+   هدر چسبان شفاف با blur؛ کلاس .scrolled را همان custom.js فعلی می‌گذارد. */
+.header {
+  background: rgba(255,255,255,.92);
+  -webkit-backdrop-filter: saturate(1.5) blur(10px);
+  backdrop-filter: saturate(1.5) blur(10px);
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.header.scrolled {
+  border-bottom-color: var(--p-line);
+  box-shadow: 0 6px 20px rgba(20,25,34,.06);
+}
+.header-search input.form-control { border-radius: var(--p-radius-pill); }
+.header-search-overlay { background: rgba(20,25,34,.35); }
+
+
+/* -------------------------------------------------------- 10. منو و مگامنو */
+.navbar-mega-context, .dropdown-menu {
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-2);
+}
+.dropdown-item { padding: .5rem 1.25rem; border-radius: 8px; }
+.dropdown-item:hover { background: #F3F6FA; color: var(--p-brand); }
+
+
+/* ------------------------------------------------------- 11. پاورقی و ناوبری */
+.footer { background: #EDF0F5; border-top: 1px solid var(--p-line); }
+.footer-features { border-bottom-color: var(--p-line); }
+.footer-links-link { color: var(--p-ink-2); }
+.footer-links-link:hover { color: var(--p-brand); }
+
+.breadcrumb { background: transparent; padding: .75rem 0; }
+.breadcrumb-item, .breadcrumb-item.active { color: var(--p-ink-3); font-size: 13px; }
+
+.page-link { border-color: transparent; border-radius: var(--p-radius-sm) !important; color: var(--p-ink); margin: 0 3px; }
+.page-item.active .page-link,
+.page-link:hover { background-color: var(--p-action); border-color: var(--p-action); color: #fff; }
+
+.loading i.fa { color: var(--p-brand); }
+
+
+/* ------------------------------------------------- 12. کف کیفیت (a11y و موبایل) */
+:focus-visible {
+  outline: 2px solid var(--p-action);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.btn:focus, .btn.focus { box-shadow: none; }
+.btn:focus-visible { outline: 2px solid var(--p-ink); outline-offset: 2px; }
+
+@media (max-width: 767.98px) {
+  .btn { min-height: 44px; }              /* هدف لمسی استاندارد */
+  .products-item-title { font-size: 13px; min-height: 48px; }
+  .products-item-price { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .products-item, .btn, .header { transition: none; }
+  .products-item:hover { transform: none; }
+}
+
+
+/* =========================================================================
+   بخش دوم — صفحات داخلی
+   (همان توکن‌های بالا؛ چیزی جز رنگ، فاصله و گردی تغییر نمی‌کند)
+   ========================================================================= */
+
+
+/* ------------------------------------------- 13. لیست فروشگاه و فیلترها */
+.store-sidebar-categories,
+.store-sidebar-search,
+.store-sidebar-filters-item {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+}
+.store-sidebar-categories { padding: 16px; }
+.store-sidebar-categories-title { font-size: 15px; font-weight: 600; }
+.store-sidebar-categories-link { font-size: 13px; color: var(--p-ink-2); }
+.store-sidebar-categories-link:hover { color: var(--p-brand); }
+.store-sidebar-categories-item { margin-top: 8px; }
+
+.store-sidebar-filters-item { margin: 0 0 12px; overflow: hidden; }
+.store-sidebar-filters-item-title { font-size: 14px; font-weight: 600; }
+.store-sidebar-filters-item-link { padding: 12px 16px; color: var(--p-ink); }
+.store-sidebar-filters-item-link:hover { background: #F5F7FA; }
+.store-sidebar-filters-item-label { font-size: 13px; color: var(--p-ink-2); cursor: pointer; }
+
+.store-sorting {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 10px 14px;
+}
+.store-sorting-title { font-size: 13px; color: var(--p-ink-3); font-weight: 500; }
+.store-sorting-item { font-size: 13px; color: var(--p-ink-2); padding: 4px 10px; border-radius: var(--p-radius-pill); }
+.store-sorting-item.active,
+.store-sorting-item:hover { background: #EEF1F6; color: var(--p-ink); }
+
+/* نوار فیلتر شناور موبایل: از نوار چسبیده به کف به دو دکمهٔ معلق */
+.store-filters-buttons {
+  padding: 0 14px 14px;
+  background: linear-gradient(to top, rgba(241,243,247,.96) 55%, rgba(241,243,247,0));
+  border: 0;
+}
+.store-filters-buttons .btn {
+  border-radius: var(--p-radius-pill);
+  box-shadow: var(--p-shadow-2);
+}
+.store-filters-search { border-radius: var(--p-radius) var(--p-radius) 0 0; }
+
+
+/* ------------------------------------------------ 14. سبد خرید و تسویه */
+.cart-item {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.cart-item-image-element { border-radius: var(--p-radius-sm); background: #F7F9FC; }
+.cart-item-title { font-size: 15px; font-weight: 500; }
+.cart-item-subtitle, .cart-item-id { font-size: 13px; color: var(--p-ink-3); }
+.cart-item-price-compare { color: var(--p-ink-3); }
+.cart-item-remove { color: var(--p-ink-3); font-size: 13px; }
+.cart-item-remove:hover { color: var(--p-brand); }
+.cart-item-quantity-input { text-align: center; }
+
+.cart-details {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 18px;
+}
+.cart-details-total-value { font-size: 20px; font-weight: 700; color: var(--p-ink); }
+.cart-details-discount-value { color: var(--p-brand); }
+.cart-coupons-code-input { border-radius: var(--p-radius-sm); }
+
+.cart-checkout-form,
+.cart-checkout-shipping,
+.cart-checkout-contact {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  padding: 18px;
+}
+.cart-checkout-title, .cart-auth-title { font-size: 17px; font-weight: 600; margin-bottom: 14px; }
+.cart-checkout-shipping-item-label { cursor: pointer; }
+.cart-checkout-shipping-badge {
+  border-radius: var(--p-radius-pill);
+  background: var(--p-brand-soft);
+  color: var(--p-brand);
+  padding: 2px 9px;
+  font-size: 12px;
+}
+
+
+/* --------------------------------------------- 15. ورود، ثبت‌نام، بازیابی */
+.authentication-container, .cart-auth-form {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-1);
+  padding: 26px;
+}
+.cart-auth-separator, .authentication-separator { border-color: var(--p-line); }
+.cart-auth-mode-signin-label,
+.cart-auth-mode-signup-label { cursor: pointer; }
+
+
+/* ----------------------------------------------------------- 16. وبلاگ */
+.blog-compact-post,
+.blog-full-post,
+.blog-masonry-post,
+.blog-cover-post {
+  background: var(--p-surface);
+  border: 1px solid var(--p-line);
+  border-radius: var(--p-radius);
+  overflow: hidden;
+  transition: box-shadow .22s ease, transform .22s ease;
+}
+.blog-compact-post:hover,
+.blog-full-post:hover,
+.blog-masonry-post:hover,
+.blog-cover-post:hover { transform: translateY(-3px); box-shadow: var(--p-shadow-2); }
+
+.blog-compact-post-image-element,
+.blog-full-post-image-element,
+.blog-masonry-post-image-element,
+.blog-cover-post-image-element { width: 100%; object-fit: cover; }
+
+.blog-compact-post-title,
+.blog-full-post-title,
+.blog-masonry-post-title,
+.blog-cover-post-title { font-size: 17px; font-weight: 600; line-height: 1.75; }
+
+.blog-compact-post-excerpt,
+.blog-full-post-excerpt,
+.blog-masonry-post-excerpt { color: var(--p-ink-2); font-size: 14px; }
+
+.blog-compact-post-meta,
+.blog-full-post-meta,
+.blog-plain-post-meta { color: var(--p-ink-3); font-size: 12px; }
+
+.blog-post-category, .blog-compact-post-category, .blog-full-post-category {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: var(--p-radius-pill);
+  background: #EEF1F6;
+  color: var(--p-ink-2);
+  font-size: 12px;
+}
+
+
+/* ---------------------------------------------------------- 17. گالری */
+.gallery-small-item-element,
+.gallery-medium-item-element,
+.gallery-large-item-element,
+.gallery-catalog-item-element { border-radius: var(--p-radius); }
+.gallery-small-item-title,
+.gallery-medium-item-title,
+.gallery-large-item-title { font-size: 17px; font-weight: 600; }
+.gallery-catalog-item-title { font-size: 20px; font-weight: 600; }
+
+
+/* ------------------------------------------------- 18. منوی کشویی موبایل */
+.offcanvas-sidebar { width: 320px; box-shadow: var(--p-shadow-2); }
+.offcanvas-header { background: var(--p-surface); border-bottom: 1px solid var(--p-line); padding: 14px 16px; }
+.offcanvas-brand { font-size: 18px; font-weight: 600; color: var(--p-ink); }
+.offcanvas-overlay { background: rgba(20,25,34,.45); }
+.offcanvas-nav { border-top-color: var(--p-line); }
+.offcanvas-nav-link { color: var(--p-ink); padding: 13px 16px 13px 44px; font-size: 15px; }
+.offcanvas-nav-link:hover { background: #F5F7FA; color: var(--p-brand); }
+.offcanvas-navbar-toggler { color: var(--p-ink) !important; }
+
+
+/* --------------------------------------------- 19. مودال، هشدار، تب، جدول */
+.modal-content { border: 0; border-radius: var(--p-radius); box-shadow: var(--p-shadow-2); }
+.modal-header, .modal-footer { border-color: var(--p-line); }
+
+.alert { border-radius: var(--p-radius-sm); border: 1px solid transparent; }
+.alert-success { background: #E8F6EE; border-color: #C9E9D8; color: #1B6B42; }
+.alert-danger  { background: var(--p-brand-soft); border-color: rgba(200,30,54,.18); color: var(--p-brand-dark); }
+
+.nav-tabs { border-bottom-color: var(--p-line); }
+.nav-tabs .nav-link { color: var(--p-ink-2); border: 0; border-bottom: 2px solid transparent; padding: 12px 18px; }
+.nav-tabs .nav-link.active { color: var(--p-ink); border-bottom-color: var(--p-brand); background: transparent; }
+
+.table th { color: var(--p-ink-2); font-weight: 600; border-color: var(--p-line); }
+.table td { border-color: var(--p-line); }
