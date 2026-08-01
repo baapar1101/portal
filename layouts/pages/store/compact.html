@@ -1,0 +1,99 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-compact-container">
+	<div class="container">
+		<div class="page-context store-context store-compact-context" store>
+			<include name="layouts/breadcrumb.html" />
+			<h1 class="page-title store-title store-compact-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page store-compact-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-product store-compact-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد محصول
+					</a>
+				</if>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator store-separator store-compact-separator">
+				<div class="page-description store-description store-compact-description break-word">
+					@@content
+				</div>
+			</if>
+			<div class="store-compact-topbar">
+				<hr class="page-separator store-separator store-compact-separator">
+				<include name="layouts/pages/store/partials/topbar.html" />
+			</div>
+			<hr class="page-separator store-separator store-compact-separator">
+			<div store-ajax-context>
+				<div class="store-loading store-compact-loading" ng-show="loading" auto-show>
+					<i class="fa fa-refresh fa-spin fa-fw"></i>
+					کمی صبر کنید...
+				</div>
+				<if terms="@@products.empty()">
+					<div class="page-empty store-empty store-compact-empty" ng-hide="loading">
+						موردی برای نمایش وجود ندارد.
+					</div>
+				</if>
+				<if terms="@@products.any()">
+					<div class="store-products store-compact-products" ng-hide="loading">
+						<div class="row">
+							<loop src="@@products">
+								<div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+									<article class='store-product store-compact-product @@outofstock.whenever("store-compact-product-outofstock")'>
+										<div class="store-product-image store-compact-product-image">
+											<a href="@@url" class="store-product-image-link store-compact-product-image-link" title="@@metatitle">
+												<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high' class="img-fluid center-block store-product-image-element store-compact-product-image-element" alt="@@title">
+											</a>
+										</div>
+										<h3 class="store-product-title store-compact-product-title">
+											<a href="@@url" class="store-product-link store-compact-product-link" title="@@metatitle">
+												@@title
+											</a>
+										</h3>
+										<if terms="@@compareprice.exists">
+											<span class="store-product-compare-price store-compact-product-compare-price">
+												@@compareprice
+											</span>
+										</if>
+										<if terms="@@price.exists">
+											<span class="store-product-price store-compact-product-price">
+												<span>@@price تومان</span>
+											</span>
+										</if>
+										<if terms="@@outofstock">
+											<span class="store-product-outofstock-message store-compact-product-outofstock-message">
+												ناموجود
+											</span>
+										</if>
+										<div class="mt-2">
+											<button class="btn btn-sm btn-blue store-compact-product-quick-view" ng-click="quickview(@@id, '/site/cart')">
+												<i class="fa fa-shopping-cart"></i>
+												خرید
+											</button>
+										</div>
+									</article>
+								</div>
+							</loop>
+						</div>
+						<include name="layouts/pager.html" />
+					</div>
+				</if>
+			</div>
+			<div class="store-filters store-compact-filters">
+				<include name="layouts/pages/store/partials/filters.html" />
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

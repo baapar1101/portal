@@ -1,0 +1,64 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-categories-container">
+	<div class="container">
+		<div class="page-context store-context store-categories-context">
+			<include name="layouts/breadcrumb.html" />
+			<h1 class="page-title store-title store-categories-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page store-categories-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-product store-categories-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد محصول
+					</a>
+				</if>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator store-separator store-categories-separator">
+				<div class="page-description store-description store-categories-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator store-separator store-categories-separator">
+			<if terms="@@subset.empty()">
+				<div class="page-empty store-empty store-categories-empty">
+					موردی برای نمایش وجود ندارد.
+				</div>
+			</if>
+			<if terms="@@subset.any()">
+				<div class="store-categories-items">
+					<div class="row">
+						<loop src="@@subset">
+							<div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+								<article class="store-categories-item">
+									<div class="store-categories-item-image">
+										<a href="@@url" class="store-categories-item-image-link" title="@@metatitle">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=veryhigh' class="img-fluid center-block store-categories-item-image-element" alt="@@title">
+										</a>
+									</div>
+									<h2 class="store-categories-item-title">
+										<a href="@@url" class="store-categories-item-link" title="@@metatitle">
+											@@title
+										</a>
+									</h2>
+								</article>
+							</div>
+						</loop>
+					</div>
+				</div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

@@ -1,0 +1,91 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-simple-container">
+	<div class="container">
+		<div class="page-context store-context store-simple-context">
+			<include name="layouts/breadcrumb.html" />
+			<h1 class="page-title store-title store-simple-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page store-simple-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-product store-simple-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد محصول
+					</a>
+				</if>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator store-separator store-simple-separator">
+				<div class="page-description store-description store-simple-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator store-separator store-simple-separator">
+			<if terms="@@products.empty()">
+				<div class="page-empty store-empty store-simple-empty">
+					موردی برای نمایش وجود ندارد.
+				</div>
+			</if>
+			<if terms="@@products.any()">
+				<div class="store-products store-simple-products">
+					<div class="row">
+						<loop src="@@products">
+							<div class="col-6 col-sm-4 col-lg-3 col-xxl-2">
+								<article class='store-product store-simple-product @@outofstock.whenever("store-simple-product-outofstock")'>
+									<div class="store-product-image store-simple-product-image">
+										<a href="@@url" class="store-product-image-link store-simple-product-image-link" title="@@metatitle">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high' class="img-fluid center-block store-product-image-element store-simple-product-image-element" alt="@@title">
+										</a>
+									</div>
+									<h3 class="store-product-title store-simple-product-title">
+										<a href="@@url" class="store-product-link store-simple-product-link" title="@@metatitle">
+											@@title
+										</a>
+									</h3>
+									<if terms="@@compareprice.exists">
+										<span class="store-product-compare-price store-simple-product-compare-price">
+											@@compareprice
+										</span>
+									</if>
+									<if terms="@@price.exists">
+										<span class="store-product-price store-simple-product-price">
+											<span>@@price تومان</span>
+										</span>
+									</if>
+									<if terms='@@discount.morethan("0")'>
+										<span class="store-simple-product-discount">
+											@@discount%
+										</span>
+									</if>
+									<if terms="@@outofstock">
+										<span class="store-product-outofstock-message store-simple-product-outofstock-message">
+											ناموجود
+										</span>
+									</if>
+									<div class="mt-2">
+										<button class="btn btn-sm btn-blue store-simple-product-quick-view" ng-click="quickview(@@id, '/site/cart')">
+											<i class="fa fa-shopping-cart"></i>
+											خرید
+										</button>
+									</div>
+								</article>
+							</div>
+						</loop>
+					</div>
+					<include name="layouts/pager.html" />
+				</div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

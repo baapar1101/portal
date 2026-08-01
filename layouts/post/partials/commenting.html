@@ -1,0 +1,93 @@
+<div class="post-commenting post-@@mode-commenting">
+    <hr class="post-commenting-separator post-@@mode-commenting-separator">
+    <h3 class="post-commenting-title post-@@mode-commenting-title">
+        دیدگاه خود را بنویسید
+    </h3>
+    <form name="commenting" class="post-commenting-form post-@@mode-commenting-form" ng-submit="commenting.$valid && submit()" dynamic-form novalidate>
+        <include name="layouts/validation.html" />
+        <div class="alert alert-success post-commenting-succeed post-@@mode-commenting-succeed" ng-show="succeed">
+            <span ng-bind="succeed.description"></span>
+        </div>
+        <div class="post-commenting-reply-info post-@@mode-commenting-reply-info" ng-show="isreply" ng-click="focusComment()">
+            <div class="alert alert-warning">
+                این دیدگاه به عنوان پاسخ شما به دیدگاهی دیگر ارسال خواهد شد. برای صرف نظر از ارسال این پاسخ، بر روی گزینه‌ی
+                <u>انصراف</u> کلیک کنید.
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group post-commenting-body post-@@mode-commenting-body">
+                    <textarea id="postcomment-body" name="body" class="form-control post-commenting-body-input post-@@mode-commenting-body-input" rows="6" placeholder="بنویسید..." ng-model="model.body" ng-disabled="progress" required></textarea>
+                    <div class="validation-inline post-@@mode-commenting-inline-error text-danger" ng-messages="commenting.body.$error" ng-show="commenting.$submitted || commenting.body.$dirty">
+                        <span ng-message="required">
+                            دیدگاه خود را بنویسید.
+                        </span>
+                        <span ng-message="server">
+                            <span ng-bind="validation.body"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <if terms="@@user.exists()">
+                <div class="col-md-12">
+                    دیدگاه شما از طرف
+                    <mark>@@user</mark> ارسال خواهد شد.
+                </div>
+            </if>
+            <if terms="@@user.empty()">
+                <div class="col-md-6">
+                    <div class="form-group post-commenting-name post-@@mode-commenting-name">
+                        <label for="postcomment-name" class="form-control-label post-commenting-name-label post-@@mode-commenting-name-label">
+                            نام و نام خانوادگی
+                        </label>
+                        <input type="text" id="postcomment-name" name="name" class="form-control post-commenting-name-input post-@@mode-commenting-name-input" ng-model="model.name" ng-disabled="progress">
+                        <div class="validation-inline post-@@mode-commenting-inline-error text-danger" ng-messages="commenting.name.$error" ng-show="commenting.$submitted || commenting.name.$dirty">
+                            <span ng-message="server">
+                                <span ng-bind="validation.name"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group post-commenting-email post-@@mode-commenting-email">
+                        <label for="postcomment-email" class="form-control-label post-commenting-email-label post-@@mode-commenting-email-label">
+                            پست الکترونیک
+                        </label>
+                        <input type="text" id="postcomment-email" name="email" class="form-control post-commenting-email-input post-@@mode-commenting-email-input" ng-model="model.email" dir="ltr" ng-disabled="progress">
+                        <div class="validation-inline post-@@mode-commenting-inline-error text-danger" ng-messages="commenting.email.$error" ng-show="commenting.$submitted || commenting.email.$dirty">
+                            <span ng-message="server">
+                                <span ng-bind="validation.email"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group post-commenting-website post-@@mode-commenting-website">
+                        <label for="postcomment-website" class="form-control-label post-commenting-website-label post-@@mode-commenting-website-label">
+                            آدرس وب‌سایت
+                        </label>
+                        <input type="text" id="postcomment-website" name="website" class="form-control post-commenting-website-input post-@@mode-commenting-website-input" ng-model="model.website" dir="ltr" ng-disabled="progress">
+                        <div class="validation-inline post-@@mode-commenting-inline-error text-danger" ng-messages="commenting.website.$error" ng-show="commenting.$submitted || commenting.website.$dirty">
+                            <span ng-message="server">
+                                <span ng-bind="validation.website"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </if>
+        </div>
+        <button class="btn btn-primary post-commenting-submit post-@@mode-commenting-submit" ng-disabled="progress" ng-hide="isreply">
+            ارسال دیدگاه
+        </button>
+        <button class="btn btn-primary post-commenting-submit post-@@mode-commenting-submit" ng-disabled="progress" ng-show="isreply">
+            ارسال پاسخ
+        </button>
+        <button type="button" class="btn btn-link post-commenting-reset post-@@mode-commenting-reset" ng-disabled="progress" ng-show="commenting.$dirty" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+            انصراف
+        </button>
+        <div class="post-commenting-loading post-@@mode-commenting-loading" ng-show="progress">
+            <i class="fa fa-refresh fa-spin fa-fw"></i>
+            کمی صبر کنید...
+        </div>
+    </form>
+</div>

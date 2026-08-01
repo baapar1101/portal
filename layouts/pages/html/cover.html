@@ -1,0 +1,55 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container text-container text-cover-container">
+	<div class="text-cover-header" style='background-image: url(@@image.append("?f=50"));'>
+		<div class="container">
+			<div class="row">
+				<div class="d-none d-lg-block col-lg-1 col-xl-2"></div>
+				<div class="col-md-12 col-lg-10 col-xl-8">
+					<h1 class="page-title text-title text-cover-header-title">
+						@@title
+					</h1>
+					<if terms="@@user.admin">
+						<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page text-cover-edit">
+							<i class="fa fa-pencil"></i>
+							ویرایش صفحه
+						</a>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+        <div class="row justify-content-center">
+			<div class="col-md-12 col-lg-10 col-xl-8">
+				<div class="page-context text-context text-cover-context">
+					<if terms="@@content.exists()">
+						<div class="page-description text-content text-cover-content figure-content break-word">
+							@@content
+						</div>
+					</if>
+					<if terms="@@showsubset && @@subset.any()">
+						<ul class="text-subset text-cover-subset">
+							<loop src="@@subset" recursive="@@subset">
+								<li class="text-subset-item text-cover-subset-item">
+									<a href="@@url" class="text-subset-link text-cover-subset-link">
+										@@title
+									</a>
+								</li>
+								<if terms="@@subset.any()">
+									<ul class="text-subset-list text-cover-subset-list">
+										@@recursive
+									</ul>
+								</if>
+							</loop>
+						</ul>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

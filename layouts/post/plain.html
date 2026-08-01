@@ -1,0 +1,119 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="post-container post-plain-container" post>
+	<div class="container">
+		<div class="row">
+			<div class="d-none d-lg-block col-lg-1 col-xl-2"></div>
+			<div class="col-md-12 col-lg-10 col-xl-8">
+				<div class="post-context post-plain-context">
+					<if terms="@@image.exists()">
+						<div class="post-image post-plain-image">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block post-image-element post-plain-image-element" alt="@@title">
+						</div>
+					</if>
+					<h1 class="post-title post-plain-title">
+						@@title
+					</h1>
+					<if terms="@@user.admin">
+						<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-post post-plain-edit">
+							<i class="fa fa-pencil"></i>
+							ویرایش نوشته
+						</a>
+					</if>
+					<div class="post-content post-plain-content figure-content break-word">
+						@@content
+					</div>
+					<widget type="posts" name="blog:relates" terms="@@items.any()" section="وبلاگ">
+						<div class="post-relates post-full-relates">
+							<h4 class="post-relates-title post-full-relates-title">
+								@@title
+							</h4>
+							<ul class="post-relates-list post-full-relates-list">
+								<loop src="@@items">
+									<li class="post-relates-item post-full-relates-item">
+										<a href="@@url" class="post-relates-link post-full-relates-link" title="@@metatitle">
+											@@title
+										</a>
+									</li>
+								</loop>
+							</ul>
+							<if terms="@@user.admin">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget mt-4">
+									<i class="fa fa-pencil"></i>
+									ویرایش تنظیمات
+								</a>
+							</if>
+						</div>
+					</widget>
+					<div class="post-meta post-plain-meta">
+						<span class="post-date post-plain-date">
+							<i class="fa fa-calendar"></i>
+							@@date
+						</span>
+						<if terms="@@author.exists()">
+							<span class="post-author post-plain-author">
+								<i class="fa fa-fw fa-user-circle"></i>
+								<a href="/site/posts?author=@@author.id" class="post-author-link post-plain-author-link">
+									<span>
+										@@author.name.default("ناشناس")
+									</span>
+								</a>
+							</span>
+						</if>
+						<if terms="@@categories.any()">
+							<span class="post-categories post-plain-categories">
+								<i class="fa fa-fw fa-sitemap"></i>
+								<loop src="@@categories">
+									<a href="@@url" class="post-category post-plain-category" title="@@metatitle">
+										@@title
+									</a>
+								</loop>
+							</span>
+						</if>
+						<if terms="@@tags.any()">
+							<span class="post-tags post-plain-tags">
+								<i class="fa fa-fw fa-tags"></i>
+								<loop src="@@tags">
+									<a href="@@url" class="post-tag post-plain-tag" title="@@metatitle">
+										@@title
+									</a>
+								</loop>
+							</span>
+						</if>
+					</div>
+					<div class="post-sharing post-plain-sharing">
+						<a href="https://twitter.com/home?status=@@config.domain.uri@@url" class="post-sharing-twitter post-plain-sharing-twitter" target="_blank">
+							<i class="fa fa-twitter"></i>
+						</a>
+						<a href="https://www.linkedin.com/shareArticle?mini=true&url=@@config.domain.uri@@url" class="post-sharing-linkedin post-plain-sharing-linkedin" target="_blank">
+							<i class="fa fa-linkedin"></i>
+						</a>
+						<a href="https://www.facebook.com/share.php?u=@@config.domain.uri@@url" class="post-sharing-facebook post-plain-sharing-facebook" target="_blank">
+							<i class="fa fa-facebook"></i>
+						</a>
+						<a href="https://plus.google.com/share?url=@@config.domain.uri@@url" class="post-sharing-googleplus post-plain-sharing-googleplus" target="_blank">
+							<i class="fa fa-google-plus"></i>
+						</a>
+						<a href="https://pinterest.com/pin/create/link/?url=@@config.domain.uri@@url" class="post-sharing-pinterest post-plain-sharing-pinterest" target="_blank">
+							<i class="fa fa-pinterest-p"></i>
+						</a>
+					</div>
+					<div eval="collect(@@id)" post-commenting auto-show>
+						<scope name="post-plain-commenting" mode="plain">
+							<if terms="@@comments.any()">
+								<include name="layouts/post/partials/comments.html" />
+							</if>
+							<if terms="@@comments.enabled">
+								<include name="layouts/post/partials/commenting.html" />
+							</if>
+						</scope>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

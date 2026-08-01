@@ -1,0 +1,381 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container authentication-container py-30">
+	<a href="/">
+		<img src="@@config.logo?m=thumb&w=150&h=48&q=veryhigh" alt="@@config.title" class="mb-30 img-fluid">
+	</a>
+	<div class="page-context authentication-context rounded bg-white border border-light shadow p-30">
+		<div auto-show>
+			<form name="authentication" class="authentication-form" ng-submit="authentication.$valid && submit()" eval="collect('@@returnurl', '@@users.signup.otpenabled')" authentication dynamic-form auto-show novalidate>
+				<h1 class="page-title authentication-title mb-15" ng-switch="step">
+					<span ng-switch-when="validate">ورود | ثبت‌نام</span>
+					<span ng-switch-when="confirm">ورود | ثبت‌نام</span>
+					<span ng-switch-when="signin">ورود</span>
+					<span ng-switch-when="signup">ثبت‌نام</span>
+				</h1>
+				<scope name="authentication">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div class="alert alert-success authentication-succeed" ng-show="succeed">
+					<span ng-bind="succeed.description"></span>
+				</div>
+				<div ng-switch="step" ng-hide="succeed">
+					<div ng-switch-when="validate">
+						<div class="form-group authentication-mobile">
+							<label for="authentication-mobile" class="text-md-left authentication-mobile-label">
+								لطفا شماره موبایل خود را وارد کنید
+							</label>
+							<div class="">
+								<input type="text" inputmode="numeric" id="authentication-mobile" name="mobile" class="form-control authentication-mobile-input text-right" ng-model="model.mobile" ng-pattern="/^(?:09|۰۹)[۰۱۲۳۴۵۶۷۸۹\d]{9}$/" dir="ltr" ng-disabled="progress" placeholder="شماره موبایل" invariant-culture auto-focus required>
+								<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.mobile.$error" ng-show="authentication.$submitted || authentication.mobile.$dirty">
+									<span ng-message="required">
+										شماره موبایل را بنویسید.
+									</span>
+									<span ng-message="pattern">
+										شماره موبایل معتبر نیست.
+									</span>
+									<span ng-message="server">
+										<span ng-bind="validation.mobile"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<button class="btn btn-block btn-success authentication-submit" ng-disabled="progress">
+								گام بعدی
+							</button>
+							<div class="authentication-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+					<div ng-switch-when="confirm">
+						<div class="form-group">
+							<div class="small">
+								یک کد ۵ رقمی به شماره {{model.mobile}} ارسال شد.
+							</div>
+						</div>
+						<div class="form-group authentication-password">
+							<input type="text" inputmode="numeric" id="authentication-password" name="password" placeholder="کد تایید" class="form-control authentication-password-input" ng-model="model.password" ng-pattern="/^[۰۱۲۳۴۵۶۷۸۹\d]{5}$/" ng-disabled="progress" invariant-culture required>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.password.$error" ng-show="authentication.$submitted || authentication.password.$dirty">
+								<span ng-message="required">
+									رمز ۵ رقمی را بنویسید.
+								</span>
+								<span ng-message="pattern">
+									رمز معتبر نیست.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.password"></span>
+								</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<span class="authentication-countdown" ng-if="countdown">
+								ارسال دوباره کد تا {{countdown}} ثانیه دیگر
+							</span>
+							<span class="authentication-otp-retry" ng-if="countdown < 1">
+								پیامک دریافت نکردین؟ <a role="button" class="authentication-otp-retry-link" ng-click="otp()" ng-disabled="progress">ارسال دوباره کد</a>
+							</span>
+						</div>
+						<div class="form-group" ng-if="inquiry.mobile">
+							<a role="button" class="authentication-signin-by-password" ng-click="goto('signin')">
+								ورود با رمز عبور ثابت
+							</a>
+						</div>
+						<hr class="page-separator authentication-separator">
+						<div class="form-group text-center mb-0">
+							<button class="btn btn-block btn-success authentication-submit" ng-disabled="progress">
+								تایید
+							</button>
+							<a role="button" class="btn btn-link authentication-cancel mt-10" ng-click="goto(inquiry.mobile ? 'validate' : 'signup')" click-confirm="آیا مطمئن هستید؟">
+								بازگشت
+							</a>
+							<div class="page-loading authentication-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+					<div ng-switch-when="signin">
+						<div class="form-group authentication-username d-none">
+							<input type="text" id="authentication-username" name="username" class="form-control authentication-username-input" ng-model="model.username" disabled>
+						</div>
+						<div class="form-group authentication-password">
+							<label for="authentication-password" class="authentication-password-label">
+								رمز عبور خود را وارد کنید
+							</label>
+							<input type="password" id="authentication-password" name="password" class="form-control authentication-password-input" ng-model="model.password" dir="ltr" ng-disabled="progress" required>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.password.$error" ng-show="authentication.$submitted || authentication.password.$dirty">
+								<span ng-message="required">
+									رمز عبور را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.password"></span>
+								</span>
+							</div>
+						</div>
+						<div class="form-group" ng-if="otpEnabled">
+							<a role="button" class="authentication-signin-by-otp" ng-click="otp()" ng-disabled="progress">
+								ورود با رمز یکبار مصرف
+							</a>
+						</div>
+						<div class="form-group">
+							<a href="/site/recoverypass" class="authentication-recoverypass">
+								رمز عبور خود را فراموش کرده‌اید؟
+							</a>
+						</div>
+						<div class="form-group authentication-rememberme">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" id="authentication-rememberme" name="rememberme" class="custom-control-input authentication-rememberme-input" ng-model="model.rememberme" value="true" ng-disabled="progress">
+								<label class="custom-control-label authentication-rememberme-label" for="authentication-rememberme">
+									من را به خاطر بسپار
+								</label>
+							</div>
+						</div>
+						<div class="form-group text-center mb-0">
+							<button class="btn btn-block btn-success authentication-submit" ng-disabled="progress">
+								ورود به وب‌سایت
+							</button>
+							<a role="button" class="btn btn-link authentication-cancel" ng-click="goto('validate')" click-confirm="آیا مطمئن هستید؟">
+								بازگشت
+							</a>
+							<div class="authentication-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی‌صبر‌کنید...
+							</div>
+						</div>
+					</div>
+					<div ng-switch-when="signup">
+						<div class="form-group authentication-mobile">
+							<input type="text" inputmode="numeric" id="authentication-mobile" name="mobile" placeholder="شماره موبایل" class="form-control authentication-mobile-input" ng-model="model.mobile" disabled>
+						</div>
+						<div class="form-group authentication-name">
+							<input type="text" id="authentication-name" name="name" placeholder="نام و نام خانوادگی" class="form-control" ng-model="model.name" ng-disabled="progress" auto-focus required>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.name.$error" ng-show="authentication.$submitted || authentication.name.$dirty">
+								<span ng-message="required">
+									نام و نام خانوادگی را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.name"></span>
+								</span>
+							</div>
+						</div>
+						<!-- <div class="form-group authentication-email">
+							<div class="input-group authentication-email-group">
+								<input type="text" inputmode="email" id="authentication-email" name="email" placeholder="پست الکترونیک" class="form-control text-right authentication-email-input" ng-model="model.email" dir="ltr" ng-disabled="progress">
+								<div class="input-group-append">
+									<span class="input-group-text authentication-email-optional">
+										اختیاری
+									</span>
+								</div>
+							</div>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.email.$error" ng-show="authentication.$submitted || authentication.email.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.email"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-national-code">
+							<input type="text" inputmode="numeric" id="authentication-national-code" name="national_code" placeholder="کد ملی" class="form-control text-right authentication-national-code-input" ng-model="model.national_code" dir="ltr" ng-pattern="/^[۰۱۲۳۴۵۶۷۸۹\d]{10,11}$/" ng-disabled="progress" required invariant-culture>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.national_code.$error" ng-show="authentication.$submitted || authentication.national_code.$dirty">
+								<span ng-message="required">
+									کد ملی را بنویسید.
+								</span>
+								<span ng-message="pattern">
+									کد ملی معتبر نیست.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.national_code"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-username" ng-if="!otpEnabled">
+							<div class="input-group authentication-username-group">
+								<input type="text" id="authentication-username" name="username" class="form-control authentication-username-input text-right" ng-model="model.username" dir="ltr" placeholder="نام کاربری" ng-disabled="progress">
+								<div class="input-group-append">
+									<span class="input-group-text authentication-username-optional">
+										اختیاری
+									</span>
+								</div>
+							</div>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.username.$error" ng-show="authentication.$submitted || authentication.username.$dirty">
+								<span ng-message="required">
+									نام کاربری را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.username"></span>
+								</span>
+							</div>
+						</div> -->
+						<div class="form-group authentication-password" ng-if="!otpEnabled">
+							<input type="password" id="authentication-password" name="password" placeholder="رمز عبور" class="form-control authentication-password-input" ng-model="model.password" strength="medium" ng-disabled="progress" required>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.password.$error" ng-show="authentication.$submitted || authentication.password.$dirty">
+								<span ng-message="required">
+									رمز عبور را بنویسید.
+								</span>
+								<span ng-message="strength">
+									رمز عبور شما باید؛ حداقل 6 حرف و ترکیبی از حروف کوچک، بزرگ یا اعداد باشد.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.password"></span>
+								</span>
+							</div>
+						</div>
+						<div class="form-group authentication-permanent-password" ng-if="otpEnabled">
+							<div class="input-group authentication-permanent-password-group">
+								<input type="password" id="authentication-permanent-password" placeholder="رمز عبور" name="permanent_password" class="form-control text-right authentication-permanent-password-input" ng-model="model.permanent_password" strength="medium" dir="ltr" ng-disabled="progress">
+								<div class="input-group-append">
+									<span class="input-group-text authentication-permanent-password-optional">
+										اختیاری
+									</span>
+								</div>
+							</div>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.permanent_password.$error" ng-show="authentication.$submitted || authentication.permanent_password.$dirty">
+								<span ng-message="strength">
+									رمز عبور شما باید؛ حداقل 6 حرف و ترکیبی از حروف کوچک، بزرگ یا اعداد باشد.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.permanent_password"></span>
+								</span>
+							</div>
+						</div>
+						<!-- <div class="form-group authentication-confirmpassword" ng-if="!otpEnabled">
+							<input type="password" id="authentication-confirmpassword" name="confirmpassword" placeholder="تکرار رمز عبور" class="form-control text-right authentication-confirmpassword-input" ng-model="model.confirmpassword" compare="model.password" dir="ltr" ng-disabled="progress" required>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.confirmpassword.$error" ng-show="authentication.$submitted || authentication.confirmpassword.$dirty">
+								<span ng-message="required">
+									تکرار رمز عبور را بنویسید.
+								</span>
+								<span ng-message="compare">
+									رمز عبور با تکرار آن یکسان نیست.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.confirmpassword"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-organization">
+							<input type="text" id="authentication-organization" name="organization" placeholder="نام شرکت" class="form-control authentication-organization-input" ng-model="model.organization" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.organization.$error" ng-show="authentication.$submitted || authentication.organization.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.organization"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-phone">
+							<input type="text" inputmode="numeric" id="authentication-phone" name="phone" placeholder="شماره تلفن" class="form-control authentication-phone-input" ng-model="model.phone" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.phone.$error" ng-show="authentication.$submitted || authentication.phone.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.phone"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-fax">
+							<input type="text" inputmode="numeric" id="authentication-fax" name="fax" placeholder="شماره فکس" class="form-control authentication-fax-input" ng-model="model.fax" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.fax.$error" ng-show="authentication.$submitted || authentication.fax.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.fax"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-website">
+							<input type="text" inputmode="url" id="authentication-website" name="website" placeholder="آدرس وب‌سایت" class="form-control authentication-website-input text-right" ng-model="model.website" dir="ltr" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.website.$error" ng-show="authentication.$submitted || authentication.website.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.website"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-country" ng-init="model.country_id = '100000103'">
+							<select id="authentication-country" name="country_id" class="form-control authentication-country-input" ng-model="model.country_id" ng-disabled="progress">
+								<option ng-if="model.country_id == null">کشور</option>
+								<option value="{{country.id}}" ng-repeat="country in countries">
+									{{country.name}}
+								</option>
+							</select>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.country_id.$error" ng-show="authentication.$submitted || authentication.country_id.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.country_id"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-state">
+							<select id="authentication-state" name="state_id" class="form-control authentication-state-input" ng-model="model.state_id" ng-disabled="progress">
+								<option value="" ng-if="model.state_id == null">استان</option>
+								<option value="{{state.id}}" ng-repeat="state in states">
+									{{state.name}}
+								</option>
+							</select>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.state_id.$error" ng-show="authentication.$submitted || authentication.state_id.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.state_id"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-city">
+							<select id="authentication-city" name="city_id" class="form-control authentication-city-input" ng-model="model.city_id" ng-disabled="progress">
+								<option value="" ng-if="model.city_id == null">شهر</option>
+								<option value="{{city.id}}" ng-repeat="city in cities">
+									{{city.name}}
+								</option>
+							</select>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.city_id.$error" ng-show="authentication.$submitted || authentication.city_id.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.city_id"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-zipcode">
+							<input type="text" inputmode="numeric" id="authentication-zipcode" name="zipcode" placeholder="کد پستی" class="form-control authentication-zipcode-input" ng-model="model.zipcode" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.zipcode.$error" ng-show="authentication.$submitted || authentication.zipcode.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.zipcode"></span>
+								</span>
+							</div>
+						</div> -->
+						<!-- <div class="form-group authentication-address">
+							<input type="text" id="authentication-address" name="address" placeholder="آدرس" class="form-control authentication-address-input" ng-model="model.address" ng-disabled="progress">
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.address.$error" ng-show="authentication.$submitted || authentication.address.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.address"></span>
+								</span>
+							</div>
+						</div> -->
+						<div class="form-group authentication-referrer">
+							<select id="authentication-referrer" name="referrer" class="form-control authentication-referrer-input" ng-model="model.referrer" ng-disabled="progress">
+								<option value="" ng-if="model.referrer == null">نحوه آشنایی</option>
+								<option>گوگل</option>
+								<option>اینستاگرام</option>
+								<option>تبلیغ در سایت‌های اینترنتی</option>
+								<option>دوستان و آشنایان</option>
+								<option>دیگر موارد</option>
+							</select>
+							<div class="validation-inline authentication-inline-error text-danger" ng-messages="authentication.referrer.$error" ng-show="authentication.$submitted || authentication.referrer.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.referrer"></span>
+								</span>
+							</div>
+						</div>
+						<hr class="page-separator authentication-separator">
+						<div class="form-group text-center mb-0">
+							<button class="btn btn-block btn-success authentication-submit" ng-disabled="progress">
+								{{otpEnabled ? 'گام بعدی' : 'ثبت‌نام'}}
+							</button>
+							<a role="button" class="btn btn-link authentication-cancel mt-10" ng-click="goto('validate')" click-confirm="آیا مطمئن هستید؟">
+								بازگشت
+							</a>
+							<div class="page-loading authentication-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

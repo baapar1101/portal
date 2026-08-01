@@ -1,0 +1,139 @@
+<div class="header-mobile pt-half">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-3">
+				<include name="layouts/navigations/offcanvas.html" />
+			</div>
+			<div class="col-6">
+				<if terms='@@layout.equal("index")'>
+					<h1 class="header-sitename">@@config.title</h1>
+				</if>
+				<a class="d-block text-center" href="/">
+					<img src="@@config.logo?m=thumb&w=150&h=48&q=veryhigh" alt="@@config.title" class="header-logo img-fluid">
+				</a>
+			</div>
+			<div class="col-3">
+				<div class="d-flex justify-content-end">
+					<!-- user -->
+					<if terms="@@user.empty()">
+						<a href="/site/signin" class="header-mobile-user-button">
+							<i class="fa fa-user align-middle"></i>
+						</a>
+					</if>
+					<if terms="@@user.exists()">
+						<div class="dropdown d-inline-block">
+							<a href="#" class="header-mobile-user-button dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+								<i class="fa fa-user align-middle"></i>
+							</a>
+							<div class="dropdown-menu">
+								<h6 class="dropdown-header">@@user</h6>
+								<if terms="@@user.reseller">
+									<a href="/reseller" class="dropdown-item">
+										<i class="fa fa-fw ml-1 mt-1 fa-globe"></i>
+										بخش نمایندگی
+									</a>
+								</if>
+								<if terms="@@user.admin">
+									<a href="/admin" class="dropdown-item">
+										<i class="fa fa-fw ml-1 mt-1 fa-gear"></i>
+										بخش مدیریت
+									</a>
+								</if>
+								<a href="/user" class="dropdown-item">
+									<i class="fa fa-fw ml-1 mt-1 fa-user"></i>
+									بخش کاربری
+								</a>
+								<a href="/user/profile" class="dropdown-item">
+									<i class="fa fa-fw ml-1 mt-1 fa-pencil"></i>
+									ویرایش مشخصات
+								</a>
+								<a href="/user/profile/changepassword" class="dropdown-item">
+									<i class="fa fa-fw ml-1 mt-1 fa-lock"></i>
+									تغییر رمز عبور
+								</a>
+								<a href="/site/signout" class="dropdown-item">
+									<i class="fa fa-fw ml-1 mt-1 fa-power-off"></i>
+									خروج
+								</a>
+							</div>
+						</div>
+					</if>
+
+					<!-- basket -->
+					<if terms="@@config.features.store">
+						<div class="header-basket" cart>
+							<div class="dropdown">
+								<a href="#" class="header-basket-button dropdown-toggle" data-toggle="dropdown" id="basket-widget" role="button" aria-expanded="false" aria-haspopup="true">
+									<i class="fa fa-shopping-cart align-middle"></i>
+									<span class="badge badge-pill badge-primary" ng-bind="model.items.length || 0">0</span>
+								</a>
+								<div class="header-basket-items dropdown-menu" aria-labelledby="basket-widget">
+									<form name="items" class="header-basket-item" ng-submit="items.$valid && update(item)" ng-repeat="item in model.items" novalidate>
+										<div class="header-basket-item-image">
+											<a ng-href="{{item.product.url}}" class="header-basket-item-image-link" target="_blank">
+												<img ng-src="{{item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=60&h=60&q=high" class="img-responsive header-basket-item-image-element">
+											</a>
+										</div>
+										<div class="header-basket-item-details">
+											<h5 class="header-basket-item-title">
+												<a ng-href="{{item.product.url}}" class="header-basket-item-link" target="_blank">
+													{{item.title}} <span class="header-basket-item-subtitle" ng-show="item.subtitle">{{item.subtitle}}</span>
+												</a>
+											</h5>
+											<h6 class="header-basket-item-price">
+												{{item.total|number}} تومان
+											</h6>
+											<a href="javascript:;" class="badge badge-danger header-basket-item-remove" ng-click="removeItem(item)" click-confirm="آیا از حذف مطمئن هستید؟">
+												<i class="fa fa-fw fa-times" ng-hide="item.progress"></i>
+												<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
+												حذف
+											</a>
+										</div>
+									</form>
+									<div class="header-basket-container"  ng-if="model.items.length">
+										<a href="/site/cart" class="btn btn-block btn-green header-basket-link">
+											ثبت و نهایی کردن سفارش 
+											<i class="fa fa-chevron-left mr-half align-middle"></i>
+										</a>
+									</div>
+									<div class="header-basket-empty" ng-if="!model.items.length">
+										سبد خرید شما خالی است.
+									</div>
+								</div>
+							</div>
+						</div>
+					</if>
+				</div>
+			</div>
+		</div>
+		<div class="header-search-mobile">
+			<div class="header-search my-10">
+				<form action="/site/search" class="header-search-form" dynamic-search auto-show>
+					<input type="text" name="q" class="form-control header-search-input" maxlength="100" autocomplete="off"
+						ng-model="query"
+						ng-focus="searchFocused=true" ng-blur="searchFocused=false"
+						ng-class="{'active': searchFocused||searchMouseover}"
+						placeholder="جستجو ...">
+					<button class="btn btn-primary header-search-submit d-none">
+						<i class="fa fa-search"></i>
+					</button>
+					<div class="quicksearch-items bg-white shadow-lg rounded" ng-show="searchFocused||searchMouseover" ng-mouseover="searchMouseover=true" ng-mouseleave="searchMouseover=false">
+						<div class="quicksearch-items-title">نتایج جستجو:</div>
+						<div class="quicksearch-item" ng-repeat="item in items">
+							<div class="quicksearch-item-image" ng-show="item.image">
+								<a ng-href="{{item.url}}" class="quicksearch-item-image-link">
+									<img ng-src="{{item.image}}?m=crop&w=100&h=100&q=high" class="quicksearch-item-image-element">
+								</a>
+							</div>
+							<h4 class="quicksearch-item-title">
+								<a ng-href="{{item.url}}" class="quicksearch-item-link">
+									<span ng-bind="item.title"></span>
+								</a>
+							</h4>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

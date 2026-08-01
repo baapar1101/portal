@@ -1,0 +1,179 @@
+<if terms="@@provider.text">
+    <input type="text" name="@@slug" id="@@name-@@slug" class="form-control @@name-text-input" ng-model="model.@@slug" ng-maxlength="@@maxlength" ng-pattern="/@@regex/" value="@@body" ng-disabled="progress" @@required @@readonly>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            @@title را بنویسید.
+        </span>
+        <span ng-message="maxlength">
+            @@title را کوچک‌تر از @@maxlength حرف بنویسید.
+        </span>
+        <span ng-message="pattern">
+            @@regexerror
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.textarea">
+    <textarea name="@@slug" id="@@name-@@slug" rows="5" class="form-control @@name-textarea-input" ng-model="model.@@slug" ng-maxlength="@@maxlength" ng-pattern="/@@regex/" ng-disabled="progress" @@required @@readonly>@@body</textarea>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            @@title را بنویسید.
+        </span>
+        <span ng-message="maxlength">
+            @@title را کوچک‌تر از @@maxlength حرف بنویسید.
+        </span>
+        <span ng-message="pattern">
+            @@regexerror
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.password">
+    <input type="password" name="@@slug" id="@@name-@@slug" class="form-control @@name-password-input" ng-model="model.@@slug" ng-maxlength="@@maxlength" ng-pattern="/@@regex/" value="@@body" ng-disabled="progress" @@required @@readonly>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            @@title را بنویسید.
+        </span>
+        <span ng-message="maxlength">
+            @@title را کوچک‌تر از @@maxlength حرف بنویسید.
+        </span>
+        <span ng-message="pattern">
+            @@regexerror
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.file">
+    <div class="custom-file">
+        <input type="file" name="@@slug" id="@@name-@@slug" class="custom-file-input @@name-file-input" ng-model="model.@@slug" ng-pattern="/@@regex/" ng-disabled="progress" lang="fa" ngf-select @@required>
+        <label class="custom-file-label" for="@@name-@@slug">
+            {{model['@@slug'].name||'انتخاب فایل...'}}
+        </label>
+    </div>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            @@title را انتخاب کنید.
+        </span>
+        <span ng-message="pattern">
+            @@regexerror
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.checkbox">
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" name="@@slug" id="@@name-@@slug" class="custom-control-input @@name-checkbox-input" ng-model="model.@@slug" ng-disabled="progress" @@required @@disabled>
+        <label class="custom-control-label @@name-checkbox-label" for="@@name-@@slug">
+            @@title
+        </label>
+    </div>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            انتخاب این گزینه اجباری است.
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.checklist">
+    <loop src="@@items">
+        <div class="custom-control custom-checkbox my-2">
+            <input type="checkbox" name="@@slug" id="@@name-@@slug-@@index" class="custom-control-input @@name-checklist-input" ng-model="model.@@slug.@@value" ng-required="checklistRequired(model.@@slug, '@@required')" ng-disabled="progress" @@disabled>
+            <label class="custom-control-label @@name-checklist-label" for="@@name-@@slug-@@index">
+                @@title
+            </label>
+        </div>
+    </loop>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            یکی از گزینه‌ها را انتخاب کنید.
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.radiolist">
+    <loop src="@@items">
+        <div class="custom-control custom-radio my-2">
+            <input type="radio" name="@@slug" id="@@name-@@slug-@@index" class="custom-control-input @@name-radiolist-input" ng-model="model.@@slug" value="@@value" ng-disabled="progress" @@required @@disabled>
+            <label class="custom-control-label @@name-radiolist-label" for="@@name-@@slug-@@index">
+                @@title
+            </label>
+        </div>
+    </loop>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            یکی از گزینه‌ها را انتخاب کنید.
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>
+<if terms="@@provider.dropdown">
+    <select name="@@slug" id="@@name-@@slug" class="form-control @@name-dropdown-input" ng-model="model.@@slug" ng-disabled="progress" @@required @@readonly>
+        <loop src="@@items">
+            <option value="@@value">
+                @@title
+            </option>
+        </loop>
+    </select>
+    <div class="validation-inline @@name-inline-error text-danger" ng-messages="formbuilder.@@slug.$error" ng-show="formbuilder.$submitted || formbuilder.@@slug.$dirty">
+        <span ng-message="required">
+            @@title را انتخاب کنید.
+        </span>
+        <span ng-message="server">
+            <span ng-bind="validation.@@slug"></span>
+        </span>
+    </div>
+    <if terms="@@help.exists()">
+        <p class="@@name-help form-text text-muted break-word">
+            @@help
+        </p>
+    </if>
+</if>

@@ -1,0 +1,129 @@
+<!--filters-->
+<div class="store-filters">
+
+    <!--buttons-->
+    <div class="store-filters-buttons collapse show fade" id="store-filters-buttons">
+        <div class="d-flex">
+            <div class="w-100">
+                <button class="btn btn-lg btn-success btn-block store-filters-buttons-search" ng-click="$root.no_scroll=showSearch=true">
+                    <i class="fa fa-search"></i>
+                    جستجو
+                </button>
+            </div>
+            <if terms="@@categories.any()">
+                <div class="w-100">
+                    <button class="btn btn-lg btn-dark btn-block store-filters-buttons-categories" ng-click="$root.no_scroll=showCategories=true">
+                        <i class="fa fa-sitemap"></i>
+                        دسته‌بندی
+                    </button>
+                </div>
+            </if>
+        </div>
+    </div>
+    <!--/buttons-->
+
+    <!--search-->
+    <div class="store-filters-search" ng-show="showSearch" auto-show>
+        <form class="store-filters-search-form" data-tabs="auto" ng-submit="$root.no_scroll=showSearch=false;search()">
+            <div class="form-group store-filters-search-query">
+                <label for="store-filters-search-query" class="store-filters-search-query-label">
+                    جستجو
+                </label>
+                <input type="text" name="query" id="store-filters-search-query" class="form-control store-filters-search-query-input" maxlength="100" value="@@query" ng-model="model.query" ng-disabled="loading" placeholder="بنویسید...">
+            </div>
+            <div class="custom-control custom-checkbox store-filters-search-available">
+                <input type="checkbox" id="store-filters-search-available" class="custom-control-input store-filters-search-available-input" ng-model="model.available" ng-disabled="loading">
+                <label class="custom-control-label store-filters-search-available-label" for="store-filters-search-available">
+                    فقط محصولات موجود
+                </label>
+            </div>
+			<div class="form-group store-filters-search-sorting mt-3">
+                <select name="sorting" id="store-filters-search-sorting" class="form-control store-filters-search-sorting-input" ng-model="model.sorting" ng-disabled="loading">
+                    <option value="">به ترتیب جدیدترین</option>
+                    <option value="rate">به ترتیب محبوب‌ترین</option>
+                    <option value="price-desc">به ترتیب گران‌ترین</option>
+                    <option value="price">به ترتیب ارزان‌ترین</option>
+                </select>
+            </div>
+            <if terms="@@filters.any()">
+                <ul class="nav nav-tabs store-filters-search-nav">
+                    <loop src="@@filters">
+                        <li class="nav-item store-filters-search-nav-item">
+                            <a role="button" class="nav-link store-filters-search-nav-link" data-toggle="tab" data-target="#store-filters-tab-@@id">
+                                @@title
+                            </a>
+                        </li>
+                    </loop>
+                </ul>
+                <div class="tab-content store-filters-search-tabs">
+                    <loop src="@@filters">
+                        <div class="tab-pane store-filters-search-tab" id="store-filters-tab-@@id">
+                            <loop src="@@subset">
+                                <div class="custom-control custom-checkbox store-filters-search-check my-1">
+                                    <input type="checkbox" id="store-filters-search-check-@@id" class="custom-control-input store-filters-search-check-input" ng-model="filters.filter@@id" eval="addFilter(@@id, @@_parent.id)" ng-disabled="loading">
+                                    <label class="custom-control-label store-filters-search-check-label" for="store-filters-search-check-@@id">
+                                        @@title
+                                    </label>
+                                </div>
+                            </loop>
+                        </div>
+                    </loop>
+                </div>
+            </if>
+            <div class="store-filters-buttons store-filters-search-buttons">
+                <div class="row no-gutters">
+                    <div class="col-12 col-sm-4">
+                        <button class="btn btn-lg btn-success btn-block store-filters-search-submit">
+                            <i class="fa fa-check-square"></i>
+                            اعمال
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <button type="button" class="btn btn-lg btn-secondary btn-block store-filters-search-cancel" ng-click="$root.no_scroll=showSearch=false;">
+                            <i class="fa fa-minus-square"></i>
+                            انصراف
+                        </button>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <button type="button" class="btn btn-lg btn-danger btn-block store-filters-search-remove" ng-click="$root.no_scroll=showSearch=false;remove()">
+                            <i class="fa fa-times"></i>
+                            حذف فیلتر
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/search-->
+
+    <!--categories-->
+    <div class="store-filters-categories" ng-show="showCategories" auto-show>
+        <h3 class="panel-heading store-filters-categories-title">
+            <i class="fa fa-sitemap fa-fw"></i>
+            دسته‌بندی
+        </h3>
+        <ul class="store-filters-categories-list">
+            <loop src="@@categories" recursive="@@subset">
+                <li class="store-filters-categories-item">
+                    <a href="@@url" class="store-filters-categories-link" title="@@metatitle">
+                        @@title
+                    </a>
+                    <if terms="@@subset.any()">
+                        <ul class="store-filters-categories-subset">
+                            @@recursive
+                        </ul>
+                    </if>
+                </li>
+            </loop>
+        </ul>
+        <div class="store-filters-buttons store-filters-categories-buttons">
+            <button type="button" class="btn btn-lg btn-secondary btn-block store-filters-categories-cancel" ng-click="$root.no_scroll=showCategories=false;">
+                <i class="fa fa-minus-square"></i>
+                انصراف
+            </button>
+        </div>
+    </div>
+    <!--/categories-->
+
+</div>
+<!--/filters-->

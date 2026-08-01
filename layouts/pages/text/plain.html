@@ -1,0 +1,487 @@
+<include name="layouts/header.html" />
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>تماس‌مارکت | لیست قیمت موبایل</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://sigmind.storage.iran.liara.space/vazir.css?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --soft:#f6f6f7;
+  --border:#e6e6e9;
+  --text:#1a1a1a;
+  --muted:#6f6f6f;
+  --accent:#0aa2b5;
+  --green:#00a85a;
+  --red:#e53935;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:0;
+  font-family: Vazirmatn, system-ui, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  direction:rtl;
+}
+
+/* ===== Header ===== */
+.site-header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:24px 16px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.brand img{
+  height:100px;
+	justify-content:center;
+	
+}
+
+.brand-text{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.campaign{
+  background:linear-gradient(135deg,#e0f7fa,#f1fbfd);
+  border:1px solid #cdeef3;
+  border-radius:16px;
+  padding:16px;
+}
+
+.campaign h2{
+  margin:0 0 8px;
+  font-size:18px;
+  font-weight:800;
+}
+
+.campaign p{
+  margin:4px 0;
+  font-size:14px;
+}
+.logo-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+}
+
+.logo-center img{
+  max-height:100px;   /* قابل تنظیم */
+  width:auto;
+}
+
+/* ===== Search ===== */
+.search-wrap{
+  padding:16px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.search{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-size:14px;
+}
+
+/* ===== Sections ===== */
+.section{
+  max-width:1200px;
+  margin:0 auto 48px;
+  padding:0 16px;
+}
+
+.section h2{
+  margin:0 0 14px;
+  font-size:20px;
+  font-weight:800;
+  border-left:4px solid var(--accent);
+  padding-left:12px;
+  text-align:left;
+}
+
+/* ===== Table ===== */
+.table-wrap{
+  background:var(--card);
+  border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(0,0,0,.05);
+  overflow:hidden;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+thead th{
+  background:var(--soft);
+  color:var(--muted);
+  font-size:13px;
+  padding:12px;
+  text-align:center;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  text-align:left;
+}
+
+tbody tr:hover{background:#fafafa}
+
+.price{
+  color:var(--green);
+  font-weight:700;
+}
+
+
+.low{background:#fdecea;color:var(--red)}
+.mid{background:#fff3cd;color:#856404}
+.high{background:#e6f4ea;color:var(--green)}
+
+/* ===== Footer ===== */
+footer{
+  background:#0f1f24;
+  color:#fff;
+  margin-top:60px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:32px 16px;
+  display:grid;
+  gap:20px;
+}
+
+
+
+.footer-text{
+  font-size:14px;
+  line-height:1.9;
+}
+
+.footer-contact{
+  font-weight:700;
+  font-size:15px;
+}
+.site-footer{
+  background:#ffffff;
+  border-top:1px solid #e6e6e9;
+  margin-top:64px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:32px 16px;
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:32px;
+  align-items:center;
+}
+
+.footer-info{
+  font-size:15px;
+  line-height:2;
+  color:#1a1a1a;
+}
+
+.footer-highlight span{
+  color:#d32f2f;
+  font-weight:800;
+}
+
+.footer-contact{
+  margin-top:16px;
+  font-size:16px;
+}
+
+.footer-image img{
+  width:100%;
+  max-width:420px;
+  display:block;
+}
+/* ===== Footer ===== */
+.site-footer{
+  background:#ffffff;
+  border-top:1px solid #e6e6e9;
+  margin-top:64px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:36px 16px;
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:32px;
+  align-items:center;
+}
+
+.footer-info{
+  color:#1a1a1a;
+  font-size:15px;
+  line-height:2;
+}
+
+.footer-highlight span{
+  color:#d32f2f;
+  font-weight:800;
+}
+
+.footer-contact{
+  margin-top:20px;
+}
+
+.contact-title{
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.contact-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.contact-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.contact-btn.whatsapp{
+  background:#e6f7ee;
+  color:#1a7f4c;
+}
+
+.contact-btn.whatsapp:hover{
+  background:#d2f1e1;
+}
+
+.contact-btn.call{
+  background:#e3f2fd;
+  color:#0d47a1;
+}
+
+.contact-btn.call:hover{
+  background:#d0e7fa;
+}
+
+.footer-image img{
+  width:100%;
+  max-width:420px;
+  display:block;
+}
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .contact-actions{
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .footer-image img{
+    margin:auto;
+    max-width:300px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media(max-width:640px){
+  .brand{flex-direction:column;align-items:flex-start}
+  .brand img{height:46px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <div class="header-inner">
+
+    <div class="logo-center">
+      <img src="logo.png" alt="تماس مارکت">
+      <div class="brand-text">
+         
+      </div>
+    </div>
+
+    <div class="campaign">
+      <h2>تماس‌مارکت</h2>
+      <p>📅 تاریخ: <span id="today-date"></span></p>
+      <p>🔥 فروش ویژه آنلاین موبایل</p>
+    </div>
+
+  </div>
+</header>
+<!--main-->
+<main class="page-container text-container text-cover-container">
+	
+	<div class="container">
+        <div >
+			<div>
+				<div>
+					<if terms="@@content.exists()">
+						<div>
+							@@content
+						</div>
+					</if>
+					<if terms="@@showsubset && @@subset.any()">
+						<ul class="text-subset text-cover-subset">
+							<loop src="@@subset" recursive="@@subset">
+								<li class="text-subset-item text-cover-subset-item">
+									<a href="@@url" class="text-subset-link text-cover-subset-link">
+										@@title
+									</a>
+								</li>
+								<if terms="@@subset.any()">
+									<ul class="text-subset-list text-cover-subset-list">
+										@@recursive
+									</ul>
+								</if>
+							</loop>
+						</ul>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<script>
+(function () {
+  const today = new Date();
+
+  const persianDate = new Intl.DateTimeFormat('fa-IR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(today);
+
+  document.getElementById('today-date').textContent = persianDate;
+})();
+</script>
+
+
+<script>
+const API_URL = "https://db.tamaspro.ir/api/v2/tables/ms4ri4ebrlgndn1/records?offset=0&limit=10000&where=&viewId=vwoz1w4er8gsekdv";
+const API_TOKEN = "sdC0AvSVuu4QTus1opgA3YWlPWAweE9B5exMZM68";
+
+let ALL_ROWS = [];
+
+// Fetch data from API
+fetch(API_URL, {
+  method: "GET",
+  headers: {
+    "xc-token": API_TOKEN
+  }
+})
+.then(res => res.json())
+.then(data => {
+  ALL_ROWS = data.list.map(r => [
+    r.brand || "",            // 0 brand
+    r.model_name || r.model,  // 1 model
+    r.color_name || "",       // 2 color
+    r.tamsa_price || 1              // 3 price
+  ]);
+
+  render();
+});
+
+search.addEventListener("input", render);
+
+function renderSection(title, brands, rows) {
+  const f = rows.filter(r =>
+    brands.includes(r[0]) &&
+    (r[1] + r[2]).toLowerCase().includes(search.value.toLowerCase())
+  );
+
+  if (!f.length) return "";
+
+  return `
+  <div class="section">
+    <h2>${title}</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+			<th>قیمت (تومان)</th>
+			<th>رنگ</th>
+            <th>مدل</th>
+            
+            
+          </tr>
+        </thead>
+        <tbody>
+          ${f.map(r => `
+            <tr>
+              <td class="price">${Number(r[3]).toLocaleString()}</td>
+              <td>${r[2]}</td>
+              <td>${r[1]}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function render() {
+  app.innerHTML =
+    renderSection(" iPhone", ["iPhone"], ALL_ROWS) +
+    renderSection(" Samsung Galaxy", ["Galaxy"], ALL_ROWS) +
+    renderSection(" Xiaomi / Redmi / POCO", ["Xiaomi", "Redmi", "POCO"], ALL_ROWS);
+}
+</script>
+
+
+</body>
+</html>
+
+
+<include name="layouts/footer.html" />

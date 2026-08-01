@@ -1,0 +1,109 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container recoverypass-container py-30">
+	<a href="/">
+		<img src="@@config.logo?m=thumb&w=150&h=48&q=veryhigh" alt="@@config.title" class="mb-30 img-fluid">
+	</a>
+	<div class="page-context recoverypass-context rounded bg-white border border-light shadow p-30 mt-0">
+		<h1 class="page-title recoverypass-title mb-15">
+			بازیابی رمز عبور
+		</h1>
+		<div auto-show>
+			<form name="recoverypass" class="recoverypass-form recoverypass-form1" ng-submit="recoverypass.$valid && submit()" ng-hide="recoveryStep2" recoverypass dynamic-form auto-show novalidate>
+				<scope name="recoverypass">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div class="form-group recoverypass-contact">
+					<input type="text" id="recoverypass-contact" name="contact" placeholder="شماره موبایل یا پست الکترونیک" class="form-control text-right recoverypass-contact-input" ng-model="model.contact" dir="ltr" ng-disabled="progress" auto-focus required>
+					<div class="validation-inline recoverypass-inline-error text-danger" ng-messages="recoverypass.contact.$error" ng-show="recoverypass.$submitted || recoverypass.contact.$dirty">
+						<span ng-message="required">
+							شماره موبایل یا پست الکترونیک را بنویسید.
+						</span>
+						<span ng-message="server">
+							<span ng-bind="validation.contact"></span>
+						</span>
+					</div>
+				</div>
+				<div class="form-group text-center mb-0">
+					<button class="btn btn-block btn-success recoverypass-submit" ng-disabled="progress">
+						گام بعدی
+					</button>
+					<a href="@@users.signin" class="btn btn-link recoverypass-cancel mt-10 click-confirm="آیا مطمئن هستید؟">
+						بازگشت
+					</a>
+					<div class="recoverypass-loading" ng-show="progress">
+						<i class="fa fa-refresh fa-spin fa-fw"></i>
+						کمی صبر کنید...
+					</div>
+				</div>
+			</form>
+			<form name="recoverypassconfirm" class="recoverypass-form recoverypass-form2" ng-submit="recoverypassconfirm.$valid && submit()" ng-show="recoveryStep2" recoverypass-confirm dynamic-form novalidate>
+				<div class="alert alert-success recoverypass-description" ng-hide="succeed">
+					هم اکنون یک کد 10 رقمی به اطلاعات تماس موجود در حساب کاربری ارسال شد. لطفا کد 10 رقمی و رمز عبور جدید خود را به ترتیب در فیلدهای زیر بنویسید و بر روی دکمه‌ی «تغییر رمز عبور» کلیک کنید.
+				</div>
+				<scope name="recoverypass">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div class="alert alert-success recoverypass-succeed" ng-show="succeed">
+					رمز عبور شما با موفقیت تغییر کرد. برای ورود به وب‌سایت،
+					<a href="@@users.signin">اینجا را کلیک کنید</a>.
+				</div>
+				<div ng-hide="succeed">
+					<div class="form-group recoverypass-token">
+						<input type="text" id="recoverypassconfirm-token" name="token" placeholder="کد بازیابی" class="form-control text-right recoverypass-token-input" ng-model="model.token" dir="ltr" ng-disabled="progress" auto-focus required>
+						<div class="validation-inline recoverypass-inline-error text-danger" ng-messages="recoverypassconfirm.token.$error" ng-show="recoverypassconfirm.$submitted || recoverypassconfirm.token.$dirty">
+							<span ng-message="required">
+								کد بازیابی را بنویسید.
+							</span>
+							<span ng-message="server">
+								<span ng-bind="validation.token"></span>
+							</span>
+						</div>
+					</div>
+					<div class="form-group recoverypass-newpassword">
+						<input type="password" id="recoverypassconfirm-newpassword" name="newpassword" placeholder="رمز عبور جدید" class="form-control text-right recoverypass-newpassword-input" ng-model="model.newpassword" strength="medium" dir="ltr" ng-disabled="progress" required>
+						<div class="validation-inline recoverypass-inline-error text-danger" ng-messages="recoverypassconfirm.newpassword.$error" ng-show="recoverypassconfirm.$submitted || recoverypassconfirm.newpassword.$dirty">
+							<span ng-message="required">
+								رمز عبور جدید را بنویسید.
+							</span>
+							<span ng-message="strength">
+								رمز عبور شما باید؛ حداقل 6 حرف و ترکیبی از حروف کوچک، بزرگ یا اعداد باشد.
+							</span>
+							<span ng-message="server">
+								<span ng-bind="validation.newpassword"></span>
+							</span>
+						</div>
+					</div>
+					<div class="form-group recoverypass-confirmpassword">
+						<input type="password" id="recoverypassconfirm-confirmpassword" name="confirmpassword" placeholder="تکرار رمز عبور جدید" class="form-control text-right recoverypass-confirmpassword-input" ng-model="model.confirmpassword" dir="ltr" ng-disabled="progress" required>
+						<div class="validation-inline recoverypass-inline-error text-danger" ng-messages="recoverypassconfirm.confirmpassword.$error" ng-show="recoverypassconfirm.$submitted || recoverypassconfirm.confirmpassword.$dirty">
+							<span ng-message="required">
+								تکرار رمز عبور جدید را بنویسید.
+							</span>
+							<span ng-message="server">
+								<span ng-bind="validation.confirmpassword"></span>
+							</span>
+						</div>
+					</div>
+					<div class="form-group text-center mb-0">
+							<button class="btn btn-block btn-success recoverypass-submit" ng-disabled="progress">
+								تغییر رمز عبور
+							</button>
+							<button type="button" class="btn btn-link recoverypass-cancel mt-10" ng-click="back()" click-confirm="آیا مطمئن هستید؟">
+								بازگشت
+							</button>
+							<div class="page-loading recoverypass-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

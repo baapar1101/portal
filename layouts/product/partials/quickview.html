@@ -1,0 +1,89 @@
+<!--quickview-->
+<form name="quickview" id="product-quickview-modal" class="modal modal-md product-quickview-modal" ng-submit="quickview.$valid && submit()" tabindex="-1" role="dialog" quick-view dynamic-form novalidate>
+    <div class="modal-dialog product-quickview-modal-dialog" role="document">
+        <div class="modal-content product-quickview-modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title product-quickview-modal-title">
+                    <span ng-bind="title"></span>
+                </h5>
+                <button type="button" class="close product-quickview-modal-close-icon" data-dismiss="modal">
+                    <span aria-hidden="true">
+                        &times;
+                    </span>
+                </button>
+            </div>
+            <div class="modal-body product-quickview-modal-body">
+                <scope name="product-quickview-modal">
+                    <div class="alert alert-danger validation-summary product-quickview-modal-failed m-0 mb-3" ng-if="validation" ng-class="{'d-block' : validation}">
+                        <h6 class="alert-heading validation-summary-title product-quickview-modal-failed-title">
+                            <span ng-bind="validation.main"></span>
+                        </h6>
+                    </div>
+                </scope>
+                <div class="alert alert-success product-quickview-modal-succeed mb-0" ng-show="succeed">
+                    <span ng-bind="succeed.description"></span>
+                </div>
+                <div ng-show="loading">
+                    در حال بارگذاری...
+                </div>
+                <div ng-hide="succeed || loading">
+                    <div class="form-group product-quickview-modal-attribute" ng-repeat="attribute in attributes">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    {{attribute.name}}
+                                </span>
+                            </div>
+                            <select id="product-quickview-modal-attribute-{{$index}}" name="attribute{{$index}}" class="form-control product-quickview-modal-attribute-control" ng-model="model.attributes['attribute' + $index]" ng-change="changeAttribute()" ng-disabled="progress" required>
+                                <option ng-repeat="value in attribute.values" value="{{attribute.name}}: {{value}}">
+                                    {{value}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="validation-inline product-quickview-modal-inline-error text-danger" ng-messages="quickview['attribute' + $index].$error" ng-show="quickview.$submitted || quickview['attribute' + $index].$dirty">
+                            <span ng-message="required">
+                                {{attribute.name}} را انتخاب کنید.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group product-quickview-modal-quantity">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    تعداد
+                                </span>
+                            </div>
+                            <input type="number" id="product-quickview-modal-quantity" name="quantity" class="form-control product-quickview-modal-quantity-control" ng-model="model.quantity" ng-disabled="progress" dir="ltr" min="1" max="1000000000" required>
+                        </div>
+                        <div class="validation-inline product-quickview-modal-inline-error text-danger" ng-messages="quickview.quantity.$error" ng-show="quickview.$submitted || quickview.quantity.$dirty">
+                            <span ng-message="required">
+                                تعداد را بنویسید.
+                            </span>
+                            <span ng-message="min">
+                                تعداد را بیش‌تر از 0 بنویسید.
+                            </span>
+                            <span ng-message="max">
+                                تعداد را کم‌تر از 10000000000 بنویسید.
+                            </span>
+                        </div>
+                    </div>
+                    <span class="product-quickview-modal-compare-price text-muted" ng-show="getComparePrice()">
+                        <del>{{getComparePrice() | number}}</del>
+                    </span>
+                    <span class="product-quickview-modal-price text-green" ng-show="getPrice()">
+                        {{getPrice() | number}} تومان
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer" ng-hide="succeed || loading">
+                <button type="button" class="btn btn-link product-quickview-modal-close" ng-disabled="progress" data-dismiss="modal">
+                    انصراف
+                </button>
+                <button class="btn btn-success product-quickview-modal-submit" ng-disabled="progress">
+                    افزودن به سبد خرید
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<!--/quickview-->

@@ -1,0 +1,99 @@
+<div class="sticky-top" style="z-index: 999; top: 130px;">
+	<div class="cart-details bg-white p-3" ng-hide="loading">
+		<div class="cart-details-counts d-flex align-items-center justify-content-between mb-2">
+			<div class="cart-details-counts-label">
+				تعداد محصولات
+			</div>
+			<div class="cart-details-counts-value">
+				{{model.quantity}} <small>عدد</small>
+			</div>
+		</div>
+		<div class="cart-details-subtotal d-flex align-items-center justify-content-between mb-2">
+			<div class="cart-details-subtotal-label">
+				جمع مبلغ
+			</div>
+			<div class="cart-details-subtotal-value">
+				{{model.subtotal+model.promotion_discount|number}} <small>تومان</small>
+			</div>
+		</div>
+		<div class="cart-details-promotion-discount d-flex align-items-center justify-content-between text-red mb-2" ng-show="model.promotion_discount">
+			<div class="cart-details-promotion-discount-label">
+				سود شما از این خرید
+			</div>
+			<div class="cart-details-promotion-discount-value">
+				{{model.promotion_discount|number}} <small>تومان</small>
+			</div>
+		</div>
+		<div class="cart-details-discount d-flex align-items-center justify-content-between mb-2" ng-show="model.discount">
+			<div class="cart-details-discount-label">
+				تخفیف
+			</div>
+			<div class="cart-details-discount-value">
+				{{model.discount|number}} <small>تومان</small>
+			</div>
+		</div>
+		<div class="cart-details-weight d-flex align-items-center justify-content-between mb-2" ng-if="model.weight">
+			<div class="cart-details-weight-label">
+				وزن
+			</div>
+			<div class="cart-details-weight-value">
+				{{model.weight|number}} <small>گرم</small>
+			</div>
+		</div>
+		<div class="cart-details-shipping d-flex align-items-center justify-content-between mb-2" ng-if="model.variant_shipping || model.shipping_class || (!model.shipping_class && model.shipping) || model.status.indexOf('freeship') > -1">
+			<div class="cart-details-shipping-label">
+				هزینه ارسال
+			</div>
+			<div class="cart-details-shipping-value" ng-if="model.shipping">
+				{{model.shipping|number}} <small>تومان</small>
+			</div>
+			<div class="cart-details-shipping-value" ng-if="model.shipping == 0 && model.shipping_class.type != 'alopeyk'">
+				رایگان
+			</div>
+			<div class="cart-details-shipping-value" ng-if="model.shipping == 0 && model.shipping_class.type == 'alopeyk'">
+				پس کرایه
+			</div>
+		</div>
+		<div class="cart-details-tax d-flex align-items-center justify-content-between" ng-show="model.tax">
+			<div class="cart-details-tax-label">
+				مالیات
+			</div>
+			<div class="cart-details-tax-value">
+				{{model.tax|number}} <small>تومان</small>
+			</div>
+		</div>
+		<div class="cart-details-paid d-flex align-items-center justify-content-between" ng-show="model.remaining_price && (model.price - model.remaining_price) > 0">
+			<div class="cart-details-paid-label">
+				مبلغ پرداخت شده
+			</div>
+			<div class="cart-details-paid-value">
+				{{model.price - model.remaining_price|number}} <small>تومان</small>
+			</div>
+		</div>
+		<hr class="page-separator cart-separator">
+		<div class="cart-details-total d-flex align-items-center justify-content-between">
+			<div class="cart-details-total-label">
+				<strong>
+					{{model.status.indexOf("paid") > -1 ? "مبلغ پرداخت شده" : "قابل پرداخت" }}
+				</strong>
+			</div>
+			<div class="cart-details-total-value">
+				<strong>
+					{{model.remaining_price ? model.remaining_price : model.price|number}} <small>تومان</small>
+				</strong>
+			</div>
+		</div>
+		<if terms='@@layout.contains("layouts/cart/index")'>
+			<a href="/site/cart/checkout" class="btn btn-lg btn-success cart-checkout d-none d-lg-block mt-3" ng-show="model.items.length > 4 && model.subtotal >= model.minimum_subtotal" ng-disabled="loading">
+				ادامه و ثبت سفارش
+			</a>
+			<div class="alert alert-info" ng-if="model.minimum_subtotal > model.subtotal && model.items.length > 4">
+				حداقل هزینه سفارش <strong>{{model.minimum_subtotal|number}}</strong> تومان می‌باشد. برای ثبت سفارش نیاز دارید <strong>{{model.minimum_subtotal - model.subtotal|number}}</strong> تومان به سبد خود بیافزایید.
+			</div>
+		</if>
+	</div>
+	<div class="page-loading cart-loading" ng-show="loading">
+		<i class="fa fa-refresh fa-spin fa-fw"></i>
+		کمی صبر کنید...
+	</div>
+</div>

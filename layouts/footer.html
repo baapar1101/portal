@@ -1,0 +1,321 @@
+		<if terms='@@layout.contains("authentication").false() && @@layout.contains("recoverypass").false()'>
+			<!-- to top -->
+			<div class="footer-to-top text-center py-10 mt-50">
+				<a href="#" class="footer-to-top-button">
+					<i class="fa fa-angle-up"></i>
+					برگشت به بالا
+				</a>
+			</div>
+
+			<!--footer-->
+			<footer class="footer">
+				<div class="container">
+					<!-- footer features -->
+					<widget type="gallery" name="footer:features" section="پاورقی">
+						<div class="footer-features pt-50 d-none d-md-block">
+							<div class="row justify-content-center">
+								<loop src="@@items">
+									<div class="col-3 col-md col-lg">
+										<a href="@@url" class="footer-features-item d-block text-center mb-30">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=60&q=high' alt="@@title" class="footer-features-item-image">
+											<span class="footer-features-item-title d-block mt-10">
+												@@title
+											</span>
+										</a>
+									</div>
+								</loop>
+							</div>
+							<if terms="@@user.admin">
+								<div class="text-center mb-15">
+									<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+										<i class="fa fa-pencil"></i>
+										ویرایش
+									</a>
+								</div>
+							</if>
+						</div>
+					</widget>
+
+					
+					<div class="footer-middle pt-30">
+						<div class="row">
+							<div class="col-lg-8">
+								<div class="row">
+									<widget type="menu" name="footer:links-1" section="پاورقی">
+										<div class="col-sm-4">
+											<div class="footer-links-title">
+												@@title
+											</div>
+											<ul class="footer-links-list">
+												<loop src="@@items">
+													<li class="footer-links-item">
+														<a href="@@url" target="@@target" class="footer-links-link @@cssclass">
+															@@title
+														</a>
+													</li>
+												</loop>
+											</ul>
+											<if terms="@@user.admin">
+												<div class="mb-15">
+													<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+														<i class="fa fa-pencil"></i>
+														ویرایش
+													</a>
+												</div>
+											</if>
+										</div>
+									</widget>
+									<widget type="menu" name="footer:links-2" section="پاورقی">
+										<div class="col-sm-4">
+											<div class="footer-links-title">
+												@@title
+											</div>
+											<ul class="footer-links-list">
+												<loop src="@@items">
+													<li class="footer-links-item">
+														<a href="@@url" target="@@target" class="footer-links-link @@cssclass">
+															@@title
+														</a>
+													</li>
+												</loop>
+											</ul>
+											<if terms="@@user.admin">
+												<div class="mb-15">
+													<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+														<i class="fa fa-pencil"></i>
+														ویرایش
+													</a>
+												</div>
+											</if>
+										</div>
+									</widget>
+									<widget type="menu" name="footer:links-3" section="پاورقی">
+										<div class="col-sm-4">
+											<div class="footer-links-title">
+												@@title
+											</div>
+											<ul class="footer-links-list">
+												<loop src="@@items">
+													<li class="footer-links-item">
+														<a href="@@url" target="@@target" class="footer-links-link @@cssclass">
+															@@title
+														</a>
+													</li>
+												</loop>
+											</ul>
+											<if terms="@@user.admin">
+												<div class="mb-15">
+													<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+														<i class="fa fa-pencil"></i>
+														ویرایش
+													</a>
+												</div>
+											</if>
+										</div>
+									</widget>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<!-- subscription -->
+								<widget type="subscription" name="footer:subscription" section="پاورقی">
+									<div class="footer-subscription">
+										<form name="footersubscription" class="footer-subscription-form" ng-submit="footersubscription.$valid && submit()" eval="collect('@@label')" subscription dynamic-form auto-show novalidate>
+											<h3 class="footer-subscription-title">
+												@@title
+											</h3>
+											<scope name="footer-subscription">
+												<include name="layouts/validation.html" />
+											</scope>
+											<div class="alert alert-success footer-subscription-succeed" ng-show="succeed">
+												<span ng-bind="succeed.description"></span>
+											</div>
+											<div class="input-group footer-subscription-email">
+												<input type="text" name="email" ng-model="model.email" class="form-control" placeholder="پست الکترونیک" ng-disabled="progress">
+												<div class="input-group-append">
+													<button class="btn btn-blue footer-subscription-submit" ng-disabled="progress">
+														ثبت‌نام
+													</button>
+												</div>
+											</div>
+											<div class="validation-inline footer-subscription-inline-error text-danger" ng-messages="footersubscription.email.$error" ng-show="footersubscription.$submitted || footersubscription.email.$dirty">
+												<span ng-message="server">
+													<span ng-bind="validation.email"></span>
+												</span>
+											</div>
+											<if terms="@@user.admin">
+												<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget footer-subscription-edit">
+													<i class="fa fa-pencil"></i>
+													ویرایش
+												</a>
+											</if>
+											<div class="footer-subscription-loading" ng-show="progress">
+												<i class="fa fa-refresh fa-spin fa-fw"></i>
+												کمی صبر کنید...
+											</div>
+										</form>
+									</div>
+								</widget>
+								<!-- /subscription -->
+
+								<!-- social -->
+								<widget type="content" name="footer:social" section="پاورقی">
+									<div class="footer-social mt-30">
+										<h3 class="footer-social-title">
+											@@title
+										</h3>
+										<if terms="@@telegram.exists()">
+											<a class="footer-social-link telegram" href="@@telegram"><span class="fa fa-send"></span></a>
+										</if>
+										<if terms="@@instagram.exists()">
+											<a class="footer-social-link instagram" href="@@instagram"><span class="fa fa-instagram"></span></a>
+										</if>
+										<if terms="@@linkedin.exists()">
+											<a class="footer-social-link linkedin" href="@@linkedin"><span class="fa fa-linkedin"></span></a>
+										</if>
+										<if terms="@@twitter.exists()">
+											<a class="footer-social-link twitter" href="@@twitter"><span class="fa fa-twitter"></span></a>
+										</if>
+										<if terms="@@facebook.exists()">
+											<a class="footer-social-link facebook" href="@@facebook"><span class="fa fa-facebook"></span></a>
+										</if>
+										<if terms="@@skype.exists()">
+											<a class="footer-social-link skype" href="@@skype"><span class="fa fa-skype"></span></a>
+										</if>
+										<if terms="@@user.admin">
+											<div class="mt-15">
+												<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+													<i class="fa fa-pencil"></i>
+													ویرایش
+												</a>
+											</div>
+										</if>
+									</div>
+								</widget>
+							</div>
+						</div>
+					</div>
+					<!-- /footer middle -->
+
+					<!-- footer contact -->
+					<widget type="content" name="footer:contact" section="پاورقی">
+						<div class="footer-contact py-30 d-flex flex-column flex-lg-row align-items-lg-center">
+
+      <div class="footer-contact">
+        <div class="contact-title">راه‌های ارتباطی</div>
+
+        <div class="contact-actions">
+          <a href="https://wa.me/message/AHUDTRE26A3JL1/"
+             class="contact-btn whatsapp"
+             target="_blank"
+             rel="noopener">
+            💬 واتساپ ۶۶۴۴
+          </a>
+
+          <a href="tel:09135006644"
+             class="contact-btn call">
+            📞 ۰۹۱۳۵۰۰۶۶۴۴
+          </a>
+        </div>
+
+        <div class="contact-actions">
+          <a href="https://wa.me/qr/EWHHZ7P7MUG2K1"
+             class="contact-btn whatsapp"
+             target="_blank"
+             rel="noopener">
+            💬 واتساپ ۶۶۸۸
+          </a>
+
+          <a href="tel:09135006688"
+             class="contact-btn call">
+            📞 ۰۹۱۳۵۰۰۶۶۸۸
+          </a>
+        </div>
+		  <a class="footer-social-link instagram" href="@@instagram"><span class="fa fa-instagram"></span></a>
+		  <a class="footer-social-link telegram" href="@@telegram"><span class="fa fa-send"></span></a>
+      </div>
+
+    </div>
+							
+							
+							
+							<if terms="@@user.admin">
+								<div class="mt-10 mt-lg-0">
+									<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget m-0">
+										<i class="fa fa-pencil"></i>
+										ویرایش
+									</a>
+								</div>
+							</if>
+						</div>
+					</widget>
+
+				</div>
+			</footer>
+			<!--/footer-->
+
+			<!--copyright-->
+			<div class="copyright-container">
+				<div class="container">
+					<!-- about and enamd -->
+					<widget type="content" name="footer:about-enamad" section="پاورقی">
+						<div class="footer-about pb-20">
+							<div class="row">
+								<div class="col-md-6 col-lg-7">
+									<div class="footer-about-context mb-20">
+										<h3 class="footer-about-title">@@title</h3>
+										<div class="footer-about-description">@@description</div>
+										<if terms="@@user.admin">
+											<div class="mt-15">
+												<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget m-0">
+													<i class="fa fa-pencil"></i>
+													ویرایش
+												</a>
+											</div>
+										</if>
+									</div>
+								</div>
+								<div class="col-md-6 col-lg-5">
+									<div class="footer-about-enamd text-center text-md-left mb-20">
+										@@html
+									</div>
+								</div>
+							</div>
+						</div>
+					</widget>
+
+					<div class="copyright-text text-center mt-20">
+						کلیه حقوق این سایت متعلق به تماس مارکت است
+					</div>
+				</div>
+			</div>
+			<!--/copyright-->
+		</if>
+		
+		<!--/quickview-->
+		<include name="layouts/product/partials/quickview.html" />
+		<!--/quickview-->
+
+		<script type="text/javascript" src="@@theme/js/bootstrap.js"></script>
+		<script type="text/javascript" src="@@theme/js/magnific.popup.js"></script>
+		<script type="text/javascript" src="@@theme/js/owl.carousel.js"></script>
+		<if terms='@@layout.contains("cart")'>
+			<script type="text/javascript" src="@@theme/js/leaflet.js"></script>
+		</if>
+		<script type="text/javascript" src="@@theme/js/app.js"></script>
+		<script type="text/javascript" src="@@theme/js/custom.js?v=1.02"></script>
+		<script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=@@analyticsid" async></script>
+		<script type="text/javascript">
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', '@@analyticsid');
+		</script>
+
+		<!-- schema -->
+		<if terms="@@schema.exists()">
+			<script type="application/ld+json">
+			@@schema
+			</script>
+		</if>
+	</body>
+</html>

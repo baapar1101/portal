@@ -1,0 +1,153 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-custom-container">
+	<div class="container">
+		<div class="page-context store-context store-custom-context" store>			
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page store-custom-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-product store-custom-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد محصول
+					</a>
+				</if>
+			</if>
+			<hr class="page-separator store-separator store-custom-separator">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="store-sidebar store-custom-sidebar">
+						<include name="layouts/pages/store/partials/sidebar.html" />
+					</div>
+				</div>
+				<div class="col-lg-9" store-ajax-context>
+					<if terms="@@products.empty()">
+						<div class="page-empty store-empty store-custom-empty" ng-hide="loading">
+							موردی برای نمایش وجود ندارد.
+						</div>
+					</if>
+
+					<include name="layouts/breadcrumb.html" />
+
+					<div class="store-custom-products-wrap bg-white shadow">
+						<div class="store-sorting store-custom-sorting d-flex align-items-center p-10 p-sm-15">
+							<div class="store-sorting-title store-custom-sorting-title d-none d-sm-block">
+								<i class="fa fa-sort-amount-desc"></i>
+								ترتیب نمایش:
+							</div>
+							<button class="btn btn-sm store-sorting-item store-custom-sorting-item mx-0 mx-sm-half" ng-class="model.sorting == null ? 'btn-blue' : 'btn-link'" ng-click="sort()">
+								جدیدترین
+							</button>
+							<button class="btn btn-sm store-sorting-item store-custom-sorting-item mx-0 mx-sm-half" ng-class="model.sorting == 'rate' ? 'btn-blue' : 'btn-link'" ng-click="sort('rate')">
+								محبوب‌ترین
+							</button>
+							<button class="btn btn-sm store-sorting-item store-custom-sorting-item mx-0 mx-sm-half" ng-class="model.sorting == 'price-desc' ? 'btn-blue' : 'btn-link'" ng-click="sort('price-desc')">
+								گران‌ترین
+							</button>
+							<button class="btn btn-sm store-sorting-item store-custom-sorting-item mx-0 mx-sm-half" ng-class="model.sorting == 'price' ? 'btn-blue' : 'btn-link'" ng-click="sort('price')">
+								ارزان‌ترین
+							</button>
+						</div>
+						<if terms="@@products.any()">
+							<div class="store-products store-custom-products">
+								<div class="store-loading store-custom-loading p-20" ng-show="loading" auto-show>
+									<i class="fa fa-refresh fa-spin fa-fw"></i>
+									کمی صبر کنید...
+								</div>
+								<div class="row no-gutters" ng-hide="loading">
+									<loop src="@@products">
+										<div class="col-xs-6 col-xxl-4">
+											<article class='store-product store-custom-product @@outofstock.whenever("store-custom-product-outofstock")'>
+												<div class="store-product-image store-custom-product-image">
+													<a href="@@url" class="store-product-image-link store-custom-product-image-link" title="@@metatitle">
+														<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high' class="img-fluid center-block store-product-image-element store-custom-product-image-element px-sm-50" alt="@@title">
+													</a>
+												</div>
+												<h3 class="store-product-title store-custom-product-title">
+													<a href="@@url" class="store-product-link store-custom-product-link" title="@@metatitle">
+														@@title
+													</a>
+												</h3>
+												<if terms="">
+													<div class="store-custom-product-rating" eval="collect(@@id, @@rate, @@ratecount)" product-rating >
+														<span class="store-custom-product-rating-info" ng-show="model.count">
+															<small class="text-gray ml-half">
+																{{model.count}} نفر
+															</small>
+														</span>
+														<a role="button" class="store-custom-product-rating-link" ng-click="submit(number)" ng-focus="changeRate(number)" ng-mouseover="changeRate(number)" ng-mouseleave="changeRate()" ng-repeat="number in [1,2,3,4,5]">
+															<i class="fa fa-star fa-flip-horizontal text-warning store-custom-product-rating-link-icon" ng-class="{ 'fa-star-half-o': isHalf(number), 'fa-star-o': model.rate < number }"></i>
+														</a>
+													</div>
+												</if>
+												<div class="store-custom-product-price-wrap text-left">
+													<if terms="@@compareprice.exists">
+														<span class="store-product-compare-price store-custom-product-compare-price">
+															@@compareprice
+														</span>
+													</if>
+													<if terms='@@discount.morethan("0")'>
+														<span class="store-custom-product-discount">
+															@@discount٪
+														</span>
+													</if>
+													<if terms="@@price.exists">
+														<div class="store-product-price store-custom-product-price">
+															@@price<span> تومان</span>
+														</div>
+													</if>
+												</div>
+												<if terms="@@outofstock.false()">
+													<div class="mt-10">
+														<button class="btn btn-sm btn-primary store-full-product-quick-view" ng-click="quickview(@@id, '/site/cart')">
+															<if terms="@@inquiry">استعلام محصول</if>
+															<if terms="@@inquiry.false()">
+																<i class="fa fa-shopping-cart"></i>
+																خرید
+															</if>
+														</button>
+													</div>
+												</if>
+												<if terms="@@outofstock">
+													<div class="store-product-outofstock-message store-custom-product-outofstock-message mt-10">
+														<span>ناموجود</span>
+													</div>
+												</if>
+											</article>
+										</div>
+									</loop>
+								</div>
+								<div ng-hide="loading">
+									<include name="layouts/pager.html" />
+								</div>
+							</div>
+						</if>
+					</div>
+				</div>
+			</div>
+
+			<if terms="@@content.exists()">
+				<div class="store-custom-info bg-white py-30 px-40 my-30">
+					<h1 class="page-title store-title store-custom-title">
+						@@title
+					</h1>
+					<div class="page-description store-description store-custom-description break-word">
+						@@content
+					</div>
+				</div>
+			</if>
+
+			<div class="store-filters store-custom-filters">
+				<include name="layouts/pages/store/partials/filters.html" />
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

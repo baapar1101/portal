@@ -1,0 +1,94 @@
+<widget type="menu" name="navigation" section="سربرگ">
+    <nav class="navbar navbar-light bg-light navbar-expand-lg" role="navigation">
+        <div class="container" navbar-menu>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-@@id" aria-expanded="false" aria-controls="navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand d-lg-none float-left" href="javascript:;">
+                @@title
+            </a>
+            <div id="navbar-@@id" class="navbar-collapse collapse">
+                <ul class="navbar-nav" role="menu">
+                    <loop src="@@items">
+                        <li class="nav-item @@active" data-subset="@@subset.count()">
+                            <a href="@@url" class="nav-link" target="@@target">
+                                @@title.truncate("50")
+                            </a>
+                            <if terms="@@subset.any()">
+                                <ul class="nav-subset" role="menu">
+                                    <loop src="@@subset" recursive="@@subset">
+                                        <li class="nav-subset-item @@active" data-subset="@@subset.count()">
+                                            <a href="@@url" class="nav-subset-link" target="@@target">
+                                                @@title.truncate("50")
+                                            </a>
+                                            <if terms="@@subset.any()">
+                                                <ul class="nav-subset" role="menu">
+                                                    @@recursive
+                                                </ul>
+                                            </if>
+                                        </li>
+                                    </loop>
+                                </ul>
+                            </if>
+                        </li>
+                    </loop>
+                </ul>
+                <if terms="@@user.exists()">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a href="/user" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                @@user
+                            </a>
+                            <div class="dropdown-menu">
+                                <if terms="@@user.reseller">
+                                    <a href="/reseller" class="dropdown-item">
+                                        <i class="fa fa-fw ml-1 mt-1 fa-globe"></i>
+                                        بخش نمایندگی
+                                    </a>
+                                </if>
+                                <if terms="@@user.admin">
+                                    <a href="/admin" class="dropdown-item">
+                                        <i class="fa fa-fw ml-1 mt-1 fa-gear"></i>
+                                        بخش مدیریت
+                                    </a>
+                                </if>
+                                <a href="/user" class="dropdown-item">
+                                    <i class="fa fa-fw ml-1 mt-1 fa-user"></i>
+                                    بخش کاربری
+                                </a>
+                                <a href="/user/profile" class="dropdown-item">
+                                    <i class="fa fa-fw ml-1 mt-1 fa-pencil"></i>
+                                    ویرایش مشخصات
+                                </a>
+                                <a href="/user/profile/changepassword" class="dropdown-item">
+                                    <i class="fa fa-fw ml-1 mt-1 fa-lock"></i>
+                                    تغییر رمز عبور
+                                </a>
+                                <a href="/site/signout" class="dropdown-item">
+                                    <i class="fa fa-fw ml-1 mt-1 fa-power-off"></i>
+                                    خروج
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </if>
+                <if terms="@@user.empty()">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="@@users.signin" class="nav-link">
+                                ورود
+                            </a>
+                        </li>
+                        <if terms="@@users.signup.enabled">
+                            <li class="nav-item">
+                                <a href="@@users.signup" class="nav-link">
+                                    ثبت‌نام
+                                </a>
+                            </li>
+                        </if>
+                    </ul>
+                </if>
+            </div>
+        </div>
+    </nav>
+</widget>

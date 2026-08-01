@@ -1,0 +1,10 @@
+<div class="alert alert-danger validation-summary @@name-failed" ng-if="validation" ng-class="{'d-block' : validation}">
+    <h6 class="alert-heading validation-summary-title @@name-failed-title">
+        <span ng-bind="validation.main"></span>
+    </h6>
+    <ul class="validation-summary-list @@name-failed-list">
+        <li class="validation-summary-item @@name-failed-item" ng-repeat="(key, value) in validation" ng-if="key != 'main'">
+            {{value}}
+        </li>
+    </ul>
+</div>

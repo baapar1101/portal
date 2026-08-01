@@ -1,0 +1,105 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container blog-container blog-cover-container">
+	<div class="blog-cover-header" style='background-image: url(@@image.append("?f=50"));'>
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-12 col-lg-10 col-xl-8">
+					<h1 class="page-title blog-title blog-cover-header-title">
+						@@title
+					</h1>
+					<if terms="@@content.exists()">
+						<div class="page-description blog-description blog-cover-header-description break-word">
+							@@content
+						</div>
+					</if>
+					<if terms="@@user.admin">
+						<if terms="@@editurl.exists()">
+							<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page blog-cover-edit">
+								<i class="fa fa-pencil"></i>
+								ویرایش صفحه
+							</a>
+						</if>
+						<if terms="@@addurl.exists()">
+							<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-post blog-cover-add" target="_blank">
+								<i class="fa fa-plus"></i>
+								ایجاد نوشته
+							</a>
+						</if>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="d-none d-lg-block col-lg-1 col-xl-2"></div>
+			<div class="col-md-12 col-lg-10 col-xl-8">
+				<div class="page-context blog-context blog-cover-context">
+					<if terms="@@posts.empty()">
+						<div class="page-empty blog-empty blog-cover-empty">
+							موردی برای نمایش وجود ندارد.
+						</div>
+					</if>
+					<loop src="@@posts">
+						<article class="blog-post blog-cover-post">
+							<if terms="@@image.exists()">
+								<div class="blog-post-image blog-cover-post-image">
+									<a href="@@url" class="blog-post-image-link blog-cover-post-image-link">
+										<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block blog-post-image-element blog-cover-post-image-element" alt="@@title">
+									</a>
+								</div>
+							</if>
+							<h2 class="blog-post-title blog-cover-post-title">
+								<a href="@@url" class="blog-post-link blog-cover-post-link" title="@@metatitle">
+									@@title
+								</a>
+							</h2>
+							<div class="blog-post-excerpt blog-cover-post-excerpt break-word">
+								@@description
+							</div>
+							<div class="blog-post-meta blog-cover-post-meta">
+								<span class="blog-post-date blog-cover-post-date">
+									<i class="fa fa-fw fa-calendar"></i>
+									@@date
+								</span>
+								<if terms="@@author.exists()">
+									<span class="blog-post-author blog-cover-post-author">
+										<i class="fa fa-fw fa-user-circle"></i>
+										<a href="/site/posts?author=@@author.id" class="blog-post-author-link blog-cover-post-author-link">
+											<span>
+												@@author.name.default("ناشناس")
+											</span>
+										</a>
+									</span>
+								</if>
+								<if terms="@@categories.any()">
+									<span class="blog-post-categories blog-cover-post-categories">
+										<i class="fa fa-fw fa-sitemap"></i>
+										<loop src="@@categories">
+											<a href="@@url" class="blog-post-category blog-cover-post-category" title="@@metatitle">
+												@@title
+											</a>
+										</loop>
+									</span>
+								</if>
+							</div>
+							<if terms="@@user.admin">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-post blog-cover-post-edit">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</if>
+							<hr class="page-separator blog-separator blog-cover-post-separator">
+						</article>
+					</loop>
+					<include name="layouts/pager.html" />
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

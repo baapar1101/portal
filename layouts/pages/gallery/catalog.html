@@ -1,0 +1,56 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container gallery-container gallery-catalog-container">
+	<div class="container">
+		<include name="layouts/breadcrumb.html" />
+		<div class="page-context gallery-context gallery-catalog-context" magnific>
+			<h1 class="page-title gallery-title gallery-catalog-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page gallery-catalog-edit">
+					<i class="fa fa-pencil"></i>
+					ویرایش صفحه
+				</a>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator gallery-separator gallery-catalog-separator">
+				<div class="page-description gallery-description gallery-catalog-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator gallery-separator gallery-catalog-separator">
+			<loop src="@@images">
+				<div class="gallery-item gallery-catalog-item">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 col-xxl-4 gallery-item-image gallery-catalog-item-image">
+							<a href="@@url" class="gallery-item-link gallery-catalog-item-link" magnific-preview="@@image?m=thumb&w=1280&h=800&q=high">
+								<img src="@@image?m=crop&w=800&h=600&q=high" class="img-fluid center-block gallery-item-element gallery-catalog-item-element">
+							</a>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-6 col-lg-7 col-xxl-8">
+							<if terms="@@title.exists()">
+								<h3 class="gallery-item-element-title gallery-catalog-item-title">
+									@@title
+								</h3>
+							</if>
+							<p class="gallery-item-element-description gallery-catalog-item-description break-word">
+								@@description.default("بدون شرح...")
+							</p>
+						</div>
+					</div>
+					<hr class="page-separator gallery-separator gallery-catalog-separator">
+				</div>
+			</loop>
+			<if terms="@@images.empty()">
+				<div class="page-empty gallery-empty gallery-catalog-empty">
+					هیچ موردی برای نمایش پیدا نشد.
+				</div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

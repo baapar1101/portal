@@ -1,0 +1,87 @@
+<div class="position-relative">
+	<div class="navbar-mega-container d-inline-block">
+		<a href="#" class="mega-menu-title">
+			<i class="fa fa-bars align-middle ml-half"></i> 
+			دسته‌بندی کالاها
+		</a>
+		<widget type="menu" name="navigation" section="سربرگ">
+			<div class="navbar-mega-context shadow">
+				<nav class="navbar-mega" role="navigation" navbar-menu>
+					<div id="navbar-@@id" class="">
+						<ul class="navbar-nav" role="menu">
+							<loop src="@@items">
+								<li class="nav-item position-static @@active" data-subset="@@subset.count()">
+									<a href="@@url" class="nav-link" target="@@target">
+										@@title.truncate("50")
+									</a>
+									<if terms="@@subset.any()">
+										<div class="nav-subset nav-subset-@@index">
+											<div class="nav-subset-list">
+												<loop src="@@subset" recursive="@@subset">
+													<a href="@@url" class='nav-subset-link @@active @@subset.count().morethan("0").whenever("has-child","")'
+														target="@@target">
+														@@title.truncate("50")
+													</a>
+													<if terms="@@subset.any()">
+														@@recursive
+													</if>
+												</loop>
+											</div>
+										</div>
+									</if>
+								</li>
+							</loop>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</widget>
+	</div>
+	<widget type="menu" name="navigation-alt" section="سربرگ">
+		<nav class="navbar navbar-expand-lg d-inline-block p-0" role="navigation">
+			<div class="container" navbar-menu>
+				<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-@@id" aria-expanded="false" aria-controls="navbar">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<a class="navbar-brand d-lg-none float-left" href="javascript:;">
+					@@title
+				</a>
+				<div id="navbar-@@id" class="navbar-collapse collapse">
+					<ul class="navbar-nav" role="menu">
+						<loop src="@@items">
+							<li class="nav-item @@active" data-subset="@@subset.count()">
+								<a href="@@url" class="nav-link" target="@@target">
+									@@title.truncate("50")
+								</a>
+								<if terms="@@subset.any()">
+									<ul class="nav-subset" role="menu">
+										<loop src="@@subset" recursive="@@subset">
+											<li class="nav-subset-item @@active" data-subset="@@subset.count()">
+												<a href="@@url" class="nav-subset-link" target="@@target">
+													@@title.truncate("50")
+												</a>
+												<if terms="@@subset.any()">
+													<ul class="nav-subset" role="menu">
+														@@recursive
+													</ul>
+												</if>
+											</li>
+										</loop>
+									</ul>
+								</if>
+							</li>
+						</loop>
+						<if terms="@@user.admin">
+							<li class="nav-item">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+									<i class="fa fa-pencil"></i>
+									ویرایش منو
+								</a>
+							</li>
+						</if>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</widget>
+</div>

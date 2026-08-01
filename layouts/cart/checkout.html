@@ -1,0 +1,402 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container cart-checkout-container" cart-checkout>
+	<div class="container">
+		<div class="page-context cart-checkout-context">
+			<div ng-hide="loading" auto-show>
+				<div ng-hide="ready">
+					<scope name="cart-checkout">
+						<include name="layouts/validation.html" />
+					</scope>
+				</div>
+				<div ng-show="ready">
+					<div class="row">
+						<div class="col-lg-8">
+							<div ng-switch="step">
+								<div ng-switch-when="form">
+									<form name="checkout" class="cart-checkout-form" ng-submit="checkout.$valid && submit()" dynamic-form auto-show novalidate>
+										<div class="alert alert-success cart-checkout-succeed" ng-show="succeed">
+											<span ng-bind="succeed.description"></span>
+										</div>
+										<scope name="cart-checkout">
+											<include name="layouts/validation.html" />
+										</scope>
+										<div ng-hide="succeed">
+											<h1 class="page-title cart-checkout-title">
+												اطلاعات تحویل گیرنده
+											</h1>
+											<hr class="page-separator cart-checkout-separator">
+											<div class="row">
+												<div class="col-6">
+													<div class="form-group cart-checkout-name">
+														<label for="cart-checkout-name" class="col-form-label cart-checkout-name-label">
+															نام و نام خانوادگی
+														</label>
+														<input type="text" id="cart-checkout-name" name="name" class="form-control cart-checkout-name-input" ng-model="model.contact.name" ng-disabled="progress" auto-focus required>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.name.$error" ng-show="checkout.$submitted || checkout.name.$dirty">
+															<span ng-message="required">
+																نام و نام خانوادگی را بنویسید.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.name"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group cart-checkout-mobile">
+														<label for="cart-checkout-mobile" class="col-form-label cart-checkout-mobile-label">
+															شماره موبایل
+														</label>
+														<input type="text" inputmode="numeric" id="cart-checkout-mobile" name="mobile" class="form-control cart-checkout-mobile-input" ng-model="model.contact.mobile" ng-pattern="/^(?:09|۰۹)[۰۱۲۳۴۵۶۷۸۹\d]{9}$/" invariant-culture ng-disabled="progress" required>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.mobile.$error" ng-show="checkout.$submitted || checkout.mobile.$dirty">
+															<span ng-message="required">
+																شماره موبایل را بنویسید.
+															</span>
+															<span ng-message="pattern">
+																شماره موبایل معتبر نیست.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.mobile"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group cart-checkout-phone">
+														<label for="cart-checkout-phone" class="col-form-label cart-checkout-phone-label">
+															شماره تلفن
+														</label>
+														<input type="text" inputmode="numeric" id="cart-checkout-phone" name="phone" class="form-control cart-checkout-phone-input" ng-model="model.contact.phone" ng-disabled="progress">
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.phone.$error" ng-show="checkout.$submitted || checkout.phone.$dirty">
+															<span ng-message="server">
+																<span ng-bind="validation.phone"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group cart-checkout-email">
+														<label for="cart-checkout-email" class="col-form-label cart-checkout-email-label">
+															پست الکترونیک
+														</label>
+														<input type="text" inputmode="email" id="cart-checkout-email" name="email" class="form-control cart-checkout-email-input" ng-model="model.contact.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" dir="ltr" ng-disabled="progress">
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.email.$error" ng-show="checkout.$submitted || checkout.email.$dirty">
+															<span ng-message="pattern">
+																پست الکترونیک معتبر نیست.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.email"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr class="page-separator cart-checkout-separator" ng-if="shippingRequired()">
+											<div class="row">
+												<div class="col-12 d-none">
+													<div class="form-group cart-checkout-country" ng-if="shippingRequired()">
+														<label for="cart-checkout-country" class="col-form-label cart-checkout-country-label">
+															کشور
+														</label>
+														<select id="cart-checkout-country" name="country_id" class="form-control cart-checkout-country-input" ng-model="model.contact.country_id" ng-disabled="progress" required>
+															<option ng-value="country.id" ng-repeat="country in countries">
+																{{country.name}}
+															</option>
+														</select>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.country_id.$error" ng-show="checkout.$submitted">
+															<span ng-message="required">
+																کشور را انتخاب کنید.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.country_id"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group cart-checkout-state" ng-if="shippingRequired()">
+														<label for="cart-checkout-state" class="col-form-label cart-checkout-state-label">
+															استان
+														</label>
+														<select id="cart-checkout-state" name="state_id" class="form-control cart-checkout-state-input" ng-model="model.contact.state_id" ng-disabled="progress" required>
+															<option ng-value="state.id" ng-repeat="state in states">
+																{{state.name}}
+															</option>
+														</select>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.state_id.$error" ng-show="checkout.$submitted">
+															<span ng-message="required">
+																استان را انتخاب کنید.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.state_id"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-6">
+													<div class="form-group cart-checkout-city" ng-if="shippingRequired()">
+														<label for="cart-checkout-city" class="col-form-label cart-checkout-city-label">
+															شهر
+														</label>
+														<select id="cart-checkout-city" name="city_id" class="form-control cart-checkout-city-input" ng-model="model.contact.city_id" ng-disabled="progress" required>
+															<option ng-value="city.id" ng-repeat="city in cities">
+																{{city.name}}
+															</option>
+														</select>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.city_id.$error" ng-show="checkout.$submitted">
+															<span ng-message="required">
+																شهر را انتخاب کنید.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.city_id"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="form-group cart-checkout-zipcode" ng-if="shippingRequired()">
+														<label for="cart-checkout-zipcode" class="col-form-label cart-checkout-zipcode-label">
+															کد پستی
+														</label>
+														<input type="text" id="cart-checkout-zipcode" name="zipcode" class="form-control cart-checkout-zipcode-input" ng-model="model.contact.zipcode" ng-pattern="/^[۰۱۲۳۴۵۶۷۸۹\d]{10,10}$/" ng-disabled="progress" required>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.zipcode.$error" ng-show="checkout.$submitted || checkout.zipcode.$dirty">
+															<span ng-message="required">
+																کد پستی را بنویسید.
+															</span>
+															<span ng-message="pattern">
+																کد پستی معتبر نیست.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.zipcode"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-lg-6">
+													<div class="form-group cart-checkout-address" ng-if="shippingRequired()">
+														<label for="cart-checkout-address" class="col-form-label cart-checkout-address-label">
+															آدرس
+														</label>
+														<input type="text" id="cart-checkout-address" name="address" class="form-control cart-checkout-address-input" ng-model="model.contact.address" ng-disabled="progress" required>
+														<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="checkout.address.$error" ng-show="checkout.$submitted || checkout.address.$dirty">
+															<span ng-message="required">
+																آدرس را بنویسید.
+															</span>
+															<span ng-message="server">
+																<span ng-bind="validation.address"></span>
+															</span>
+														</div>
+													</div>
+												</div>
+												<div class="col-12">
+													<div class="form-group cart-checkout-location" ng-if="shippingRequired()">
+														<div class="cart-checkout-location-container" id="map" ng-model="model.contact" maps></div>
+														<div class="cart-checkout-location-help">
+															لطفا محل دقیق تحویل را روی نقشه انتخاب کنید.
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr class="page-separator cart-checkout-separator">
+											<div class="form-group cart-checkout-description-field mt-4" ng-show="step == 'noshipping'">
+												<label for="cart-checkout-description" class="cart-checkout-description-field-label">
+													توضیحات
+												</label>
+												<textarea id="cart-checkout-description" name="description" class="form-control cart-checkout-description-field-input" ng-model="model.description" rows="5" ng-disabled="progress"></textarea>
+												<div class="cart-checkout-description-field-help">
+													در صورتی سفارش شما نیازمند توضیحات و ملاحظات خاصی است، در این فیلد بنویسید.
+												</div>
+											</div>
+											<div class="form-group cart-checkout-buttons">
+												<button class="btn btn-lg btn-success cart-checkout-submit" ng-disabled="inProgress">
+													{{shippingRequired ? (edit ? 'ثبت تغییرات' : 'ثبت اطلاعات') : 'مرحله بعد'}}
+												</button>
+												<a role="button" class="btn btn-link cart-checkout-back" ng-if="edit || contacts.length" ng-click="retrieveContacts()">
+													بازگشت
+												</a>
+												<a href="/site/cart" class="btn btn-link cart-checkout-back" ng-if="!edit && !contacts.length">
+													بازگشت
+												</a>
+											</div>
+										</div>
+										<div class="cart-auth-loading" ng-show="loading">
+											<i class="fa fa-refresh fa-spin fa-fw"></i>
+											کمی صبر کنید...
+										</div>
+									</form>
+								</div>
+								<div ng-switch-when="selected">
+									<div class="cart-checkout-contact">
+										<h2 class="page-title cart-checkout-title">
+											آدرس تحویل گیرنده
+										</h2>
+										<hr class="page-separator cart-checkout-separator">
+										<h3 class="cart-checkout-contact-name mb-3">
+											{{model.contact.name}}
+										</h3>
+										<div class="cart-checkout-contact-item mb-2">
+											آدرس: 
+											{{model.contact.state.name ? model.contact.state.name + '، ' : ''}}
+											{{model.contact.city.name ? model.contact.city.name + '، ' : ''}}
+											{{model.contact.address}}
+										</div>
+										<div class="cart-checkout-contact-item mb-2" ng-show="model.contact.mobile">
+											موبایل: {{model.contact.mobile}}
+										</div>
+										<div class="cart-checkout-contact-item mb-2" ng-show="model.contact.phone">
+											تلفن: {{model.contact.phone}}
+										</div>
+										<div class="cart-checkout-contact-item mb-2" ng-show="model.contact.zipcode">
+											کد پستی: {{model.contact.zipcode}}
+										</div>
+										<button type="button" data-toggle="modal" data-target="#contacts" class="btn btn-outline-primary mt-3" ng-disabled="progress" ng-show="user">
+											ویرایش آدرس
+										</button>
+										<a role="button" class="btn btn-outline-primary mt-3" ng-disabled="progress" ng-hide="user" ng-click="goto('form')">
+											ویرایش آدرس
+										</a>
+									</div>
+									<div id="contacts" class="modal fade">
+										<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">انتخاب آدرس</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<div class="cart-checkout-contacts" ng-hide="loadingModal">
+														<div class="cart-checkout-contacts-item position-relative" ng-repeat="item in contacts | orderBy: '-id'">
+															<div class="custom-control custom-radio">
+																<input type="radio" id="contact{{item.id}}" name="contact" ng-model="model.contact" ng-change="changedContact()" ng-value="item" class="custom-control-input" ng-checked="model.contact == item" ng-disabled="progress">
+																<label class="custom-control-label cart-checkout-contacts-item-label font-weight-bold" for="contact{{item.id}}">
+																	<h3 class="m-0">{{item.name}}</h3>
+																</label>
+															</div>
+															<div class="pb-3 pb-lg-0 pr-4 mt-3">
+																<div class="cart-checkout-contact-item mb-2">
+																	آدرس: 
+																	{{item.state.name ? item.state.name + '، ' : ''}}
+																	{{item.city.name ? item.city.name + '، ' : ''}}
+																	{{item.address}}
+																</div>
+																<div class="cart-checkout-contact-item mb-2" ng-show="item.mobile">
+																	موبایل: {{item.mobile}}
+																</div>
+																<div class="cart-checkout-contact-item mb-2" ng-show="item.phone">
+																	تلفن: {{item.phone}}
+																</div>
+																<div class="cart-checkout-contact-item" ng-show="item.zipcode">
+																	کد پستی: {{item.zipcode}}
+																</div>
+															</div>
+															<div class="cart-checkout-contact-item-action">
+																<button type="button" class="btn btn-outline-primary ml-2" data-dismiss="modal" ng-click="editContact(item)" ng-disabled="progress">
+																	ویرایش آدرس
+																</button>
+																<button type="button" class="btn btn-outline-danger" ng-click="deleteContact(item.id)" ng-disabled="progress" click-confirm="آیا مایل به حذف آدرس هستید؟">
+																	حذف
+																</button>
+															</div>
+															<hr class="page-separator cart-checkout-separator" ng-hide="$last">
+														</div>
+													</div>
+													<div class="page-loading cart-loading" ng-show="loadingModal">
+														<i class="fa fa-refresh fa-spin fa-fw"></i>
+														کمی صبر کنید...
+													</div>
+												</div>
+												<div class="modal-footer justify-content-start">
+													<button type="button" class="btn btn-link px-0" data-dismiss="modal" ng-click="newContact()" ng-disabled="progress">
+														<i class="fa fa-plus"></i>
+														تعریف آدرس جدید
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="form-group cart-checkout-description-field mt-4">
+										<label for="cart-checkout-description" class="cart-checkout-description-field-label">
+											توضیحات
+										</label>
+										<textarea id="cart-checkout-description" name="description" class="form-control cart-checkout-description-field-input" ng-model="model.description" rows="5" ng-disabled="progress"></textarea>
+										<div class="cart-checkout-description-field-help">
+											در صورتی سفارش شما نیازمند توضیحات و ملاحظات خاصی است، در این فیلد بنویسید.
+										</div>
+									</div>
+									<div class="cart-checkout-shipping mt-5" ng-show="shippings">
+										<form name="shippingsForm" class="cart-shippings-form" dynamic-form auto-show novalidate>
+											<h2 class="page-title cart-checkout-title">
+												نحوه دریافت
+											</h2>
+											<hr class="page-separator cart-checkout-separator">
+											<div class="cart-checkout-shipping-items">
+												<div class="cart-checkout-shipping-item bg-light my-2 p-3" ng-repeat="item in shippings">
+													<div class="custom-control custom-radio cart-checkout-shipping-item-control">
+														<input type="radio" name="shipping" id="cart-checkout-shipping-item-{{item.id}}" class="custom-control-input cart-checkout-shipping-item-input" ng-value="item.id" ng-model="model.shipping_id" ng-disabled="progress" required>
+														<label class="custom-control-label cart-checkout-shipping-item-label" for="cart-checkout-shipping-item-{{item.id}}">
+															<div>
+																{{item.title}}
+																<small class="d-block text-muted">{{item.description}}</small>
+															</div>
+															<div>
+																<span ng-show="item.cost || model.variant_shipping">{{item.cost + model.variant_shipping | number}} <small class="text-muted">تومان</small></span>
+																<span ng-show="!item.cost && !model.variant_shipping">{{item.type == 'alopeyk' ? 'پس‌کرایه' : 'رایگان'}}</span>
+															</div>
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="validation-inline cart-checkout-inline-error text-danger" ng-messages="shippingsForm.shipping.$error" ng-show="shippingsForm.$submitted || shippingsForm.shipping.$dirty">
+												<span ng-message="required">
+													نحوه دریافت را انتخاب کنید.
+												</span>
+											</div>
+											<hr class="page-separator cart-checkout-separator">
+											<div ng-if="model.subtotal >= model.minimum_subtotal">
+												<div class="form-group cart-checkout-buttons">
+													<button class="btn btn-lg btn-success cart-checkout-submit" ng-click="shippingsForm.$valid && update()" ng-disabled="progress">
+														مرحله بعد
+													</button>
+													<a href="/site/cart" class="btn btn-link cart-checkout-back" ng-disabled="progress">
+														بازگشت
+													</a>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div ng-if="model.subtotal >= model.minimum_subtotal">
+										<div class="form-group cart-checkout-buttons" ng-hide="shippings">
+											<button class="btn btn-lg btn-success cart-checkout-submit" ng-click="update()" ng-disabled="progress">
+												مرحله بعد
+											</button>
+											<a href="/site/cart" class="btn btn-link cart-checkout-back" ng-disabled="progress">
+												بازگشت
+											</a>
+										</div>
+									</div>
+									<div class="alert alert-info" ng-if="model.minimum_subtotal > model.subtotal">
+										حداقل هزینه سفارش <strong>{{model.minimum_subtotal|number}}</strong> تومان می‌باشد. برای ثبت سفارش باید <strong>{{model.minimum_subtotal - model.subtotal|number}}</strong> تومان دیگر به سبد خود اضافه کنید.
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<include name="layouts/cart/partials/cart-details.html" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="page-loading cart-loading" ng-show="loading">
+				<i class="fa fa-refresh fa-spin fa-fw"></i>
+				کمی صبر کنید...
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

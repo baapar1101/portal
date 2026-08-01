@@ -1,0 +1,588 @@
+<include name="layouts/header.html" />
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>تماس‌مارکت | جانبی</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#ffffff;
+  --card:#ffffff;
+  --soft:#f6f6f7;
+  --border:#e6e6e9;
+  --text:#1a1a1a;
+  --muted:#6f6f6f;
+  --accent:#0aa2b5;
+  --green:#00a85a;
+  --red:#e53935;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:0;
+  font-family: "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  direction:rtl;
+}
+
+/* ===== Header ===== */
+.site-header{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:24px 16px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.brand img{
+  height:100px;
+	justify-content:center;
+	
+}
+
+.brand-text{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.campaign{
+  background:linear-gradient(135deg,#e0f7fa,#f1fbfd);
+  border:1px solid #cdeef3;
+  border-radius:16px;
+  padding:16px;
+}
+
+.campaign h2{
+  margin:0 0 8px;
+  font-size:18px;
+  font-weight:800;
+}
+
+.campaign p{
+  margin:4px 0;
+  font-size:14px;
+}
+.logo-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:100%;
+}
+
+.logo-center img{
+  max-height:100px;   /* قابل تنظیم */
+  width:auto;
+}
+
+/* ===== Search ===== */
+.search-wrap{
+  padding:16px;
+  max-width:1200px;
+  margin:auto;
+}
+
+.search{
+  width:100%;
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-family: "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size:14px;
+}
+input, select, textarea, button{
+  font-family: "Vazirmatn", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ===== Sections ===== */
+.section{
+  max-width:1200px;
+  margin:0 auto 48px;
+  padding:0 16px;
+}
+
+.section h2{
+  margin:0 0 14px;
+  font-size:20px;
+  font-weight:800;
+  border-right:4px solid var(--accent);
+  padding-right:12px;
+}
+
+/* ===== Table ===== */
+.table-wrap{
+  background:var(--card);
+  border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 24px rgba(0,0,0,.05);
+  overflow-x:auto;
+  -webkit-overflow-scrolling: touch;
+	
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+thead th{
+  background:var(--soft);
+  color:var(--muted);
+  font-size:13px;
+  padding:12px;
+  text-align:center;
+}
+
+td{
+  padding:12px;
+  border-bottom:1px solid var(--border);
+  font-size:14px;
+  text-align:center;
+}
+
+tbody tr:hover{background:#fafafa}
+
+.price{
+  color:var(--green);
+  font-weight:700;
+}
+
+
+.low{background:#fdecea;color:var(--red)}
+.mid{background:#fff3cd;color:#856404}
+.high{background:#e6f4ea;color:var(--green)}
+
+/* ===== Footer ===== */
+footer{
+  background:#0f1f24;
+  color:#fff;
+  margin-top:60px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:32px 16px;
+  display:grid;
+  gap:20px;
+}
+
+
+
+.footer-text{
+  font-size:14px;
+  line-height:1.9;
+  font-family: Vazirmatn;
+}
+
+.footer-contact{
+  font-weight:700;
+  font-size:15px;
+}
+.site-footer{
+  background:#ffffff;
+  border-top:1px solid #e6e6e9;
+  margin-top:64px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:32px 16px;
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:32px;
+  align-items:center;
+}
+
+.footer-info{
+  font-size:15px;
+  line-height:2;
+  color:#1a1a1a;
+}
+
+.footer-highlight span{
+  color:#d32f2f;
+  font-weight:800;
+}
+
+.footer-contact{
+  margin-top:16px;
+  font-size:16px;
+}
+
+.footer-image img{
+  width:100%;
+  max-width:420px;
+  display:block;
+}
+/* ===== Footer ===== */
+.site-footer{
+  background:#ffffff;
+  border-top:1px solid #e6e6e9;
+  margin-top:64px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:36px 16px;
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap:32px;
+  align-items:center;
+}
+
+.footer-info{
+  color:#1a1a1a;
+  font-size:15px;
+  line-height:2;
+}
+
+.footer-highlight span{
+  color:#d32f2f;
+  font-weight:800;
+}
+
+.footer-contact{
+  margin-top:20px;
+}
+
+.contact-title{
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.contact-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.contact-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s ease;
+}
+
+.contact-btn.whatsapp{
+  background:#e6f7ee;
+  color:#1a7f4c;
+}
+
+.contact-btn.whatsapp:hover{
+  background:#d2f1e1;
+}
+
+.contact-btn.call{
+  background:#e3f2fd;
+  color:#0d47a1;
+}
+
+.contact-btn.call:hover{
+  background:#d0e7fa;
+}
+
+.footer-image img{
+  width:100%;
+  max-width:220px;
+  display:block;
+}
+.pay-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.pay-tag{
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  background:#f1f3f5;
+  color:#333;
+  white-space:nowrap;
+}
+
+.pay-tag.cash{
+  background:#e6f4ea;
+  color:#0d47a1;
+}
+
+.pay-tag.credit{
+  background:#e3f2fd;
+  color:#0d47a1;
+}
+
+.pay-tag.check{
+  background:#fff3cd;
+  color:#856404;
+}
+.filters{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.filters select{
+  flex:1;
+  min-width:160px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  font-family:Vazirmatn;
+  font-size:14px;
+  background:#fff;
+}
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .contact-actions{
+
+/* ===== Mobile ===== */
+@media(max-width:768px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+  .footer-image img{
+    margin:auto;
+    max-width:300px;
+  }
+}
+
+/* ===== Mobile ===== */
+@media(max-width:640px){
+  .brand{flex-direction:column;align-items:flex-start}
+  .brand img{height:46px}
+}
+</style>
+</head>
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <div class="header-inner">
+
+    <div class="logo-center">
+      <img src="logo.png" alt="تماس مارکت">
+      <div class="brand-text">
+         
+      </div>
+    </div>
+
+    <div class="campaign">
+      <h2>تماس‌مارکت</h2>
+      <p>📅 تاریخ: <span id="today-date"></span></p>
+      <p>🔥 فروش ویژه لوازم جانبی</p>
+    </div>
+
+  </div>
+</header>	
+<!--main-->
+<main class="page-container text-container text-cover-container">
+	
+	<div class="container">
+        <div >
+			<div>
+				<div>
+					<if terms="@@content.exists()">
+						<div>
+							@@content
+						</div>
+					</if>
+					<if terms="@@showsubset && @@subset.any()">
+						<ul class="text-subset text-cover-subset">
+							<loop src="@@subset" recursive="@@subset">
+								<li class="text-subset-item text-cover-subset-item">
+									<a href="@@url" class="text-subset-link text-cover-subset-link">
+										@@title
+									</a>
+								</li>
+								<if terms="@@subset.any()">
+									<ul class="text-subset-list text-cover-subset-list">
+										@@recursive
+									</ul>
+								</if>
+							</loop>
+						</ul>
+					</if>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<script>
+(function () {
+  const today = new Date();
+
+  const persianDate = new Intl.DateTimeFormat('fa-IR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(today);
+
+  document.getElementById('today-date').textContent = persianDate;
+})();
+</script>
+
+
+<script>
+const SHEET_ID = "14YFEkQrMHBFBkCM6lP88PzEzdE8E-r8vRFg2-ee4hGM";
+const SHEET_NAME = "FATHER DAY";
+const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+let DATA = [];
+
+const app = document.getElementById("app");
+const search = document.getElementById("search");
+
+fetch(URL)
+  .then(r => r.text())
+  .then(t => {
+    const j = JSON.parse(t.substring(47).slice(0, -2));
+    // حذف ردیف عنوان‌ها
+    DATA = j.table.rows.map(r => r.c.map(c => c ? c.v : "")).slice(1);
+	initFilters();   // ✅ این خط حیاتی است
+    render();
+  });
+
+search.addEventListener("input", render);
+const fCategory = document.getElementById("filter-category");
+const fBrand    = document.getElementById("filter-brand");
+const fPay      = document.getElementById("filter-pay");
+
+function initFilters(){
+  fillSelect(fCategory, 0); // دسته‌بندی
+  fillSelect(fBrand, 1);    // برند
+}
+
+function fillSelect(select, index){
+  select.querySelectorAll("option:not(:first-child)").forEach(o => o.remove());
+
+  const values = [...new Set(DATA.map(r => r[index]).filter(Boolean))];
+  values.forEach(v=>{
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v;
+    select.appendChild(opt);
+  });
+}
+
+
+[fCategory, fBrand, fPay].forEach(el =>
+  el.addEventListener("change", render)
+);
+function render(){
+  const q = search.value.trim().toLowerCase();
+
+  // فیلتر سرچ
+const filtered = DATA.filter(r => {
+  const matchSearch =
+    (r[0] + r[1] + r[2]).toLowerCase().includes(q);
+
+  const matchCategory =
+    !fCategory.value || r[0] === fCategory.value;
+
+  const matchBrand =
+    !fBrand.value || r[1] === fBrand.value;
+
+  const matchPay =
+    !fPay.value || String(r[6]).includes(fPay.value);
+
+  return matchSearch && matchCategory && matchBrand && matchPay;
+});
+
+
+  // گروه‌بندی بر اساس دسته‌بندی
+  const groups = {};
+  filtered.forEach(r => {
+    const category = r[0] || "سایر";
+    if(!groups[category]) groups[category] = [];
+    groups[category].push(r);
+  });
+
+  // رندر نهایی
+  app.innerHTML = Object.keys(groups).map(category => `
+    <div class="section">
+      <h2>${category}</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>تصویر</th>
+              <th>برند</th>
+              <th>مدل</th>
+              <th>قیمت فروش (ریال)</th>
+              <th>قیمت فروش ویژه </th>
+              <th>تسویه</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${groups[category].map(r => `
+              <tr>
+                <td>
+                  <img src="/picture/${r[3]}.jpg"
+                       style="width:60px;height:60px;object-fit:contain"
+                       onerror="this.src='no-image.png'">
+                </td>
+                <td>${r[1]}</td>
+                <td>${r[2]}</td>
+                <td class="price">${Number(r[4]).toLocaleString()}</td>
+                <td class="price">${Number(r[5]).toLocaleString()}</td>
+                <td>
+  <div class="pay-tags">
+    ${String(r[6]).split("،").map(t => {
+      const v = t.trim();
+      let cls = "";
+      if(v.includes("نقد")) cls = "cash";
+      else if(v.includes("اعتباری")) cls = "credit";
+      else if(v.includes("چک")) cls = "check";
+      return `<span class="pay-tag ${cls}">${v}</span>`;
+    }).join("")}
+  </div>
+</td>
+
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `).join("");
+}
+</script>
+<include name="layouts/footer.html" />

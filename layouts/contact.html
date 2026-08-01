@@ -1,0 +1,113 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container contact-container">
+	<div class="container">
+		<div class="page-context contact-context">
+			<h1 class="page-title contact-title">
+				فرم تماس
+			</h1>
+			<hr class="page-separator contact-separator">
+			<form name="contact" class="contact-form" ng-submit="contact.$valid && submit()" contact dynamic-form auto-show novalidate>
+				<scope name="contact">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div class="alert alert-success contact-succeed" ng-show="succeed">
+					<span ng-bind="succeed.description"></span>
+				</div>
+				<div ng-hide="succeed">
+					<div class="row form-group contact-name">
+						<label for="contact-name" class="col-form-label col-md-3 text-md-left">
+							نام و نام خانوادگی
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="contact-name" name="name" class="form-control" ng-model="model.name" ng-disabled="progress" auto-focus required>
+							<div class="validation-inline contact-inline-error text-danger" ng-messages="contact.name.$error" ng-show="contact.$submitted || contact.name.$dirty">
+								<span ng-message="required">
+									نام و نام خانوادگی را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.name"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group contact-email">
+						<label for="contact-email" class="col-form-label col-md-3 text-md-left">
+							پست الکترونیک
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="contact-email" name="email" class="form-control text-left" ng-model="model.email" dir="ltr" ng-disabled="progress">
+							<div class="validation-inline contact-inline-error text-danger" ng-messages="contact.email.$error" ng-show="contact.$submitted || contact.email.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.email"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group contact-phone">
+						<label for="contact-phone" class="col-form-label col-md-3 text-md-left">
+							شماره تماس
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="contact-phone" name="phone" class="form-control text-left" ng-model="model.phone" dir="ltr" ng-disabled="progress">
+							<div class="validation-inline contact-inline-error text-danger" ng-messages="contact.phone.$error" ng-show="contact.$submitted || contact.phone.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.phone"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group contact-subject">
+						<label for="contact-subject" class="col-form-label col-md-3 text-md-left">
+							موضوع
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="contact-subject" name="subject" class="form-control" ng-model="model.subject" ng-disabled="progress">
+							<div class="validation-inline contact-inline-error text-danger" ng-messages="contact.subject.$error" ng-show="contact.$submitted || contact.subject.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.subject"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group contact-body">
+						<label for="contact-body" class="col-form-label col-md-3 text-md-left">
+							پیام
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<textarea id="contact-body" name="body" class="form-control" rows="5" ng-model="model.body" ng-disabled="progress" required></textarea>
+							<div class="validation-inline contact-inline-error text-danger" ng-messages="contact.body.$error" ng-show="contact.$submitted || contact.body.$dirty">
+								<span ng-message="required">
+									پیام را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.body"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr class="page-separator contact-separator">
+					<div class="row form-group">
+						<div class="col-md-3"></div>
+						<div class="col-md-9 col-lg-6">
+							<button class="btn btn-lg btn-success contact-submit" ng-disabled="progress">
+								ارسال
+							</button>
+							<button type="button" class="btn btn-link contact-reset" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+								انصراف
+							</button>
+							<div class="page-loading contact-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

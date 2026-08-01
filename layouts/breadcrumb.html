@@ -1,0 +1,45 @@
+<if terms="@@breadcrumb.exists()">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a href="/">
+				<span>
+					خانه
+				</span>
+			</a>
+		</li>
+		<loop src="@@breadcrumb">
+			<li class="breadcrumb-item @@active">
+				<a href="@@url">
+					<span>
+						@@title
+					</span>
+				</a>
+			</li>
+		</loop>
+	</ol>
+</if>
+<if terms="@@breadcrumb.empty() && @@_root.title.exists() && @@_root.url.exists()">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item">
+			<a href="/">
+				<span>
+					خانه
+				</span>
+			</a>
+		</li>
+		<li class="breadcrumb-item active">
+			<a href="@@_root.url">
+				<span>
+					@@_root.title
+				</span>
+			</a>
+		</li>
+	</ol>
+</if>
+
+<!-- schema -->
+<if terms="@@breadcrumb.exists()">
+	<script type="application/ld+json">
+		@@breadcrumb.schema
+	</script>
+</if>

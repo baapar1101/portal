@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa" ng-app="siteBuilder.public">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>@@metatitle</title>
+		<meta name="keywords" content="@@metakeywords">
+		<meta name="description" content="@@metadescription">
+		<meta property="og:title" content="@@title">
+		<meta property="og:description" content="@@metadescription">
+		<meta property="og:url" content="@@canonicalurl">
+		<meta property="og:site_name" content="@@config.title">
+		<meta property="og:image" content='@@image.format("{0}?m=crop&w=200&h=200&q=veryhigh")'>
+		<meta name="twitter:url" content="@@canonicalurl">
+		<meta name="twitter:title" content="@@metatitle">
+		<meta name="twitter:description" content="@@metadescription">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="@@theme.fonts?family=persian&family=fontawesome">
+		<link rel="stylesheet" href="@@theme/css/bootstrap.css">
+		<link rel="stylesheet" href="@@theme/css/bootstrap.rtl.css">
+		<link rel="stylesheet" href="@@theme/css/magnific.popup.css">
+		<link rel="stylesheet" href="@@theme/css/owl.carousel.css">
+		<if terms='@@layout.contains("cart")'>
+			<link rel="stylesheet" href="@@theme/css/leaflet.css">
+		</if>
+		<link rel="stylesheet" href="@@theme/css/app.css">
+		<link rel="canonical" href="@@canonicalurl">
+		@@config.verification
+	</head>
+	<body ng-class="{'no-scroll':no_scroll}">
+
+		<!-- loading -->
+		<div class="loading"></div>
+
+		<if terms='@@layout.contains("authentication").false() && @@layout.contains("recoverypass").false()'>
+			<!-- header -->
+			<header class="header">
+				<!-- header desktop -->
+				<div class="d-none d-lg-block">
+					<include name="layouts/components/header-desktop.html" />
+				</div>
+				<!-- header mobile -->
+				<div class="d-block d-lg-none">
+					<include name="layouts/components/header-mobile.html" />
+				</div>
+			</header>
+		</if>
+
+		<if terms="@@user.admin">
+			<div class="modal fade" tabindex="-1" role="dialog" edit-dialog>
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						بارگذاری...
+					</div>
+				</div>
+			</div>
+		</if>
+
+		<!-- search overlay -->
+		<div class="header-search-overlay" ng-show="searchFocused||searchMouseover"></div>

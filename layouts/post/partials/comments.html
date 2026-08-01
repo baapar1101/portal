@@ -1,0 +1,45 @@
+<div class="post-comments post-@@mode-comments" id="comments">
+    <hr class="post-comments-separator post-@@mode-comments-separator">
+    <h3 class="post-comments-title post-@@mode-comments-title">
+        دیدگاه‌های بازدیدکنندگان
+    </h3>
+    <loop src="@@comments" recursive="@@subset">
+        <div class="media post-comment post-@@mode-comment" id="comment-@@id">
+            <div class="d-flex ml-3 post-comment-avatar post-plain-comment-avatar">
+                <img src="@@avatar.get?m=crop&w=100&h=100&q=high" class="post-comment-avatar-image post-plain-comment-avatar-image">
+            </div>
+            <div class="media-body">
+                <h5 class="post-comment-author post-@@mode-comment-author">
+                    <img src='@@region.format("/site/resources/flags/{0}.gif")' class="post-comment-author-flag post-@@mode-comment-author-flag">
+                    <if terms="@@website.empty()">
+                        <span class="post-comment-name post-@@mode-comment-name">
+                            @@name.default("ناشناس")
+                        </span>
+                    </if>
+                    <if terms="@@website.exists()">
+                        <a href="@@website" rel="nofollow" target="_blank" class="post-comment-website post-@@mode-comment-website">
+                            <span>
+                                @@name.default("ناشناس")
+                            </span>
+                        </a>
+                    </if>
+                </h5>
+                <p class="post-comment-body post-@@mode-comment-body break-word">
+                    @@body
+                </p>
+                <span class="post-comment-time post-@@mode-comment-time">
+                    <i class="fa fa-clock-o"></i>
+                    @@time.subtract
+                </span>
+                <a href="javascript:;" class="btn btn-sm btn-link post-comment-reply post-@@mode-comment-reply" ng-click="reply(@@id)">
+                    ارسال پاسخ
+                </a>
+                <if terms="@@subset.any()">
+                    <div class="post-comment-subset post-@@mode-comment-subset">
+                        @@recursive
+                    </div>
+                </if>
+            </div>
+        </div>
+    </loop>
+</div>

@@ -1,0 +1,134 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-compare-container">
+	<div class="container">
+		<div class="page-context store-context store-compare-context">
+			<h1 class="page-title store-title store-compare-title">
+				@@title
+			</h1>
+			<hr class="page-separator store-separator store-compare-separator">
+			<div class="store-compare-products store-compare-@@products.count()">
+				<div class="store-compare-products-responsive">
+					<div class="store-compare-headers">
+						<loop src="@@products.reverse()">
+							<if terms='@@index.equal("0")'>
+								<div class="store-compare-headers-title store-compare-column">
+								</div>
+							</if>
+							<div class="store-compare-product store-compare-product-@@index store-compare-column">
+								<div class="store-compare-product-image">
+									<a href="@@url" class="store-compare-product-image-link">
+										<img src='@@image.default("/site/resources/images/empty.png")?m=thumb&w=300&h=300&q=high' class="img-fluid store-compare-product-image-element">
+									</a>
+								</div>
+								<h5 class="store-compare-item-title">
+									<a href="@@url" class="store-compare-item-link break-word">
+										@@title
+									</a>
+								</h5>
+								<a href="@@remove" class="btn btn-sm btn-danger store-compare-product-remove" click-confirm="آیا از حذف مطمئن هستید؟">
+									<i class="fa fa-times"></i>
+									حذف
+								</a>
+							</div>
+						</loop>
+						<if terms='@@products.count().lessthan("4")'>
+							<div class="store-compare-product store-compare-product-add store-compare-product-@@products.count() store-compare-column d-flex align-items-center justify-content-center flex-column position-relative" ng-click="focusSearchInput()">
+								<div class="store-compare-product-image">
+									<i class="fa fa-plus"></i>
+									<br>
+									افزودن محصول دیگر
+								</div>
+								<form class="quicksearch store-compare-quicksearch" dynamic-search auto-show type="product">
+									<div class="form-group">
+										<div class="input-group store-compare-quicksearch-query">
+											<input type="text" name="q" class="form-control store-compare-quicksearch-query-input" maxlength="100" ng-model="query" ng-model-options="{debounce:500}" placeholder="جستجو کنید...">
+										</div>
+										<div class="store-compare-quicksearch-items bg-white border border-light shadow p-3 d-none" ng-class="{'d-none': !items.length}">
+											<div class="store-compare-quicksearch-item d-flex align-items-center mt-3" ng-repeat="item in items">
+												<div class="store-compare-quicksearch-item-image ml-3" ng-show="item.image">
+													<a ng-href="/site/products/compare/add?id={{item.id}}" class="store-compare-quicksearch-item-image-link">
+														<img ng-src="{{item.image}}?m=crop&w=40&h=40&q=high" class="store-compare-quicksearch-item-image-element">
+													</a>
+												</div>
+												<h6 class="store-compare-quicksearch-item-title">
+													<a ng-href="/site/products/compare/add?id={{item.id}}" class="store-compare-quicksearch-item-link">
+														<span ng-bind="item.title"></span>
+													</a>
+												</h6>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</if>
+					</div>
+					<div class="store-compare-fields">
+						<div class="store-compare-field">
+							<div class="store-compare-field-name store-compare-column break-word">
+								قیمت
+							</div>
+							<loop src="@@products.reverse()">
+								<div class="store-compare-field-value store-compare-column store-compare-field-value-@@index break-word">
+									<if terms='@@compareprice.exists'>
+										<span class="store-compare-field-compareprice d-inline-block ml-1 text-muted">
+											@@compareprice
+										</span>
+									</if>
+									<if terms='@@price.exists'>
+										<strong class="store-compare-field-price">
+											@@price
+										</strong>
+										<small>تومان</small>
+									</if>
+									<if terms='@@price.equal("0")'>
+										---
+									</if>
+								</div>
+							</loop>
+							<if terms='@@products.count().lessthan("4")'>
+								<div class="store-compare-field-value store-compare-column store-compare-field-value-@@products.count() break-word">
+									---
+								</div>
+							</if>
+						</div>
+						<loop src="@@fields">
+							<div class="store-compare-field">
+								<div class="store-compare-field-name store-compare-column break-word">
+									@@name
+								</div>
+								<loop src="@@values.reverse()">
+									<div class="store-compare-field-value store-compare-column store-compare-field-value-@@index break-word">
+										<loop src="@@values">
+											<div class="store-compare-field-value-element">
+												@@value.default("---")
+											</div>
+										</loop>
+									</div>
+								</loop>
+								<if terms='@@products.count().lessthan("4")'>
+									<div class="store-compare-field-value store-compare-column store-compare-field-value-@@products.count() break-word">
+										---
+									</div>
+								</if>
+							</div>
+						</loop>
+					</div>
+				</div>
+			</div>
+			<if terms="@@products.empty()">
+				<div class="page-empty store-empty store-compare-empty">
+					هیچ موردی برای مقایسه انتخاب نشده.
+					<br>
+					<a href="/site/products" class="btn btn-sm btn-primary store-compare-back">
+						بازگشت
+					</a>
+				</div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

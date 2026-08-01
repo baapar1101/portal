@@ -1,0 +1,77 @@
+<!--sidebar-->
+<div class="store-sidebar">
+	<if terms="@@categories.any()">
+		<div class="card store-sidebar-categories">
+			<div class="card-header store-sidebar-categories-header">
+				<h5 class="card-title store-sidebar-categories-title">
+					دسته‌بندی
+				</h5>
+			</div>
+			<div class="card-body">
+				<ul class="store-sidebar-categories-list">
+					<loop src="@@categories" recursive="@@subset">
+						<li class="store-sidebar-categories-item">
+							<a href="@@url" class="store-sidebar-categories-link" title="@@metatitle">
+								@@title
+							</a>
+							<if terms="@@subset.any()">
+								<ul class="store-sidebar-categories-subset">
+									@@recursive
+								</ul>
+							</if>
+						</li>
+					</loop>
+				</ul>
+			</div>
+		</div>
+		<hr class="store-sidebar-separator">
+	</if>
+	<div class="store-sidebar-search">
+		<form class="store-sidebar-search-form" ng-submit="search()">
+			<div class="form-group store-sidebar-search-query">
+				<div class="input-group store-sidebar-search-query-group">
+					<input type="text" name="query" class="form-control store-sidebar-search-query-input" maxlength="100" value="@@query" ng-model="model.query" ng-disabled="loading" placeholder="جستجو...">
+					<div class="input-group-append">
+						<button class="btn btn-secondary store-sidebar-search-query-submit">
+							<i class="fa fa-fw fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<div class="custom-control custom-checkbox store-sidebar-search-available">
+				<input type="checkbox" id="store-sidebar-search-available" class="custom-control-input store-sidebar-search-available-input" ng-model="model.available" ng-change="search()" ng-disabled="loading">
+				<label class="custom-control-label store-sidebar-search-available-label" for="store-sidebar-search-available">
+					فقط محصولات موجود
+				</label>
+			</div>
+			<if terms="@@filters.any()">
+				<div class="store-sidebar-filters">
+					<loop src="@@filters">
+						<div class="card store-sidebar-filters-item">
+							<div class="card-header store-sidebar-filters-item-header">
+								<h5 class="card-title store-sidebar-filters-item-title">
+									<a role="button" class="store-sidebar-filters-item-link" data-toggle="collapse" data-target="#store-sidebar-filters-@@id">
+										@@title
+									</a>
+								</h5>
+							</div>
+							<div class="collapse" role="tabpanel" id="store-sidebar-filters-@@id" data-parent=".store-sidebar-filters">
+								<div class="card-body store-sidebar-filters-item-subset">
+									<loop src="@@subset">
+										<div class="custom-control custom-checkbox store-sidebar-filters-item-check my-1">
+											<input type="checkbox" id="store-sidebar-filter-@@id" class="custom-control-input store-sidebar-filters-item-input" ng-model="filters.filter@@id" ng-change="search()" eval="addFilter(@@id, @@_parent.id)" ng-disabled="loading">
+											<label class="custom-control-label store-sidebar-filters-item-label" for="store-sidebar-filter-@@id">
+												@@title
+											</label>
+										</div>
+									</loop>
+								</div>
+							</div>
+						</div>
+					</loop>
+				</div>
+			</if>
+		</form>
+	</div>
+</div>
+<!--/sidebar-->

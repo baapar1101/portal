@@ -1,0 +1,35 @@
+<div class='products-item bg-white rounded p-15 @@outofstock.whenever("products-item-outofstock")'>
+	<a href="@@url"	class="products-item-link"></a>
+	<div class="products-item-image">
+		<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high'
+			class="img-fluid center-block products-item-image-element"
+			alt="@@title">
+	</div>
+	<h3 class="products-item-title">
+		@@title
+	</h3>
+	<if terms="@@outofstock.false()">
+		<div class="products-item-price-wrap text-left">
+			<if terms="@@compareprice.exists">
+				<span class="products-item-compare-price">
+					@@compareprice
+				</span>
+			</if>
+			<if terms='@@discount.morethan("0")'>
+				<span class="products-item-discount">
+					@@discount٪
+				</span>
+			</if>
+			<if terms="@@price.exists">
+				<div class="products-item-price">
+					@@price <span>تومان</span>
+				</div>
+			</if>
+		</div>
+	</if>
+	<if terms="@@outofstock">
+		<span class="products-item-outofstock-message">
+			ناموجود
+		</span>
+	</if>
+</div>

@@ -1,0 +1,59 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container gallery-container gallery-large-container">
+	<div class="container">
+		<include name="layouts/breadcrumb.html" />
+		<div class="page-context gallery-context gallery-large-context" magnific>
+			<h1 class="page-title gallery-title gallery-large-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page gallery-large-edit">
+					<i class="fa fa-pencil"></i>
+					ویرایش صفحه
+				</a>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator gallery-separator gallery-large-separator">
+				<div class="page-description gallery-description gallery-large-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator gallery-separator gallery-large-separator">
+			<div class="row">
+				<loop src="@@images">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+						<div class="gallery-item gallery-large-item">
+							<div class="gallery-item-image gallery-large-item-image">
+								<a href="@@url" magnific-preview="@@image?m=thumb&w=1280&h=800&q=high" class="gallery-item-link gallery-large-item-link">
+									<img src="@@image?m=crop&w=800&h=600&q=high" class="img-fluid center-block gallery-item-element gallery-large-item-element">
+								</a>
+							</div>
+							<if terms="@@title.exists()">
+								<h3 class="gallery-item-title gallery-large-item-title">
+									@@title
+								</h3>
+							</if>
+							<if terms="@@description.exists()">
+								<p class="gallery-item-description gallery-large-item-description break-word">
+									@@description
+								</p>
+							</if>
+						</div>
+					</div>
+				</loop>
+				<if terms="@@images.empty()">
+					<div class="col-xs-12">
+						<div class="page-empty gallery-empty gallery-large-empty">
+							هیچ موردی برای نمایش پیدا نشد.
+						</div>
+					</div>
+				</if>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

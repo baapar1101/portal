@@ -1,0 +1,49 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container text-container text-group-container">
+	<div class="container">
+		<include name="layouts/breadcrumb.html" />
+		<div class="page-context text-context text-group-context">
+			<h1 class="page-title text-title text-group-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page text-group-edit">
+					<i class="fa fa-pencil"></i>
+					ویرایش صفحه
+				</a>
+			</if>
+			<if terms="@@content.exists()">
+				<div class="text-content text-group-content figure-content break-word">
+					@@content
+				</div>
+			</if>
+			<if terms="@@showsubset && @@subset.any()">
+                <div class="text-subset text-group-subset">
+                    <div class="row">
+                        <loop src="@@subset">
+                            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3 col-xxl-2">
+                                <div class="text-subset-item text-group-subset-item">
+                                    <div class="text-subset-image text-group-subset-image">
+                                        <a href="@@url" class="text-subset-image-link text-group-subset-image-link">
+                                            <img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=320&h=240&q=high' class="img-fluid center-block text-subset-image-element text-group-subset-image-element">
+                                        </a>
+                                    </div>
+                                    <h5 class="text-subset-title text-group-subset-title">
+                                        <a href="@@url" class="text-subset-link text-group-subset-link">
+                                            @@title
+                                        </a>
+                                    </h5>
+                                </div>
+                            </div>
+                        </loop>
+                    </div>
+                </div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

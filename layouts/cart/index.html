@@ -1,0 +1,151 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container cart-container" cart>
+	<div class="container">
+		<div class="page-context cart-context">
+			<h1 class="page-title cart-title">
+				@@title
+			</h1>
+			<div ng-hide="loading && !ready" auto-show>
+				<scope name="cart-checkout">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div ng-show="ready">
+					<div ng-show="model.items">
+						<div class="row">
+							<div class="col-lg-8">
+								<div class="page-description cart-description">
+									فهرست محصولاتی که به سبدخرید اضافه کردید را در زیر مشاهده می‌کنید.
+								</div>
+								<div class="cart-items">
+									<form name="items" class="cart-item" ng-submit="items.$valid && update(item)" ng-repeat="item in model.items" novalidate>
+										<hr class="page-separator cart-separator">
+										<div class="row">
+											<div class="col-5 col-sm-4 col-md-3 col-lg-4">
+												<div class="cart-item-image">
+													<a ng-href="{{item.product.url}}" class="cart-item-image-link" target="_blank">
+														<img ng-src="{{item.product.variant.image||item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=300&h=300&q=high" class="img-responsive cart-item-image-element">
+													</a>
+												</div>
+												<div class="cart-item-quantity mt-2">
+													<div class="input-group cart-item-quantity-group">
+														<div class="input-group-prepend" ng-if="item.quantity == 1">
+															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="removeItem(item)" click-confirm="آیا از حذف مطمئن هستید؟" style="cursor: pointer" ng-disabled="progress">
+																<i class="fa fa-fw fa-trash text-danger" ng-hide="item.progress"></i>
+																<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
+															</button>
+														</div>
+														<div class="input-group-prepend" ng-if="item.quantity > 1">
+															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity-1;update(item)" style="cursor: pointer" ng-disabled="item.progress">
+																<i class="fa fa-fw fa-minus" ng-hide="item.progress"></i>
+																<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
+															</button>
+														</div>
+														<input type="number" name="quantity" class="form-control cart-item-quantity-input text-center" min="1" max="{{item.product.variant.max}}" ng-model="item.quantity" ng-model-options="{debounce: 1000}" ng-change="update(item)" ng-disabled="progress" required>
+														<div class="input-group-append">
+															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity+1;update(item)" style="cursor: pointer" ng-disabled="item.progress">
+																<i class="fa fa-fw fa-plus" ng-hide="item.progress"></i>
+																<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
+															</button>
+														</div>
+													</div>
+													<div class="validation-inline cart-item-inline-error text-danger" ng-messages="items.$error" ng-show="items.$dirty">
+														<span ng-message="required">
+															تعداد را بنویسید.
+														</span>
+														<span ng-message="min">
+															بیش‌تر از 0 بنویسید.
+														</span>
+														<span ng-message="max">
+															کم‌تر از {{item.product.variant.max + 1}} بنویسید.
+														</span>
+													</div>
+												</div>
+											</div>
+											<div class="col-7 col-sm-8 col-md-9 col-lg-8">
+												<div class="cart-item-details">
+													<h5 class="cart-item-title">
+														<a ng-href="{{item.product.url}}" class="cart-item-link" target="_blank">
+															{{item.title}}
+														</a>
+													</h5>
+													<div class="cart-item-subtitle" ng-show="item.subtitle">
+														<div class="text-muted" ng-repeat="item in item.attributes">
+															{{item}}
+														</div>
+													</div>
+													<!-- <div class="cart-item-id">
+														کد: {{item.product.variant.id}}
+													</div> -->
+												</div>
+												<div class="cart-item-amounts mt-3">
+													<div class="cart-item-price">
+														مبلغ: 
+														<span class="cart-item-price-compare" ng-show="item.product.variant.compare_price">
+															{{item.product.variant.compare_price*item.quantity|number}}
+														</span>
+														<h6 class="cart-item-subtotal d-inline">
+															{{item.product.variant.price*item.quantity|number}} <small>تومان</small>
+														</h6>
+														<!-- <div class="cart-item-price-value">
+															قیمت واحد: {{item.product.variant.price|number}} <small>تومان</small>
+														</div> -->
+													</div>
+													<div class="cart-item-shipping" ng-show="item.shipping">
+														هزینه ارسال: {{item.shipping*item.quantity|number}} <small>تومان</small>
+													</div>
+													<div class="cart-item-tax" ng-show="item.tax">
+														مالیات: {{item.tax}}%
+													</div>
+													<div class="cart-item-promotion-discount text-red" ng-show="item.promotion_discount">
+														سود شما: {{item.promotion_discount|number}} <small>تومان</small>
+													</div>
+													<a href="javascript:;" class="badge badge-danger cart-item-remove" ng-click="removeItem(item)" click-confirm="آیا از حذف مطمئن هستید؟" ng-disabled="item.progress">
+														<i class="fa fa-fw fa-trash" ng-hide="item.progress"></i>
+														<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
+														حذف
+													</a>
+												</div>
+											</div>
+										</div>
+									</form>
+									<hr class="page-separator cart-separator">
+									<a href="/site/cart/checkout" class="btn btn-lg btn-success cart-checkout d-none d-lg-inline-block" ng-disabled="loading" ng-if="model.subtotal >= model.minimum_subtotal">
+										ادامه و ثبت سفارش
+									</a>
+									<div class="alert alert-info" ng-if="model.minimum_subtotal > model.subtotal">
+										حداقل هزینه سفارش <strong>{{model.minimum_subtotal|number}}</strong> تومان می‌باشد. برای ثبت سفارش باید <strong>{{model.minimum_subtotal - model.subtotal|number}}</strong> تومان دیگر به سبد خود اضافه کنید.
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<include name="layouts/cart/partials/cart-details.html" />
+							</div>
+						</div>
+						<a href="/site/cart/checkout" class="btn btn-lg btn-success cart-checkout d-block d-lg-none" ng-disabled="loading" ng-if="model.subtotal >= model.minimum_subtotal">
+							ادامه و ثبت سفارش
+						</a>
+					</div>
+					<div class="cart-empty" ng-hide="model.items">
+						<div class="page-description cart-empty-description">
+							<mark class="cart-empty-description-text">
+								سبدخرید شما خالی است. برای افزودن محصولات دلخواه خود به صفحه‌ی فروشگاه مراجعه کنید.
+							</mark>
+						</div>
+						<a href="/site/products" class="btn btn-primary btn-sm cart-empty-link">
+							مشاهده محصولات
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="page-loading cart-loading" ng-show="loading">
+				<i class="fa fa-refresh fa-spin fa-fw"></i>
+				کمی صبر کنید...
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

@@ -1,0 +1,84 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container subscription-container">
+	<div class="container">
+		<div class="page-context subscription-context">
+			<h1 class="page-title subscription-title">
+				اشتراک خبرنامه
+			</h1>
+			<hr class="page-separator subscription-separator">
+			<form name="subscription" class="subscription-form" ng-submit="subscription.$valid && submit()" subscription dynamic-form auto-show novalidate>
+				<scope name="subscription">
+					<include name="layouts/validation.html" />
+				</scope>
+				<div class="alert alert-success subscription-succeed" ng-show="succeed">
+					<span ng-bind="succeed.description"></span>
+				</div>
+				<div ng-hide="succeed">
+					<div class="row form-group subscription-name">
+						<label for="subscription-name" class="col-form-label col-md-3 text-md-left subscription-name-label">
+							نام و نام خانوادگی
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="subscription-name" name="name" class="form-control subscription-name-input" ng-model="model.name" ng-disabled="progress" auto-focus required>
+							<div class="validation-inline subscription-inline-error text-danger" ng-messages="subscription.name.$error" ng-show="subscription.$submitted || subscription.name.$dirty">
+								<span ng-message="required">
+									نام و نام خانوادگی را بنویسید.
+								</span>
+								<span ng-message="server">
+									<span ng-bind="validation.name"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group subscription-email">
+						<label for="subscription-email" class="col-form-label col-md-3 text-md-left subscription-email-label">
+							پست الکترونیک
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="subscription-email" name="email" class="form-control text-left subscription-email-input" ng-model="model.email" dir="ltr" ng-disabled="progress">
+							<div class="validation-inline subscription-inline-error text-danger" ng-messages="subscription.email.$error" ng-show="subscription.$submitted || subscription.email.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.email"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group subscription-mobile">
+						<label for="subscription-mobile" class="col-form-label col-md-3 text-md-left subscription-mobile-label">
+							شماره موبایل
+						</label>
+						<div class="col-md-9 col-lg-6">
+							<input type="text" id="subscription-mobile" name="mobile" class="form-control subscription-mobile-input" ng-model="model.mobile" ng-disabled="progress">
+							<div class="validation-inline subscription-inline-error text-danger" ng-messages="subscription.mobile.$error" ng-show="subscription.$submitted || subscription.mobile.$dirty">
+								<span ng-message="server">
+									<span ng-bind="validation.mobile"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<hr class="page-separator subscription-separator">
+					<div class="row form-group">
+						<div class="col-md-3"></div>
+						<div class="col-md-9 col-lg-6">
+							<button class="btn btn-lg btn-success subscription-submit" ng-disabled="progress">
+								ثبت‌نام
+							</button>
+							<button type="button" class="btn btn-link subscription-cancel" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+								انصراف
+							</button>
+							<div class="page-loading subscription-loading" ng-show="progress">
+								<i class="fa fa-refresh fa-spin fa-fw"></i>
+								کمی صبر کنید...
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

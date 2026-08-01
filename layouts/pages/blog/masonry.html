@@ -1,0 +1,80 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container blog-container blog-masonry-container">
+	<div class="container">
+		<div class="page-context blog-context blog-masonry-context">
+			<include name="layouts/breadcrumb.html" />
+			<h1 class="page-title blog-title blog-masonry-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page blog-masonry-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-post blog-masonry-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد نوشته
+					</a>
+				</if>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator blog-separator blog-masonry-separator">
+				<div class="page-description blog-description blog-masonry-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator blog-separator blog-masonry-separator">
+			<if terms="@@posts.empty()">
+				<div class="page-empty blog-empty blog-masonry-empty">
+					موردی برای نمایش وجود ندارد.
+				</div>
+			</if>
+			<if terms="@@posts.any()">
+				<div class="card-columns columns-count-sm-2 columns-count-lg-3 columns-count-xl-4 blog-masonry-items">
+					<loop src="@@posts">
+						<article class="card blog-masonry-item">
+							<div class="blog-post blog-masonry-post">
+								<if terms="@@image.exists()">
+									<div class="blog-post-image blog-masonry-post-image">
+										<a href="@@url" class="blog-post-image-link blog-masonry-post-image-link">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=480&h=480&q=high' class="img-fluid center-block blog-post-image-element blog-masonry-post-image-element" alt="@@title">
+										</a>
+									</div>
+								</if>
+								<div class="blog-masonry-post-context">
+									<h2 class="blog-post-title blog-masonry-post-title">
+										<a href="@@url" class="blog-post-link blog-masonry-post-link" title="@@metatitle">
+											@@title
+										</a>
+									</h2>
+									<div class="blog-post-excerpt blog-masonry-post-excerpt break-word">
+										@@excerpt.truncate("300")
+									</div>
+									<div class="blog-post-date blog-masonry-post-date">
+										<i class="fa fa-calendar"></i>
+										@@date
+									</div>
+									<if terms="@@user.admin">
+										<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-post blog-masonry-post-edit">
+											<i class="fa fa-pencil"></i>
+											ویرایش
+										</a>
+									</if>
+								</div>
+							</div>
+						</article>
+					</loop>
+				</div>
+				<include name="layouts/pager.html" />
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

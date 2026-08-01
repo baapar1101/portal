@@ -1,0 +1,595 @@
+<include name="layouts/header.html" />
+
+<div class="container">
+	<div class="row">
+		<!-- showcase -->
+		<div class="col-lg-8">
+			<widget type="gallery" name="home:showcase-slider" section="صفحه نخست">
+				<div class="py-30">
+					<div class="showcase-slider shadow position-relative rounded overflow-hidden">
+						<div class="owl-carousel" 
+							options="{ 
+								autoplay: true,
+								animateIn: 'fadeIn',
+								animateOut: 'fadeOut',
+								autoplayTimeout: 4500,
+								autoplayHoverPause: true,
+								smartSpeed: 500,
+								loop: true,
+								rtl: true,
+								dots: true,
+								dotsEach: true,
+								responsive:{ 0:{ items: 1 } } 
+							}">
+							<loop src="@@items">
+								<a href="@@url" class="showcase-slider-link">
+									<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=900&h=450&q=veryhigh' alt="@@title" class="showcase-slider-image img-fluid">
+								</a>
+							</loop>
+						</div>
+						<if terms="@@user.admin">
+							<div class="position-absolute" style="bottom: 10px; right: 10px; z-index: 1;">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</div>
+						</if>
+					</div>
+				</div>
+			</widget>
+		</div>
+	
+		<div class="col-lg-4">
+			<!-- banner -->
+			<div class="d-flex flex-column flex-xs-row flex-lg-column justify-content-between h-100 pt-lg-30 pb-30">
+				<widget type="content" name="home:banner-1" section="صفحه نخست">
+					<div class="banner position-relative rounded overflow-hidden mb-30 mb-xs-0 ml-xs-15 ml-lg-0">
+						<a href="@@url" class="banner-link">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid">
+						</a>
+						<if terms="@@user.admin">
+							<div class="position-absolute" style="bottom: 10px; right: 10px; z-index: 1;">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</div>
+						</if>
+					</div>
+				</widget>
+	
+				<!-- banner -->
+				<widget type="content" name="home:banner-2" section="صفحه نخست">
+					<div class="banner position-relative rounded overflow-hidden mr-xs-15 mr-lg-0">
+						<a href="@@url" class="banner-link">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid">
+						</a>
+						<if terms="@@user.admin">
+							<div class="position-absolute" style="bottom: 10px; right: 10px; z-index: 1;">
+								<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-widget">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</div>
+						</if>
+					</div>
+				</widget>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- special products -->
+<widget type="products" name="home:special-products" section="صفحه نخست">
+	<div class="special-products bg-red py-30 mb-30">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 col-xl-2">
+					<widget type="content" name="home:special-products-title" section="صفحه نخست">
+						<div class="special-products-title d-none d-md-block">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title">
+							<a href="@@url" class="btn btn-outline-white special-products-title-button my-20">
+								@@anchor
+								<i class="fa fa-angle-left align-middle mr-10"></i>
+							</a>
+							<if terms="@@user.admin">
+								<a href="@@editurl"
+								class="btn btn-sm btn-edit edit-link edit-link-widget mr-15">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</if>
+						</div>
+					</widget>
+				</div>
+				<div class="col-md-9 col-xl-10">
+					<div class="owl-container position-relative">
+						<div class="special-products-items owl-carousel"
+							options="{
+								autoplay: true,
+								autoplayTimeout: 4500,
+								autoplayHoverPause: true,
+								smartSpeed: 500,
+								loop: false,
+								rtl: true,
+								margin: 10,
+								responsive:{ 0:{ items: 1.3 }, 375: { items: 2 }, 992: { items: 3 }, 1200: { items: 4 } }
+							}">
+							<loop src="@@items">
+								<div class='special-products-item bg-white shadow rounded px-20 pt-10 pb-40 @@outofstock.whenever("special-products-item-outofstock")'>
+									<a href="@@url"	class="special-products-item-link"></a>
+									<div class="special-products-item-image">
+										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high'
+											class="img-fluid center-block special-products-item-image-element"
+											alt="@@title">
+									</div>
+									<h3 class="special-products-item-title">
+										@@title
+									</h3>
+									<if terms="@@outofstock.false()">
+										<div class="special-products-item-price-wrap text-left">
+											<if terms="@@compareprice.exists">
+												<span class="special-products-item-compare-price">
+													@@compareprice
+												</span>
+											</if>
+											<if terms='@@discount.morethan("0")'>
+												<span class="special-products-item-discount">
+													@@discount٪
+												</span>
+											</if>
+											<if terms="@@price.exists">
+												<div class="special-products-item-price">
+													@@price <span>تومان</span>
+												</div>
+											</if>
+										</div>
+									</if>
+									<if terms="@@outofstock">
+										<span class="special-products-item-outofstock-message">
+											ناموجود
+										</span>
+									</if>
+									<if terms="@@expiration.exists()">
+										<if terms="@@expired.false()">
+											<div class="special-products-item-countdown align-items-center py-10 d-flex" count-down="@@expiration.time.subtract.total.seconds">
+												<i class="fa fa-clock-o"></i>
+												<div class="special-products-item-column days" data-separator="" ng-if="days != 0">
+													<span class="special-products-item-count">
+														<span ng-bind="days"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column hours" data-separator=":">
+													<span class="special-products-item-count">
+														<span ng-bind="hours"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column minutes" data-separator=":">
+													<span class="special-products-item-count">
+														<span ng-bind="minutes"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column seconds">
+													<span class="special-products-item-count">
+														<span ng-bind="seconds"></span>
+													</span>
+												</div>
+											</div>
+										</if>
+									</if>
+								</div>
+							</loop>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<if terms="@@user.admin">
+			<div class="text-center my-20">
+				<a href="@@editurl"
+				class="btn btn-sm btn-edit edit-link edit-link-widget">
+					<i class="fa fa-pencil"></i>
+					ویرایش
+				</a>
+			</div>
+		</if>
+	</div>
+</widget>
+
+<!-- banners -->
+<widget type="gallery" name="home:banners-tetrad" section="صفحه نخست">
+	<div class="banners">
+		<div class="container">
+			<div class="row">
+				<loop src="@@items">
+					<div class="col-xs-6 col-lg-3">
+						<div class="banners-item mb-30">
+							<a href="@@url" class="banners-item-link">
+								<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=500&h=500&q=high'
+									class="img-fluid rounded shadow banners-item-image"
+									alt="@@title">
+							</a>
+						</div>
+					</div>
+				</loop>
+			</div>
+			<if terms="@@user.admin">
+				<div class="text-center my-20">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</div>
+			</if>
+		</div>
+	</div>
+</widget>
+
+<!-- special products 2 -->
+<widget type="products" name="home:special-products-2" section="صفحه نخست">
+	<div class="special-products bg-green py-30 mb-30">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 col-xl-2">
+					<widget type="content" name="home:special-products-title-2" section="صفحه نخست">
+						<div class="special-products-title d-none d-md-block">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title">
+							<a href="@@url" class="btn btn-outline-white special-products-title-button my-20">
+								@@anchor
+								<i class="fa fa-angle-left align-middle mr-10"></i>
+							</a>
+							<if terms="@@user.admin">
+								<a href="@@editurl"
+								class="btn btn-sm btn-edit edit-link edit-link-widget mr-15">
+									<i class="fa fa-pencil"></i>
+									ویرایش
+								</a>
+							</if>
+						</div>
+					</widget>
+				</div>
+				<div class="col-md-9 col-xl-10">
+					<div class="owl-container position-relative">
+						<div class="special-products-items owl-carousel"
+							options="{
+								autoplay: true,
+								autoplayTimeout: 4500,
+								autoplayHoverPause: true,
+								smartSpeed: 500,
+								loop: false,
+								rtl: true,
+								margin: 10,
+								responsive:{ 0:{ items: 1.3 }, 375: { items: 2 }, 992: { items: 3 }, 1200: { items: 4 } }
+							}">
+							<loop src="@@items">
+								<div class='special-products-item bg-white shadow rounded px-20 pt-10 pb-40 @@outofstock.whenever("special-products-item-outofstock")'>
+									<a href="@@url"	class="special-products-item-link"></a>
+									<div class="special-products-item-image">
+										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high'
+											class="img-fluid center-block special-products-item-image-element"
+											alt="@@title">
+									</div>
+									<h3 class="special-products-item-title">
+										@@title
+									</h3>
+									<if terms="@@outofstock.false()">
+										<div class="special-products-item-price-wrap text-left">
+											<if terms="@@compareprice.exists">
+												<span class="special-products-item-compare-price">
+													@@compareprice
+												</span>
+											</if>
+											<if terms='@@discount.morethan("0")'>
+												<span class="special-products-item-discount">
+													@@discount٪
+												</span>
+											</if>
+											<if terms="@@price.exists">
+												<div class="special-products-item-price">
+													@@price <span>تومان</span>
+												</div>
+											</if>
+										</div>
+									</if>
+									<if terms="@@outofstock">
+										<span class="special-products-item-outofstock-message">
+											ناموجود
+										</span>
+									</if>
+									<if terms="@@expiration.exists()">
+										<if terms="@@expired.false()">
+											<div class="special-products-item-countdown align-items-center py-10 d-flex" count-down="@@expiration.time.subtract.total.seconds">
+												<i class="fa fa-clock-o"></i>
+												<div class="special-products-item-column days" data-separator="" ng-if="days != 0">
+													<span class="special-products-item-count">
+														<span ng-bind="days"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column hours" data-separator=":">
+													<span class="special-products-item-count">
+														<span ng-bind="hours"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column minutes" data-separator=":">
+													<span class="special-products-item-count">
+														<span ng-bind="minutes"></span>:
+													</span>
+												</div>
+												<div class="special-products-item-column seconds">
+													<span class="special-products-item-count">
+														<span ng-bind="seconds"></span>
+													</span>
+												</div>
+											</div>
+										</if>
+									</if>
+								</div>
+							</loop>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<if terms="@@user.admin">
+			<div class="text-center my-20">
+				<a href="@@editurl"
+				class="btn btn-sm btn-edit edit-link edit-link-widget">
+					<i class="fa fa-pencil"></i>
+					ویرایش
+				</a>
+			</div>
+		</if>
+	</div>
+</widget>
+
+<!-- products -->
+<div class="container">
+	<div class="row">
+		<widget type="products" name="home:products-1" section="صفحه نخست">
+			<div class="col-md-8 col-lg-9 col-xl-10">
+				<div class="products-wrap bg-white rounded shadow mb-30 py-10 px-30">
+					<h2 class="products-title">
+						<span>@@title</span>
+						<if terms="@@user.admin">
+							<a href="@@editurl"
+							class="btn btn-sm btn-edit edit-link edit-link-widget">
+								<i class="fa fa-pencil"></i>
+								ویرایش
+							</a>
+						</if>
+					</h2>
+					<div class="owl-container position-relative">
+						<div class="products-items owl-carousel"
+							options="{
+								autoplay: true,
+								autoplayTimeout: 4500,
+								autoplayHoverPause: true,
+								smartSpeed: 500,
+								loop: false,
+								rtl: true,
+								margin: 5,
+								responsive:{ 0:{ items: 1.3 }, 375: { items: 2 }, 576: { items: 2 }, 992: { items: 4 }, 1200: { items: 6 } }
+							}">
+							<loop src="@@items">
+								<include name="layouts/components/products-item.html" />
+							</loop>
+						</div>
+					</div>
+				</div>
+			</div>
+		</widget>
+		<widget type="products" name="home:products-offers" section="صفحه نخست">
+			<div class="col-md-4 col-lg-3 col-xl-2">
+				<div class="products-offers-wrap border border-blue bg-white rounded shadow mb-30 py-10 px-10">
+					<h2 class="products-offers-title">
+						<span>@@title</span>
+						<div class="products-offers-progress">
+							<span></span>
+						</div>
+						<if terms="@@user.admin">
+							<a href="@@editurl"
+								style="position: absolute; top: 0; left: 0;"
+								class="btn btn-sm btn-edit edit-link edit-link-widget">
+								<i class="fa fa-pencil"></i>
+								ویرایش
+							</a>
+						</if>
+					</h2>
+					<div class="owl-container position-relative">
+						<div class="products-items owl-carousel"
+							options="{
+								autoplay: true,
+								autoplayTimeout: 6000,
+								autoplayHoverPause: false,
+								smartSpeed: 500,
+								mouseDrag: false,
+								touchDrag: false,
+								animateIn: 'fadeIn',
+								animateOut: 'fadeOut',
+								loop: true,
+								rtl: true,
+								margin: 0,
+								responsive:{ 0:{ items: 1 } }
+							}">
+							<loop src="@@items">
+								<include name="layouts/components/products-item.html" />
+							</loop>
+						</div>
+					</div>
+				</div>
+			</div>
+		</widget>
+	</div>
+</div>
+
+
+<!-- banners -->
+<widget type="gallery" name="home:banners-double" section="صفحه نخست">
+	<div class="banners">
+		<div class="container">
+			<div class="row">
+				<loop src="@@items">
+					<div class="col-md-6 col-lg-6">
+						<div class="banners-item mb-30">
+							<a href="@@url" class="banners-item-link">
+								<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=300&q=high'
+									class="img-fluid rounded shadow banners-item-image"
+									alt="@@title">
+							</a>
+						</div>
+					</div>
+				</loop>
+			</div>
+			<if terms="@@user.admin">
+				<div class="text-center my-20">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</div>
+			</if>
+		</div>
+	</div>
+</widget>
+
+<!-- products -->
+<div class="container">
+	<widget type="products" name="home:products-2" section="صفحه نخست">
+		<div class="products-wrap bg-white rounded shadow mb-30 py-10 px-30">
+			<h2 class="products-title">
+				<span>@@title</span>
+				<if terms="@@user.admin">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</if>
+			</h2>
+			<div class="owl-container position-relative">
+				<div class="products-items owl-carousel"
+					options="{
+						autoplay: true,
+						autoplayTimeout: 4500,
+						autoplayHoverPause: true,
+						smartSpeed: 500,
+						loop: false,
+						rtl: true,
+						margin: 5,
+						responsive:{ 0:{ items: 1.3 }, 375: { items: 2 }, 576: { items: 3 }, 992: { items: 4 }, 1200: { items: 6 } }
+					}">
+					<loop src="@@items">
+						<include name="layouts/components/products-item.html" />
+					</loop>
+				</div>
+			</div>
+		</div>
+	</widget>
+</div>
+
+<!-- banners -->
+<widget type="gallery" name="home:banners-single" section="صفحه نخست">
+	<div class="banners d-none d-md-block">
+		<div class="container">
+			<loop src="@@items">
+				<div class="banners-item mb-30">
+					<a href="@@url" class="banners-item-link">
+						<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=1400&h=300&q=high'
+							class="img-fluid rounded shadow banners-item-image"
+							alt="@@title">
+					</a>
+				</div>
+			</loop>
+			<if terms="@@user.admin">
+				<div class="text-center my-20">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</div>
+			</if>
+		</div>
+	</div>
+</widget>
+
+<!-- products -->
+<div class="container">
+	<widget type="products" name="home:products-3" section="صفحه نخست">
+		<div class="products-wrap bg-white rounded shadow mb-30 py-10 px-30">
+			<h2 class="products-title">
+				<span>@@title</span>
+				<if terms="@@user.admin">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</if>
+			</h2>
+			<div class="owl-container position-relative">
+				<div class="products-items owl-carousel"
+					options="{
+						autoplay: true,
+						autoplayTimeout: 4500,
+						autoplayHoverPause: true,
+						smartSpeed: 500,
+						loop: false,
+						rtl: true,
+						margin: 10,
+						responsive:{ 0:{ items: 1.3 }, 375: { items: 2 }, 576: { items: 3 }, 992: { items: 4 }, 1200: { items: 6 } }
+					}">
+					<loop src="@@items">
+						<include name="layouts/components/products-item.html" />
+					</loop>
+				</div>
+			</div>
+		</div>
+	</widget>
+</div>
+
+<!-- brands -->
+<div class="container">
+	<widget type="gallery" name="home:brands" section="صفحه نخست">
+		<div class="brands-wrap bg-white rounded shadow mb-30 py-10 px-30">
+			<h2 class="brands-title">
+				<span>@@title</span>
+				<if terms="@@user.admin">
+					<a href="@@editurl"
+					class="btn btn-sm btn-edit edit-link edit-link-widget">
+						<i class="fa fa-pencil"></i>
+						ویرایش
+					</a>
+				</if>
+			</h2>
+			<div class="owl-container position-relative">
+				<div class="brands-items owl-carousel"
+					options="{
+						autoplay: true,
+						autoplayTimeout: 4500,
+						autoplayHoverPause: true,
+						smartSpeed: 500,
+						loop: false,
+						rtl: true,
+						margin: 10,
+						responsive:{ 0:{ items: 2 }, 375: { items: 3 }, 576: { items: 4 }, 992: { items: 5 }, 1200: { items: 6 } }
+					}">
+					<loop src="@@items">
+						<div class="brands-item m-15 d-flex align-items-center justify-content-center">
+							<a href="@@url" class="brands-item-link">
+								<img class="brands-item-image img-fluid" src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&h=100&q=high' alt="@@title">
+							</a>
+						</div>
+					</loop>
+				</div>
+			</div>
+		</div>
+	</widget>
+</div>
+
+<include name="layouts/footer.html" />

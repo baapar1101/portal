@@ -1,0 +1,85 @@
+<!--topbar-->
+<div class="store-topbar">
+	<form class="row" ng-submit="search()">
+		<div class="col-lg-5 col-xl-4">
+			<div class="store-topbar-search">
+				<div class="input-group store-topbar-search-query">
+					<input type="text" class="form-control store-topbar-search-query-input" maxlength="100" value="@@query" ng-model="model.query" ng-disabled="loading" placeholder="جستجو کنید...">
+					<div class="input-group-append">
+						<span class="input-group-text">
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" id="store-topbar-search-available" name="rememberme" class="custom-control-input store-topbar-search-available-input" ng-model="model.available" ng-disabled="loading">
+								<label class="custom-control-label store-topbar-search-available-label" for="store-topbar-search-available">
+									موجود
+								</label>
+							</div>
+						</span>
+						<button class="btn btn-secondary store-topbar-search-query-submit">
+							<i class="fa fa-fw fa-check"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-lg-auto mr-lg-auto d-flex flex-wrap">
+			<div class="dropdown store-topbar-sorting">
+				<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+					ترتیب نمایش
+				</button>
+				<div class="dropdown-menu dropdown-menu-right store-topbar-sorting-list">
+					<button class="dropdown-item store-topbar-sorting-item" ng-class="model.sorting == null ? 'btn-blue' : 'btn-link'" ng-click="sort()">
+						جدیدترین
+					</button>
+					<button class="dropdown-item store-topbar-sorting-item" ng-class="model.sorting == 'rate' ? 'btn-blue' : 'btn-link'" ng-click="sort('rate')">
+						محبوب‌ترین
+					</button>
+					<button class="dropdown-item store-topbar-sorting-item" ng-class="model.sorting == 'price-desc' ? 'btn-blue' : 'btn-link'" ng-click="sort('price-desc')">
+						گران‌ترین
+					</button>
+					<button class="dropdown-item store-topbar-sorting-item" ng-class="model.sorting == 'price' ? 'btn-blue' : 'btn-link'" ng-click="sort('price')">
+						ارزان‌ترین
+					</button>
+				</div>
+			</div>
+			<if terms="@@categories.any()">
+				<div class="dropdown store-topbar-categories">
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+						دسته‌بندی
+					</button>
+					<div class="dropdown-menu dropdown-menu-right store-topbar-categories-list">
+						<loop src="@@categories">
+							<a href="@@url" class="dropdown-item store-topbar-categories-item" title="@@metatitle">
+								@@title
+							</a>
+						</loop>
+					</div>
+				</div>
+			</if>
+			<loop src="@@filters">
+				<div class="dropdown store-topbar-filter">
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+						@@title
+					</button>
+					<div class="dropdown-menu dropdown-menu-right store-topbar-filter-subset">
+						<loop src="@@subset">
+							<div class="dropdown-item">
+								<div class="custom-control custom-checkbox store-topbar-filter-item">
+									<input type="checkbox" id="store-topbar-filter-@@id" class="custom-control-input store-topbar-filter-item-input" ng-model="filters.filter@@id" ng-change="search()" eval="addFilter(@@id, @@_parent.id)" ng-disabled="loading">
+									<label class="custom-control-label store-topbar-filter-item-label" for="store-topbar-filter-@@id">
+										@@title
+									</label>
+								</div>
+							</div>
+						</loop>
+					</div>
+				</div>
+			</loop>
+			<if terms="@@filters.any()">
+				<button type="button" class="btn btn-danger store-topbar-remove" ng-click="remove()" data-toggle="tooltip" title="حذف فیلتر">
+					<i class="fa fa-times"></i>
+				</button>
+			</if>
+		</div>
+	</form>
+</div>
+<!--/topbar-->

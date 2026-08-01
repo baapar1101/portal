@@ -1,0 +1,182 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container form-container form-cover-container">
+    <div class="form-cover-header" style='background-image: url(@@image.append("?f=50"));'>
+        <div class="container">
+            <div class="row">
+                <div class="d-none d-lg-block col-lg-1 col-xl-2"></div>
+                <div class="col-md-12 col-lg-10 col-xl-8">
+                    <h1 class="page-title form-title form-cover-header-title">
+                        @@title
+                    </h1>
+                    <if terms="@@user.admin">
+                        <a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page form-cover-edit">
+                            <i class="fa fa-pencil"></i>
+                            ویرایش صفحه
+                        </a>
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-8">
+                <div class="page-context form-context form-cover-context">
+                    <if terms="@@content.exists()">
+                        <div class="page-description form-description form-cover-content figure-content break-word">
+                            @@content
+                        </div>
+                        <hr class="page-separator form-separator form-cover-separator">
+                    </if>
+                    <if terms="@@fields.any()">
+                        <form name="formbuilder" class="form-cover-element" ng-submit="formbuilder.$valid && submit()" eval="collect(@@id, @@settings.payment.amount)" formbuilder dynamic-form auto-show novalidate>
+                            <div class="alert alert-success form-cover-succeed" ng-show="succeed">
+                                <span ng-bind="succeed.description"></span>
+                            </div>
+                            <scope name="form-cover">
+                                <include name="layouts/validation.html" />
+                            </scope>
+                            <loop src="@@fields" name="form-cover">
+                                <if terms="@@provider.text">
+                                    <div class="form-group form-text form-cover-text @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-text-label form-cover-text-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.textarea">
+                                    <div class="form-group form-textarea form-cover-textarea @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-textarea-label form-cover-textarea-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.password">
+                                    <div class="form-group form-password form-cover-password @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-password-label form-cover-password-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.file">
+                                    <div class="form-group form-file form-cover-file @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-file-label form-cover-file-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.checkbox">
+                                    <div class="form-group form-checkbox form-cover-checkbox @@cssclass">
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.checklist">
+                                    <div class="form-group form-checklist form-cover-checklist @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-checklist-label form-cover-checklist-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.radiolist">
+                                    <div class="form-group form-radiolist form-cover-radiolist @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-radiolist-label form-cover-radiolist-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.dropdown">
+                                    <div class="form-group form-dropdown form-cover-dropdown @@cssclass">
+                                        <label for="form-cover-@@slug" class="form-dropdown-label form-cover-dropdown-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </if>
+                                <if terms="@@provider.paragraph">
+                                    <div class="form-text text-muted form-paragraph form-cover-paragraph break-word @@cssclass">
+                                        @@body
+                                    </div>
+                                </if>
+                                <if terms="@@provider.hr">
+                                    <hr class="form-hr form-cover-hr @@cssclass">
+                                </if>
+                            </loop>
+                            <if terms="@@settings.payment.enabled">
+                                <div class="form-group form-amount form-cover-amount">
+                                    <label for="form-cover-amount" class="form-amount-label form-cover-amount-label">
+                                        مبلغ
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" name="amount" id="form-cover-amount" class="form-control form-amount-input form-cover-amount-input" ng-model="model.amount" min="100" max="1000000000" ng-disabled="progress" required @@settings.payment.readonly>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                تومان
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="validation-inline form-cover-inline-error text-danger" ng-messages="formbuilder.amount.$error" ng-show="formbuilder.$submitted || formbuilder.amount.$dirty">
+                                        <span ng-message="required">
+                                            مبلغ را بنویسید.
+                                        </span>
+                                        <span ng-message="server">
+                                            <span ng-bind="validation.amount"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-gateway form-cover-gateway">
+                                    <label for="form-cover-gateway" class="form-gateway-label form-cover-gateway-label">
+                                        درگاه پرداخت
+                                    </label>
+                                    <select name="gateway" id="form-cover-gateway" class="form-control form-gateway-input form-cover-gateway-input" ng-model="model.gateway" ng-disabled="progress" required>
+                                        <loop src="@@gateways">
+                                            <option value="@@id">
+                                                @@title
+                                            </option>
+                                        </loop>
+                                    </select>
+                                    <div class="validation-inline form-cover-inline-error text-danger" ng-messages="formbuilder.gateway.$error" ng-show="formbuilder.$submitted || formbuilder.gateway.$dirty">
+                                        <span ng-message="required">
+                                            درگاه پرداخت را انتخاب کنید.
+                                        </span>
+                                        <span ng-message="server">
+                                            <span ng-bind="validation.gateway"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </if>
+                            <hr class="form-hr form-cover-hr">
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-success form-submit form-cover-submit" ng-disabled="progress">
+                                    @@settings.button
+                                </button>
+                                <button type="button" class="btn btn-link form-reset form-cover-reset" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+                                    انصراف
+                                </button>
+                                <div class="form-loading form-cover-loading" ng-show="progress">
+                                    <i class="fa fa-refresh fa-spin fa-fw"></i>
+                                    کمی صبر کنید...
+                                </div>
+                            </div>
+                        </form>
+                    </if>
+                    <if terms="@@fields.empty()">
+                        <div class="page-empty form-empty form-cover-empty">
+                            هیچ فیلدی ایجاد نشده.
+                        </div>
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

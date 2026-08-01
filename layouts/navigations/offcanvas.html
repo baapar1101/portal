@@ -1,0 +1,36 @@
+<widget type="menu" name="navigation" section="سربرگ">
+    <nav class="navbar navbar-light p-0" role="navigation">
+        <div class="">
+            <div class="offcanvas" navbar-offcanvas>
+                <div class="offcanvas-overlay"></div>
+                <button type="button" class="navbar-toggler offcanvas-navbar-toggler" navbar-offcanvas-toggle>
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div id="offcanvas-@@id" class="offcanvas-sidebar">
+                    <div class="offcanvas-header">
+                        <a class="d-block text-center" href="/">
+							<img src="@@config.logo?m=thumb&w=150&h=48&q=veryhigh" alt="@@config.title" class="header-logo img-fluid">
+						</a>
+                    </div>
+                    <ul class="offcanvas-nav" role="menu">
+                        <loop src="@@items" recursive="@@subset" max-depth="4">
+                            <li class="offcanvas-nav-item @@active" data-subset="@@subset.count()">
+                                <a href="@@url" class="offcanvas-nav-link" target="@@target">
+                                    @@title
+                                </a>
+                                <if terms="@@subset.any()">
+                                    <button type="button" class="offcanvas-nav-toggle">
+                                        <i class="fa offcanvas-nav-toggle-icon"></i>
+                                    </button>
+                                    <ul class="offcanvas-nav-subset offcanvas-nav-subset-@@depth" role="menu">
+                                        @@recursive
+                                    </ul>
+                                </if>
+                            </li>
+                        </loop>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</widget>

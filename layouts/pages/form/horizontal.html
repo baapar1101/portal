@@ -1,0 +1,224 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container form-container form-horizontal-container">
+	<div class="container">
+		<include name="layouts/breadcrumb.html" />
+		<div class="page-context form-context form-horizontal-context">
+			<h1 class="page-title form-title form-horizontal-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page form-horizontal-edit">
+					<i class="fa fa-pencil"></i>
+					ویرایش صفحه
+				</a>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator form-separator form-horizontal-separator">
+				<div class="page-description form-description form-horizontal-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator form-separator form-horizontal-separator">
+			<if terms="@@fields.any()">
+				<form name="formbuilder" class="form-horizontal-element" ng-submit="formbuilder.$valid && submit()" eval="collect(@@id, @@settings.payment.amount)" formbuilder dynamic-form auto-show novalidate>
+					<div class="alert alert-success form-horizontal-succeed" ng-show="succeed">
+						<span ng-bind="succeed.description"></span>
+					</div>
+					<scope name="form-horizontal">
+						<include name="layouts/validation.html" />
+					</scope>
+					<div ng-hide="succeed">
+						<loop src="@@fields" name="form-horizontal">
+							<if terms="@@provider.text">
+								<div class="form-text form-horizontal-text @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-text-label form-horizontal-text-label">
+											@@title
+										</label>
+										<div class="col-md-9 col-lg-6">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.textarea">
+								<div class="form-textarea form-horizontal-textarea @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-textarea-label form-horizontal-textarea-label">
+											@@title
+										</label>
+										<div class="col-md-9 col-lg-6">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.password">
+								<div class="form-password form-horizontal-password @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-password-label form-horizontal-password-label">
+											@@title
+										</label>
+										<div class="col-md-9 col-lg-6">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.file">
+								<div class="form-file form-horizontal-file @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-file-label form-horizontal-file-label">
+											@@title
+										</label>
+										<div class="col-md-9 col-lg-6">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.checkbox">
+								<div class="form-checkbox form-horizontal-checkbox @@cssclass">
+									<div class="row form-group">
+										<div class="col-md-3"></div>
+										<div class="col-md-9">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.checklist">
+								<div class="form-checklist form-horizontal-checklist @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-checklist-label form-horizontal-checklist-label">
+											@@title
+										</label>
+										<div class="col-md-9">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.radiolist">
+								<div class="form-radiolist form-horizontal-radiolist @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-radiolist-label form-horizontal-radiolist-label">
+											@@title
+										</label>
+										<div class="col-md-9">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.dropdown">
+								<div class="form-dropdown form-horizontal-dropdown @@cssclass">
+									<div class="row form-group">
+										<label for="form-horizontal-@@slug" class="col-form-label col-md-3 text-md-left form-dropdown-label form-horizontal-dropdown-label">
+											@@title
+										</label>
+										<div class="col-md-9 col-lg-6">
+											<include name="layouts/pages/form/partials/fields.html" />
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.paragraph">
+								<div class="form-paragraph form-horizontal-paragraph @@cssclass">
+									<div class="row">
+										<div class="col-md-3"></div>
+										<div class="col-md-9">
+											<div class="form-text text-muted break-word">
+												@@body
+											</div>
+										</div>
+									</div>
+								</div>
+							</if>
+							<if terms="@@provider.hr">
+								<hr class="form-hr form-horizontal-hr @@cssclass">
+							</if>
+						</loop>
+						<if terms="@@settings.payment.enabled">
+							<div class="form-amount form-horizontal-amount">
+								<div class="row form-group">
+									<label for="form-horizontal-amount" class="col-form-label col-md-3 text-md-left form-amount-label form-horizontal-amount-label">
+										مبلغ
+									</label>
+									<div class="col-md-9 col-lg-6">
+										<div class="input-group">
+											<input type="number" name="amount" id="form-horizontal-amount" class="form-control form-amount-input form-horizontal-amount-input" ng-model="model.amount" min="100" max="1000000000" ng-disabled="progress" required @@settings.payment.readonly>
+											<div class="input-group-append">
+												<span class="input-group-text">
+													تومان
+												</span>
+											</div>
+										</div>
+										<div class="validation-inline form-horizontal-inline-error text-danger" ng-messages="formbuilder.amount.$error" ng-show="formbuilder.$submitted || formbuilder.amount.$dirty">
+											<span ng-message="required">
+												مبلغ را بنویسید.
+											</span>
+											<span ng-message="server">
+												<span ng-bind="validation.amount"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-gateway form-horizontal-gateway">
+								<div class="row form-group">
+									<label for="form-horizontal-gateway" class="col-form-label col-md-3 text-md-left form-gateway-label form-horizontal-gateway-label">
+										درگاه پرداخت
+									</label>
+									<div class="col-md-9 col-lg-6">
+										<select name="gateway" id="form-horizontal-gateway" class="form-control form-gateway-input form-horizontal-gateway-input" ng-model="model.gateway" ng-disabled="progress" required>
+											<loop src="@@gateways">
+												<option value="@@id">
+													@@title
+												</option>
+											</loop>
+										</select>
+										<div class="validation-inline form-horizontal-inline-error text-danger" ng-messages="formbuilder.gateway.$error" ng-show="formbuilder.$submitted || formbuilder.gateway.$dirty">
+											<span ng-message="required">
+												درگاه پرداخت را انتخاب کنید.
+											</span>
+											<span ng-message="server">
+												<span ng-bind="validation.gateway"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</if>
+						<hr class="form-hr form-horizontal-hr">
+						<div class="row form-group">
+							<div class="col-md-3"></div>
+							<div class="col-md-9 col-lg-6">
+								<button class="btn btn-lg btn-success form-submit form-horizontal-submit" ng-disabled="progress">
+									@@settings.button
+								</button>
+								<button type="button" class="btn btn-link form-reset form-horizontal-reset" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+									انصراف
+								</button>
+								<div class="form-loading form-horizontal-loading" ng-show="progress">
+									<i class="fa fa-refresh fa-spin fa-fw"></i>
+									کمی صبر کنید...
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</if>
+			<if terms="@@fields.empty()">
+				<div class="page-empty form-empty form-horizontal-empty">
+					هیچ فیلدی ایجاد نشده.
+				</div>
+			</if>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

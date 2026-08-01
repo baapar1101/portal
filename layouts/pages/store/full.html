@@ -1,0 +1,120 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container store-container store-full-container">
+	<div class="container">
+		<div class="page-context store-context store-full-context" store>
+			<include name="layouts/breadcrumb.html" />
+			<h1 class="page-title store-title store-full-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<if terms="@@editurl.exists()">
+					<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page store-full-edit">
+						<i class="fa fa-pencil"></i>
+						ویرایش صفحه
+					</a>
+				</if>
+				<if terms="@@addurl.exists()">
+					<a href="@@addurl" class="btn btn-sm btn-create add-link add-link-product store-full-add" target="_blank">
+						<i class="fa fa-plus"></i>
+						ایجاد محصول
+					</a>
+				</if>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator store-separator store-full-separator">
+				<div class="page-description store-description store-full-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator store-separator store-full-separator">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="store-sidebar store-full-sidebar">
+						<include name="layouts/pages/store/partials/sidebar.html" />
+					</div>
+				</div>
+				<div class="col-lg-9" store-ajax-context>
+					<div class="store-loading store-full-loading" ng-show="loading" auto-show>
+						<i class="fa fa-refresh fa-spin fa-fw"></i>
+						کمی صبر کنید...
+					</div>
+					<if terms="@@products.empty()">
+						<div class="page-empty store-empty store-full-empty" ng-hide="loading">
+							موردی برای نمایش وجود ندارد.
+						</div>
+					</if>
+					<div class="store-sorting store-full-sorting d-flex align-items-center" ng-hide="loading">
+						<div class="store-sorting-title store-full-sorting-title">
+							ترتیب نمایش:
+						</div>
+						<button class="btn btn-sm store-sorting-item store-full-sorting-item" ng-class="model.sorting == null ? 'btn-blue' : 'btn-link'" ng-click="sort()">
+							جدیدترین
+						</button>
+						<button class="btn btn-sm store-sorting-item store-full-sorting-item" ng-class="model.sorting == 'rate' ? 'btn-blue' : 'btn-link'" ng-click="sort('rate')">
+							محبوب‌ترین
+						</button>
+						<button class="btn btn-sm store-sorting-item store-full-sorting-item" ng-class="model.sorting == 'price-desc' ? 'btn-blue' : 'btn-link'" ng-click="sort('price-desc')">
+							گران‌ترین
+						</button>
+						<button class="btn btn-sm store-sorting-item store-full-sorting-item" ng-class="model.sorting == 'price' ? 'btn-blue' : 'btn-link'" ng-click="sort('price')">
+							ارزان‌ترین
+						</button>
+					</div>
+					<hr class="page-separator store-separator store-full-separator">
+					<if terms="@@products.any()">
+						<div class="store-products store-full-products" ng-hide="loading">
+							<div class="row">
+								<loop src="@@products">
+									<div class="col-6 col-sm-4 col-xxl-3">
+										<article class='store-product store-full-product @@outofstock.whenever("store-full-product-outofstock")'>
+											<div class="store-product-image store-full-product-image">
+												<a href="@@url" class="store-product-image-link store-full-product-image-link" title="@@metatitle">
+													<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high' class="img-fluid center-block store-product-image-element store-full-product-image-element" alt="@@title">
+												</a>
+											</div>
+											<h3 class="store-product-title store-full-product-title">
+												<a href="@@url" class="store-product-link store-full-product-link" title="@@metatitle">
+													@@title
+												</a>
+											</h3>
+											<if terms="@@compareprice.exists">
+												<span class="store-product-compare-price store-full-product-compare-price">
+													@@compareprice
+												</span>
+											</if>
+											<if terms="@@price.exists">
+												<span class="store-product-price store-full-product-price">
+													<span>@@price تومان</span>
+												</span>
+											</if>
+											<if terms="@@outofstock">
+												<span class="store-product-outofstock-message store-full-product-outofstock-message">
+													ناموجود
+												</span>
+											</if>
+											<div class="mt-2">
+												<button class="btn btn-sm btn-blue store-full-product-quick-view" ng-click="quickview(@@id, '/site/cart')">
+													<i class="fa fa-shopping-cart"></i>
+													خرید
+												</button>
+											</div>
+										</article>
+									</div>
+								</loop>
+							</div>
+							<include name="layouts/pager.html" />
+						</div>
+					</if>
+				</div>
+			</div>
+			<div class="store-filters store-full-filters">
+				<include name="layouts/pages/store/partials/filters.html" />
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

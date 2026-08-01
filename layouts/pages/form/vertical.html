@@ -1,0 +1,197 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container form-container form-vertical-container">
+    <div class="container">
+		<include name="layouts/breadcrumb.html" />
+        <div class="page-context form-context form-vertical-context">
+            <h1 class="page-title form-title form-vertical-title">
+                @@title
+            </h1>
+            <if terms="@@user.admin">
+                <a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page form-vertical-edit">
+                    <i class="fa fa-pencil"></i>
+                    ویرایش صفحه
+                </a>
+            </if>
+            <if terms="@@content.exists()">
+                <hr class="page-separator form-separator form-asidecontent-separator">
+                <div class="page-description form-description form-vertical-description break-word">
+                    @@content
+                </div>
+            </if>
+            <hr class="page-separator form-separator form-vertical-separator">
+            <if terms="@@fields.any()">
+                <form name="formbuilder" class="form-vertical-element" ng-submit="formbuilder.$valid && submit()" eval="collect(@@id, @@settings.payment.amount)" formbuilder dynamic-form auto-show novalidate>
+                    <div class="alert alert-success form-vertical-succeed" ng-show="succeed">
+                        <span ng-bind="succeed.description"></span>
+                    </div>
+                    <scope name="form-vertical">
+                        <include name="layouts/validation.html" />
+                    </scope>
+                    <div class="row flex-column" ng-hide="succeed">
+                        <loop src="@@fields" name="form-vertical">
+                            <if terms="@@provider.text">
+                                <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                    <div class="form-group form-text form-vertical-text @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-text-label form-vertical-text-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.textarea">
+                                <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                    <div class="form-group form-textarea form-vertical-textarea @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-textarea-label form-vertical-textarea-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.password">
+                                <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                    <div class="form-group form-password form-vertical-password @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-password-label form-vertical-password-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.file">
+                                <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                    <div class="form-group form-file form-vertical-file @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-file-label form-vertical-file-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.checkbox">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-checkbox form-vertical-checkbox @@cssclass">
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.checklist">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-checklist form-vertical-checklist @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-checklist-label form-vertical-checklist-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.radiolist">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-radiolist form-vertical-radiolist @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-radiolist-label form-vertical-radiolist-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.dropdown">
+                                <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                    <div class="form-group form-dropdown form-vertical-dropdown @@cssclass">
+                                        <label for="form-vertical-@@slug" class="form-dropdown-label form-vertical-dropdown-label">
+                                            @@title
+                                        </label>
+                                        <include name="layouts/pages/form/partials/fields.html" />
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.paragraph">
+                                <div class="col-sm-12">
+                                    <div class="form-text text-muted form-paragraph form-vertical-paragraph break-word @@cssclass">
+                                        @@body
+                                    </div>
+                                </div>
+                            </if>
+                            <if terms="@@provider.hr">
+                                <div class="col-sm-12">
+                                    <hr class="form-hr form-vertical-hr @@cssclass">
+                                </div>
+                            </if>
+                        </loop>
+                        <if terms="@@settings.payment.enabled">
+                            <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-6">
+                                <div class="form-group form-amount form-vertical-amount">
+                                    <label for="form-vertical-amount" class="form-amount-label form-vertical-amount-label">
+                                        مبلغ
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="number" name="amount" id="form-vertical-amount" class="form-control form-amount-input form-vertical-amount-input" ng-model="model.amount" min="100" max="1000000000" ng-disabled="progress" required @@settings.payment.readonly>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                تومان
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="validation-inline form-vertical-inline-error text-danger" ng-messages="formbuilder.amount.$error" ng-show="formbuilder.$submitted || formbuilder.amount.$dirty">
+                                        <span ng-message="required">
+                                            مبلغ را بنویسید.
+                                        </span>
+                                        <span ng-message="server">
+                                            <span ng-bind="validation.amount"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-gateway form-vertical-gateway">
+                                    <label for="form-vertical-gateway" class="form-gateway-label form-vertical-gateway-label">
+                                        درگاه پرداخت
+                                    </label>
+                                    <select name="gateway" id="form-vertical-gateway" class="form-control form-gateway-input form-vertical-gateway-input" ng-model="model.gateway" ng-disabled="progress" required>
+                                        <loop src="@@gateways">
+                                            <option value="@@id">
+                                                @@title
+                                            </option>
+                                        </loop>
+                                    </select>
+                                    <div class="validation-inline form-vertical-inline-error text-danger" ng-messages="formbuilder.gateway.$error" ng-show="formbuilder.$submitted || formbuilder.gateway.$dirty">
+                                        <span ng-message="required">
+                                            درگاه پرداخت را انتخاب کنید.
+                                        </span>
+                                        <span ng-message="server">
+                                            <span ng-bind="validation.gateway"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </if>
+                        <div class="col-sm-12">
+                            <hr class="form-hr form-vertical-hr">
+                            <div class="form-group">
+                                <button class="btn btn-lg btn-success form-submit form-vertical-submit" ng-disabled="progress">
+                                    @@settings.button
+                                </button>
+                                <button type="button" class="btn btn-link form-reset form-vertical-reset" ng-click="reset()" click-confirm="همه‌ی اطلاعات نوشته شده، حذف می‌شوند. آیا مطمئن هستید؟">
+                                    انصراف
+                                </button>
+                                <div class="form-loading form-vertical-loading" ng-show="progress">
+                                    <i class="fa fa-refresh fa-spin fa-fw"></i>
+                                    کمی صبر کنید...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </if>
+            <if terms="@@fields.empty()">
+                <div class="page-empty form-empty form-vertical-empty">
+                    هیچ فیلدی ایجاد نشده.
+                </div>
+            </if>
+        </div>
+    </div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />

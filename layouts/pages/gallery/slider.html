@@ -1,0 +1,73 @@
+<include name="layouts/header.html" />
+
+<!--main-->
+<main class="page-container gallery-container gallery-slider-container">
+	<div class="container">
+		<include name="layouts/breadcrumb.html" />
+		<div class="page-context gallery-context gallery-slider-context" gallery-slider>
+			<h1 class="page-title gallery-title gallery-slider-title">
+				@@title
+			</h1>
+			<if terms="@@user.admin">
+				<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-page gallery-slider-edit">
+					<i class="fa fa-pencil"></i>
+					ویرایش صفحه
+				</a>
+			</if>
+			<if terms="@@content.exists()">
+				<hr class="page-separator gallery-separator gallery-slider-separator">
+				<div class="page-description gallery-description gallery-slider-description break-word">
+					@@content
+				</div>
+			</if>
+			<hr class="page-separator gallery-separator gallery-slider-separator">
+			<if terms="@@images.exists()">
+				<div class="gallery-slider-preview" ng-if="ready">
+					<div ng-class="loading ? 'gallery-slider-preview-image gallery-slider-preview-image-loading' : 'gallery-slider-preview-image'">
+						<img class="img-fluid center-block gallery-slider-preview-element" ng-src="{{image}}" image-load="toggleLoading()">
+					</div>
+					<h4 class="gallery-slider-preview-title" ng-bind="title"></h4>
+					<p class="gallery-slider-preview-description break-word" ng-bind="description"></p>
+					<button type="button" class="btn btn-primary btn-sm gallery-slider-preview-previous" ng-click="previous()" ng-disabled="!previousItem">
+						<i class="fa fa-caret-right"></i>
+						تصویر قبلی
+					</button>
+					<button type="button" class="btn btn-primary btn-sm gallery-slider-preview-next" ng-click="next()" ng-disabled="!nextItem">
+						تصویر بعدی
+						<i class="fa fa-caret-left"></i>
+					</button>
+					<hr class="gallery-slider-preview-separator d-none d-md-block">
+				</div>
+			</if>
+			<div class="row d-none d-md-flex">
+				<loop src="@@images">
+					<div class="col-md-3 col-lg-2">
+						<div class="gallery-item gallery-slider-item">
+							<div class="gallery-item-image gallery-slider-item-image">
+								<a href="@@url" ng-click="select($event)" class="gallery-item-link gallery-slider-item-link">
+									<img src="@@image?m=crop&w=468&h=320&q=high" data-preview="@@image?m=thumb&w=1280&h=800&q=veryhigh" class="img-fluid center-block gallery-item-element gallery-slider-item-element">
+								</a>
+							</div>
+							<h4 class="gallery-item-title gallery-slider-item-title">
+								@@title
+							</h4>
+							<p class="gallery-item-description gallery-slider-item-description">
+								@@description
+							</p>
+						</div>
+					</div>
+				</loop>
+				<if terms="@@images.empty()">
+					<div class="col-xs-12">
+						<div class="page-empty gallery-empty gallery-slider-empty">
+							<p>هیچ موردی برای نمایش پیدا نشد.</p>
+						</div>
+					</div>
+				</if>
+			</div>
+		</div>
+	</div>
+</main>
+<!--/main-->
+
+<include name="layouts/footer.html" />
