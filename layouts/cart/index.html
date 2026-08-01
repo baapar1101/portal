@@ -25,7 +25,7 @@
 											<div class="col-5 col-sm-4 col-md-3 col-lg-4">
 												<div class="cart-item-image">
 													<a ng-href="{{item.product.url}}" class="cart-item-image-link" target="_blank">
-														<img ng-src="{{item.product.variant.image||item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=300&h=300&q=high" class="img-responsive cart-item-image-element">
+														<img ng-src="{{item.product.variant.image||item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=300&h=300&q=high" class="img-responsive cart-item-image-element" loading="lazy" decoding="async" width="300" height="300">
 													</a>
 												</div>
 												<div class="cart-item-quantity mt-2">

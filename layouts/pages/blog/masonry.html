@@ -42,7 +42,7 @@
 								<if terms="@@image.exists()">
 									<div class="blog-post-image blog-masonry-post-image">
 										<a href="@@url" class="blog-post-image-link blog-masonry-post-image-link">
-											<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=480&h=480&q=high' class="img-fluid center-block blog-post-image-element blog-masonry-post-image-element" alt="@@title">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=480&h=480&q=high' class="img-fluid center-block blog-post-image-element blog-masonry-post-image-element" alt="@@title" loading="lazy" decoding="async" width="480" height="480">
 										</a>
 									</div>
 								</if>

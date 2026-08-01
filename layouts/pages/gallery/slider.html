@@ -24,7 +24,7 @@
 			<if terms="@@images.exists()">
 				<div class="gallery-slider-preview" ng-if="ready">
 					<div ng-class="loading ? 'gallery-slider-preview-image gallery-slider-preview-image-loading' : 'gallery-slider-preview-image'">
-						<img class="img-fluid center-block gallery-slider-preview-element" ng-src="{{image}}" image-load="toggleLoading()">
+						<img class="img-fluid center-block gallery-slider-preview-element" ng-src="{{image}}" image-load="toggleLoading()" loading="lazy" decoding="async">
 					</div>
 					<h4 class="gallery-slider-preview-title" ng-bind="title"></h4>
 					<p class="gallery-slider-preview-description break-word" ng-bind="description"></p>
@@ -45,7 +45,7 @@
 						<div class="gallery-item gallery-slider-item">
 							<div class="gallery-item-image gallery-slider-item-image">
 								<a href="@@url" ng-click="select($event)" class="gallery-item-link gallery-slider-item-link">
-									<img src="@@image?m=crop&w=468&h=320&q=high" data-preview="@@image?m=thumb&w=1280&h=800&q=veryhigh" class="img-fluid center-block gallery-item-element gallery-slider-item-element">
+									<img src="@@image?m=crop&w=468&h=320&q=high" data-preview="@@image?m=thumb&w=1280&h=800&q=veryhigh" class="img-fluid center-block gallery-item-element gallery-slider-item-element" loading="lazy" decoding="async" width="468" height="320">
 								</a>
 							</div>
 							<h4 class="gallery-item-title gallery-slider-item-title">

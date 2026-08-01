@@ -41,7 +41,7 @@
 							<if terms="@@image.exists()">
 								<div class="blog-post-image blog-full-post-image">
 									<a href="@@url" class="blog-post-image-link blog-full-post-image-link">
-										<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block blog-post-image-element blog-full-post-image-element" alt="@@title">
+										<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block blog-post-image-element blog-full-post-image-element" alt="@@title" loading="lazy" decoding="async" width="800" height="600">
 									</a>
 								</div>
 							</if>

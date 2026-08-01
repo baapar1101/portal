@@ -71,7 +71,7 @@
 									<form name="items" class="header-basket-item" ng-submit="items.$valid && update(item)" ng-repeat="item in model.items" novalidate>
 										<div class="header-basket-item-image">
 											<a ng-href="{{item.product.url}}" class="header-basket-item-image-link" target="_blank">
-												<img ng-src="{{item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=60&h=60&q=high" class="img-responsive header-basket-item-image-element">
+												<img ng-src="{{item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=60&h=60&q=high" class="img-responsive header-basket-item-image-element" loading="lazy" decoding="async" width="60" height="60">
 											</a>
 										</div>
 										<div class="header-basket-item-details">
@@ -122,7 +122,7 @@
 						<div class="quicksearch-item" ng-repeat="item in items">
 							<div class="quicksearch-item-image" ng-show="item.image">
 								<a ng-href="{{item.url}}" class="quicksearch-item-image-link">
-									<img ng-src="{{item.image}}?m=crop&w=100&h=100&q=high" class="quicksearch-item-image-element">
+									<img ng-src="{{item.image}}?m=crop&w=100&h=100&q=high" class="quicksearch-item-image-element" loading="lazy" decoding="async" width="100" height="100">
 								</a>
 							</div>
 							<h4 class="quicksearch-item-title">

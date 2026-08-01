@@ -396,7 +396,7 @@ footer{
   <div class="header-inner">
 
     <div class="logo-center">
-      <img src="logo.png" alt="تماس مارکت">
+      <img src="logo.png" alt="تماس مارکت" loading="lazy" decoding="async">
       <div class="brand-text">
          
       </div>
@@ -557,7 +557,7 @@ const filtered = DATA.filter(r => {
                 <td>
                   <img src="/picture/${r[3]}.jpg"
                        style="width:60px;height:60px;object-fit:contain"
-                       onerror="this.src='no-image.png'">
+                       onerror="this.src='no-image.png'" loading="lazy" decoding="async">
                 </td>
                 <td>${r[1]}</td>
                 <td>${r[2]}</td>

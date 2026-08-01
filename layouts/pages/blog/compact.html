@@ -41,7 +41,7 @@
 							<if terms="@@image.exists()">
 								<div class="blog-post-image blog-compact-post-image">
 									<a href="@@url" class="blog-post-image-link blog-compact-post-image-link">
-										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=640&h=480&q=high' class="img-fluid center-block blog-post-image-element blog-compact-post-image-element" alt="@@title">
+										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=640&h=480&q=high' class="img-fluid center-block blog-post-image-element blog-compact-post-image-element" alt="@@title" loading="lazy" decoding="async" width="640" height="480">
 									</a>
 								</div>
 							</if>
