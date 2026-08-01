@@ -3,7 +3,7 @@
         <div class="">
             <div class="offcanvas" navbar-offcanvas>
                 <div class="offcanvas-overlay"></div>
-                <button type="button" class="navbar-toggler offcanvas-navbar-toggler" navbar-offcanvas-toggle>
+                <button type="button" class="navbar-toggler offcanvas-navbar-toggler" navbar-offcanvas-toggle aria-label="باز کردن منو" aria-expanded="false" aria-controls="offcanvas-@@id">
                     <i class="fa fa-bars"></i>
                 </button>
                 <div id="offcanvas-@@id" class="offcanvas-sidebar">
@@ -19,7 +19,7 @@
                                     @@title
                                 </a>
                                 <if terms="@@subset.any()">
-                                    <button type="button" class="offcanvas-nav-toggle">
+                                    <button type="button" class="offcanvas-nav-toggle" aria-label="نمایش زیرمنوی @@title">
                                         <i class="fa offcanvas-nav-toggle-icon"></i>
                                     </button>
                                     <ul class="offcanvas-nav-subset offcanvas-nav-subset-@@depth" role="menu">

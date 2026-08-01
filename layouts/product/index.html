@@ -70,16 +70,16 @@
 							<!-- actions -->
 							<div class="product-actions">
 								<if terms="@@user.exists()">
-									<button type="button" class="btn btn-link product-addtowishlist" ng-click="submit()" eval="collect(@@id)" ng-class="succeed ? 'btn-danger text-white' : ''" ng-disabled="progress" data-toggle="tooltip" data-original-title="افزودن به فهرست علاقه‌مندی‌ها" add-to-wishlist>
+									<button type="button" class="btn btn-link product-addtowishlist" ng-click="submit()" eval="collect(@@id)" ng-class="succeed ? 'btn-danger text-white' : ''" ng-disabled="progress" data-toggle="tooltip" data-original-title="افزودن به فهرست علاقه‌مندی‌ها" aria-label="افزودن به فهرست علاقه‌مندی‌ها" add-to-wishlist>
 										<i class="fa fa-fw fa-heart-o"></i>
 									</button>
 								</if>
 								<if terms="@@user.empty()">
-									<button type="button" class="btn btn-link product-addtowishlist" onclick="alert('این امکان فقط برای کاربران در دسترس است.')">
+									<button type="button" class="btn btn-link product-addtowishlist" onclick="alert('این امکان فقط برای کاربران در دسترس است.')" aria-label="افزودن به فهرست علاقه‌مندی‌ها">
 										<i class="fa fa-fw fa-heart-o"></i>
 									</button>
 								</if>
-								<a href="@@compareurl" class="btn btn-link product-compare" data-toggle="tooltip" title="مقایسه">
+								<a href="@@compareurl" class="btn btn-link product-compare" data-toggle="tooltip" title="مقایسه" aria-label="مقایسه">
 									<i class="fa fa-fw fa-balance-scale"></i>
 								</a>
 							</div>
@@ -259,7 +259,7 @@
 								<div class="col-lg-4">
 									<div class="product-info-buy p-15">
 										<div class="product-seller d-flex align-items-center pt-half pb-15">
-											<img class="product-seller-icon img-fluid" src="@@theme/images/store-icon.png" alt="فروشنده" loading="lazy" decoding="async">
+											<img class="product-seller-icon img-fluid" src="@@theme/images/store-icon.png" alt="" loading="lazy" decoding="async">
 											<span class="pr-10">فروشنده: @@config.title</span>
 										</div>
 										<div class="product-availability d-flex align-items-center py-15" ng-class="{ 'd-block': outofstock() }">

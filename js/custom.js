@@ -21,6 +21,16 @@ $(function () {
 	$('.loading').fadeOut(reduceMotion ? 0 : 400);
 
 
+	/* --------------------------------------------------------- skip link
+	   هدف skip-link باید هر بار روی همان <main> صفحه باشد، ولی لی‌آوت‌های
+	   مختلف id ندارند؛ این‌جا یک‌بار روی اولین main صفحه ست می‌شود.
+	   tabindex="-1" یعنی فقط برنامه‌ای فوکوس‌پذیر است، در Tab عادی نمی‌آید. */
+	var $main = $('main').first();
+	if ($main.length && !$main.attr('id')) {
+		$main.attr({ id: 'main-content', tabindex: '-1' });
+	}
+
+
 	/* ---------------------------------------------------------- هدر چسبان */
 	var $header = $('.header');
 	var $body = $('body');
@@ -115,6 +125,52 @@ $(function () {
 		if (e.key === 'Escape' || e.keyCode === 27) {
 			closeMega();
 			$megaTitle.trigger('blur');
+		}
+	});
+
+
+	/* ------------------------------------------------------------ آفکانواس
+	   منطق باز/بسته‌شدن (کلاس offcanvas-expanded) دست دایرکتیو انگیولار است؛
+	   این‌جا فقط رفتار کیبورد کنارش اضافه می‌شود: Escape می‌بندد، فوکوس داخل
+	   منو گیر می‌کند و با بسته‌شدن به دکمهٔ همبرگر برمی‌گردد. همون سبک مگامنو. */
+	var $offcanvas = $('.offcanvas');
+	var $offcanvasToggle = $('[navbar-offcanvas-toggle]');
+	var $offcanvasSidebar = $('.offcanvas-sidebar');
+
+	function offcanvasOpen() {
+		return $offcanvas.hasClass('offcanvas-expanded');
+	}
+
+	function offcanvasFocusable() {
+		return $offcanvasSidebar.find('a[href], button:not([disabled])').filter(':visible');
+	}
+
+	$(document).on('click', '[navbar-offcanvas-toggle], .offcanvas-overlay, .offcanvas-close', function () {
+		setTimeout(function () {
+			$offcanvasToggle.attr('aria-expanded', offcanvasOpen() ? 'true' : 'false');
+			if (offcanvasOpen()) offcanvasFocusable().first().trigger('focus');
+		}, 0);
+	});
+
+	$(document).on('keydown', function (e) {
+		if ((e.key === 'Escape' || e.keyCode === 27) && offcanvasOpen()) {
+			$('.offcanvas-overlay').trigger('click');
+			$offcanvasToggle.trigger('focus');
+		}
+	});
+
+	$offcanvasSidebar.on('keydown', function (e) {
+		if (e.key !== 'Tab' || !offcanvasOpen()) return;
+		var $focusable = offcanvasFocusable();
+		if (!$focusable.length) return;
+		var first = $focusable[0];
+		var last = $focusable[$focusable.length - 1];
+		if (e.shiftKey && document.activeElement === first) {
+			e.preventDefault();
+			last.focus();
+		} else if (!e.shiftKey && document.activeElement === last) {
+			e.preventDefault();
+			first.focus();
 		}
 	});
 
