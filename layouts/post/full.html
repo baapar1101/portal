@@ -8,7 +8,7 @@
 				<div class="post-context post-full-context">
 					<if terms="@@image.exists()">
 						<div class="post-image post-full-image">
-							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block post-image-element post-full-image-element" alt="@@title">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=600&q=high' class="img-fluid center-block post-image-element post-full-image-element" alt="@@title" loading="lazy" decoding="async" width="800" height="600">
 						</div>
 					</if>
 					<h1 class="post-title post-full-title">

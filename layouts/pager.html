@@ -3,7 +3,7 @@
 		<ul class="pagination">
 			<if terms="@@pager.previous.exists()">
 				<li class="page-item">
-					<a href="@@pager.previous.url" class="page-link">
+					<a href="@@pager.previous.url" class="page-link" aria-label="صفحه قبل">
 						<span aria-hidden="true">
 							<i class="fa fa-angle-double-right"></i>
 						</span>
@@ -19,7 +19,7 @@
 			</loop>
 			<if terms="@@pager.next.exists()">
 				<li class="page-item">
-					<a href="@@pager.next.url" class="page-link">
+					<a href="@@pager.next.url" class="page-link" aria-label="صفحه بعد">
 						<span aria-hidden="true">
 							<i class="fa fa-angle-double-left"></i>
 						</span>

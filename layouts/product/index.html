@@ -70,36 +70,36 @@
 							<!-- actions -->
 							<div class="product-actions">
 								<if terms="@@user.exists()">
-									<button type="button" class="btn btn-link product-addtowishlist" ng-click="submit()" eval="collect(@@id)" ng-class="succeed ? 'btn-danger text-white' : ''" ng-disabled="progress" data-toggle="tooltip" data-original-title="افزودن به فهرست علاقه‌مندی‌ها" add-to-wishlist>
+									<button type="button" class="btn btn-link product-addtowishlist" ng-click="submit()" eval="collect(@@id)" ng-class="succeed ? 'btn-danger text-white' : ''" ng-disabled="progress" data-toggle="tooltip" data-original-title="افزودن به فهرست علاقه‌مندی‌ها" aria-label="افزودن به فهرست علاقه‌مندی‌ها" add-to-wishlist>
 										<i class="fa fa-fw fa-heart-o"></i>
 									</button>
 								</if>
 								<if terms="@@user.empty()">
-									<button type="button" class="btn btn-link product-addtowishlist" onclick="alert('این امکان فقط برای کاربران در دسترس است.')">
+									<button type="button" class="btn btn-link product-addtowishlist" onclick="alert('برای افزودن به فهرست علاقه‌مندی‌ها، وارد حساب کاربری خود شوید.')" aria-label="افزودن به فهرست علاقه‌مندی‌ها">
 										<i class="fa fa-fw fa-heart-o"></i>
 									</button>
 								</if>
-								<a href="@@compareurl" class="btn btn-link product-compare" data-toggle="tooltip" title="مقایسه">
+								<a href="@@compareurl" class="btn btn-link product-compare" data-toggle="tooltip" title="مقایسه" aria-label="مقایسه">
 									<i class="fa fa-fw fa-balance-scale"></i>
 								</a>
 							</div>
 							<div class="product-image" magnific>
 								<a ng-href="{{model.image || '@@image'}}" class="product-image-link" magnific-preview="{{model.image || '@@image?m=thumb&w=1280&h=800&q=high'}}">
-									<img ng-src='{{model.image || "@@image.default("/site/resources/images/empty.jpg")"}}?m=thumb&w=1280&h=800&q=high' class="product-image-element" alt="@@title">
+									<img ng-src='{{model.image || "@@image.default("/site/resources/images/empty.jpg")"}}?m=thumb&w=1280&h=800&q=high' class="product-image-element" alt="@@title" loading="lazy" decoding="async" width="1280" height="800">
 								</a>
 							</div>
 							<if terms='@@images.morethan("1")'>
 								<div class="product-images owl-carousel" options="{ navClass: ['product-images-prev', 'product-images-next'], responsive: { 992: { items: 3 }, 1200: { items: 4 } }, loop: false, navText: [], margin: 15, nav: true }" magnific>
 									<loop src='@@images'>
 										<a href="@@path" magnific-preview="@@path?m=thumb&w=1280&h=800&q=high" class="product-images-link">
-											<img src="@@path?m=crop&w=120&h=80&q=high" class="product-images-item">
+											<img src="@@path?m=crop&w=120&h=80&q=high" class="product-images-item" loading="lazy" decoding="async" width="120" height="80">
 										</a>
 									</loop>
 								</div>
 							</if>
 							<div class="product-images-slider owl-carousel d-none" options="{ navClass: ['product-images-prev', 'product-images-next'], navText: [], nav: true, items: 1 }">
 								<loop src="@@images">
-									<img src="@@path?m=thumb&w=1280&h=800&q=high" class="product-images-slider-item">
+									<img src="@@path?m=thumb&w=1280&h=800&q=high" class="product-images-slider-item" loading="lazy" decoding="async" width="1280" height="800">
 								</loop>
 							</div>
 						</div>
@@ -108,7 +108,7 @@
 						<form name="addtocart" class="product-info" ng-submit="addtocart.$valid && submit()" eval="collect(@@price.number, @@compareprice.number, @@discount)" dynamic-form auto-show novalidate>
 							<div class="row">
 								<div class="col-lg-8">
-									<div class="product-data pr-lg-15">
+									<div class="product-data pl-lg-15">
 										<if terms="@@user.admin">
 											<a href="@@editurl" class="btn btn-sm btn-edit edit-link edit-link-product product-edit">
 												<i class="fa fa-pencil"></i>
@@ -236,7 +236,7 @@
 													<loop src="@@items">
 														<div class="col-3 col-md col-lg">
 															<a href="@@url" class="product-features-item d-flex align-items-center mb-15">
-																<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=24&h=24&q=high' alt="@@title" class="product-features-item-image ml-10">
+																<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=24&h=24&q=high' alt="@@title" class="product-features-item-image ml-10" loading="lazy" decoding="async" width="24" height="24">
 																<span class="product-features-item-title d-block">
 																	@@title
 																</span>
@@ -259,7 +259,7 @@
 								<div class="col-lg-4">
 									<div class="product-info-buy p-15">
 										<div class="product-seller d-flex align-items-center pt-half pb-15">
-											<img class="product-seller-icon img-fluid" src="@@theme/images/store-icon.png" alt="فروشنده">
+											<img class="product-seller-icon img-fluid" src="@@theme/images/store-icon.png" alt="" loading="lazy" decoding="async">
 											<span class="pr-10">فروشنده: @@config.title</span>
 										</div>
 										<div class="product-availability d-flex align-items-center py-15" ng-class="{ 'd-block': outofstock() }">
@@ -423,11 +423,11 @@
 										<loop src="@@comments" recursive="@@subset">
 											<div class="media product-comment break-word" id="comment-@@id">
 												<div class="d-flex ml-3 product-comment-avatar">
-													<img src="@@avatar.get?m=crop&w=100&h=100&q=high" class="product-comment-avatar-image">
+													<img src="@@avatar.get?m=crop&w=100&h=100&q=high" class="product-comment-avatar-image" loading="lazy" decoding="async" width="100" height="100">
 												</div>
 												<div class="media-body">
 													<h5 class="product-comment-author">
-														<img src='@@region.format("/site/resources/flags/{0}.gif")' class="product-comment-author-flag">
+														<img src='@@region.format("/site/resources/flags/{0}.gif")' class="product-comment-author-flag" loading="lazy" decoding="async">
 														<if terms="@@website.empty()">
 															<span class="product-comment-name">
 																@@name.default("ناشناس")
@@ -597,6 +597,49 @@
 	</div>
 </main>
 <!--/main-->
+
+<!-- schema -->
+<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Product",
+		"name": "@@title"
+		<if terms="@@image.exists()">
+		, "image": "@@image?m=thumb&w=1200&h=1200&q=veryhigh"
+		</if>
+		<if terms="@@metadescription.exists()">
+		, "description": "@@metadescription"
+		</if>
+		<if terms="@@sku.exists()">
+		, "sku": "@@sku"
+		</if>
+		<if terms="@@category.exists()">
+		, "category": "@@category.title"
+		</if>
+		<if terms="@@filters.any()">
+			<loop src="@@filters">
+				<if terms='@@parentid.equal("id of brand filter")'>
+		, "brand": { "@type": "Brand", "name": "@@title" }
+				</if>
+			</loop>
+		</if>
+		<if terms="@@price.exists">
+		, "offers": {
+			"@type": "Offer",
+			"url": "@@canonicalurl",
+			"price": "@@price.number",
+			"priceCurrency": "IRR",
+			<if terms="@@outofstock">
+			"availability": "https://schema.org/OutOfStock",
+			</if>
+			<if terms="@@outofstock.false()">
+			"availability": "https://schema.org/InStock",
+			</if>
+			"seller": { "@type": "Organization", "name": "@@config.title" }
+		}
+		</if>
+	}
+</script>
 
 <if terms="@@inquiry.false()">
 	<include name="layouts/product/partials/addtocart.html" />

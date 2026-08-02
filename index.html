@@ -23,7 +23,7 @@
 							}">
 							<loop src="@@items">
 								<a href="@@url" class="showcase-slider-link">
-									<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=900&h=450&q=veryhigh' alt="@@title" class="showcase-slider-image img-fluid">
+									<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=900&h=450&q=veryhigh' alt="@@title" class="showcase-slider-image img-fluid" fetchpriority="high" decoding="async" width="900" height="450">
 								</a>
 							</loop>
 						</div>
@@ -46,7 +46,7 @@
 				<widget type="content" name="home:banner-1" section="صفحه نخست">
 					<div class="banner position-relative rounded overflow-hidden mb-30 mb-xs-0 ml-xs-15 ml-lg-0">
 						<a href="@@url" class="banner-link">
-							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid" fetchpriority="high" decoding="async" width="450" height="220">
 						</a>
 						<if terms="@@user.admin">
 							<div class="position-absolute" style="bottom: 10px; right: 10px; z-index: 1;">
@@ -63,7 +63,7 @@
 				<widget type="content" name="home:banner-2" section="صفحه نخست">
 					<div class="banner position-relative rounded overflow-hidden mr-xs-15 mr-lg-0">
 						<a href="@@url" class="banner-link">
-							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=450&h=220&q=veryhigh' alt="@@title" class="banner-image img-fluid" fetchpriority="high" decoding="async" width="450" height="220">
 						</a>
 						<if terms="@@user.admin">
 							<div class="position-absolute" style="bottom: 10px; right: 10px; z-index: 1;">
@@ -88,7 +88,7 @@
 				<div class="col-md-3 col-xl-2">
 					<widget type="content" name="home:special-products-title" section="صفحه نخست">
 						<div class="special-products-title d-none d-md-block">
-							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title" loading="lazy" decoding="async" width="200" height="400">
 							<a href="@@url" class="btn btn-outline-white special-products-title-button my-20">
 								@@anchor
 								<i class="fa fa-angle-left align-middle mr-10"></i>
@@ -122,7 +122,7 @@
 									<div class="special-products-item-image">
 										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high'
 											class="img-fluid center-block special-products-item-image-element"
-											alt="@@title">
+											alt="@@title" loading="lazy" decoding="async" width="500" height="500">
 									</div>
 									<h3 class="special-products-item-title">
 										@@title
@@ -209,7 +209,7 @@
 							<a href="@@url" class="banners-item-link">
 								<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=500&h=500&q=high'
 									class="img-fluid rounded shadow banners-item-image"
-									alt="@@title">
+									alt="@@title" loading="lazy" decoding="async" width="500" height="500">
 							</a>
 						</div>
 					</div>
@@ -236,7 +236,7 @@
 				<div class="col-md-3 col-xl-2">
 					<widget type="content" name="home:special-products-title-2" section="صفحه نخست">
 						<div class="special-products-title d-none d-md-block">
-							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title">
+							<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=200&h=400&q=high' class="img-fluid special-products-title-image" alt="@@title" loading="lazy" decoding="async" width="200" height="400">
 							<a href="@@url" class="btn btn-outline-white special-products-title-button my-20">
 								@@anchor
 								<i class="fa fa-angle-left align-middle mr-10"></i>
@@ -270,7 +270,7 @@
 									<div class="special-products-item-image">
 										<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=500&h=500&q=high'
 											class="img-fluid center-block special-products-item-image-element"
-											alt="@@title">
+											alt="@@title" loading="lazy" decoding="async" width="500" height="500">
 									</div>
 									<h3 class="special-products-item-title">
 										@@title
@@ -438,7 +438,7 @@
 							<a href="@@url" class="banners-item-link">
 								<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=800&h=300&q=high'
 									class="img-fluid rounded shadow banners-item-image"
-									alt="@@title">
+									alt="@@title" loading="lazy" decoding="async" width="800" height="300">
 							</a>
 						</div>
 					</div>
@@ -501,7 +501,7 @@
 					<a href="@@url" class="banners-item-link">
 						<img src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&w=1400&h=300&q=high'
 							class="img-fluid rounded shadow banners-item-image"
-							alt="@@title">
+							alt="@@title" loading="lazy" decoding="async" width="1400" height="300">
 					</a>
 				</div>
 			</loop>
@@ -582,7 +582,7 @@
 					<loop src="@@items">
 						<div class="brands-item m-15 d-flex align-items-center justify-content-center">
 							<a href="@@url" class="brands-item-link">
-								<img class="brands-item-image img-fluid" src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&h=100&q=high' alt="@@title">
+								<img class="brands-item-image img-fluid" src='@@image.default("/site/resources/images/empty.jpg")?m=thumb&h=100&q=high' alt="@@title" loading="lazy" decoding="async">
 							</a>
 						</div>
 					</loop>

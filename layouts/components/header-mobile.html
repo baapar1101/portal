@@ -16,13 +16,13 @@
 				<div class="d-flex justify-content-end">
 					<!-- user -->
 					<if terms="@@user.empty()">
-						<a href="/site/signin" class="header-mobile-user-button">
+						<a href="/site/signin" class="header-mobile-user-button" aria-label="ورود به حساب کاربری">
 							<i class="fa fa-user align-middle"></i>
 						</a>
 					</if>
 					<if terms="@@user.exists()">
 						<div class="dropdown d-inline-block">
-							<a href="#" class="header-mobile-user-button dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+							<a href="#" class="header-mobile-user-button dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-label="حساب کاربری">
 								<i class="fa fa-user align-middle"></i>
 							</a>
 							<div class="dropdown-menu">
@@ -63,7 +63,7 @@
 					<if terms="@@config.features.store">
 						<div class="header-basket" cart>
 							<div class="dropdown">
-								<a href="#" class="header-basket-button dropdown-toggle" data-toggle="dropdown" id="basket-widget" role="button" aria-expanded="false" aria-haspopup="true">
+								<a href="#" class="header-basket-button dropdown-toggle" data-toggle="dropdown" id="basket-widget" role="button" aria-expanded="false" aria-haspopup="true" aria-label="سبد خرید">
 									<i class="fa fa-shopping-cart align-middle"></i>
 									<span class="badge badge-pill badge-primary" ng-bind="model.items.length || 0">0</span>
 								</a>
@@ -71,7 +71,7 @@
 									<form name="items" class="header-basket-item" ng-submit="items.$valid && update(item)" ng-repeat="item in model.items" novalidate>
 										<div class="header-basket-item-image">
 											<a ng-href="{{item.product.url}}" class="header-basket-item-image-link" target="_blank">
-												<img ng-src="{{item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=60&h=60&q=high" class="img-responsive header-basket-item-image-element">
+												<img ng-src="{{item.product.image||'/site/resources/images/empty.jpg'}}?m=thumb&w=60&h=60&q=high" class="img-responsive header-basket-item-image-element" loading="lazy" decoding="async" width="60" height="60">
 											</a>
 										</div>
 										<div class="header-basket-item-details">
@@ -109,12 +109,13 @@
 		<div class="header-search-mobile">
 			<div class="header-search my-10">
 				<form action="/site/search" class="header-search-form" dynamic-search auto-show>
-					<input type="text" name="q" class="form-control header-search-input" maxlength="100" autocomplete="off"
+					<label for="header-search-mobile-input" class="sr-only">جستجو در محصولات</label>
+					<input type="text" id="header-search-mobile-input" name="q" class="form-control header-search-input" maxlength="100" autocomplete="off"
 						ng-model="query"
 						ng-focus="searchFocused=true" ng-blur="searchFocused=false"
 						ng-class="{'active': searchFocused||searchMouseover}"
 						placeholder="جستجو ...">
-					<button class="btn btn-primary header-search-submit d-none">
+					<button class="btn btn-primary header-search-submit d-none" aria-label="جستجو">
 						<i class="fa fa-search"></i>
 					</button>
 					<div class="quicksearch-items bg-white shadow-lg rounded" ng-show="searchFocused||searchMouseover" ng-mouseover="searchMouseover=true" ng-mouseleave="searchMouseover=false">
@@ -122,7 +123,7 @@
 						<div class="quicksearch-item" ng-repeat="item in items">
 							<div class="quicksearch-item-image" ng-show="item.image">
 								<a ng-href="{{item.url}}" class="quicksearch-item-image-link">
-									<img ng-src="{{item.image}}?m=crop&w=100&h=100&q=high" class="quicksearch-item-image-element">
+									<img ng-src="{{item.image}}?m=crop&w=100&h=100&q=high" class="quicksearch-item-image-element" loading="lazy" decoding="async" width="100" height="100">
 								</a>
 							</div>
 							<h4 class="quicksearch-item-title">

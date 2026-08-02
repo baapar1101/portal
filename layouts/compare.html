@@ -19,7 +19,7 @@
 							<div class="store-compare-product store-compare-product-@@index store-compare-column">
 								<div class="store-compare-product-image">
 									<a href="@@url" class="store-compare-product-image-link">
-										<img src='@@image.default("/site/resources/images/empty.png")?m=thumb&w=300&h=300&q=high' class="img-fluid store-compare-product-image-element">
+										<img src='@@image.default("/site/resources/images/empty.png")?m=thumb&w=300&h=300&q=high' class="img-fluid store-compare-product-image-element" loading="lazy" decoding="async" width="300" height="300">
 									</a>
 								</div>
 								<h5 class="store-compare-item-title">
@@ -49,7 +49,7 @@
 											<div class="store-compare-quicksearch-item d-flex align-items-center mt-3" ng-repeat="item in items">
 												<div class="store-compare-quicksearch-item-image ml-3" ng-show="item.image">
 													<a ng-href="/site/products/compare/add?id={{item.id}}" class="store-compare-quicksearch-item-image-link">
-														<img ng-src="{{item.image}}?m=crop&w=40&h=40&q=high" class="store-compare-quicksearch-item-image-element">
+														<img ng-src="{{item.image}}?m=crop&w=40&h=40&q=high" class="store-compare-quicksearch-item-image-element" loading="lazy" decoding="async" width="40" height="40">
 													</a>
 												</div>
 												<h6 class="store-compare-quicksearch-item-title">

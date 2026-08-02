@@ -6,11 +6,11 @@
     <loop src="@@comments" recursive="@@subset">
         <div class="media post-comment post-@@mode-comment" id="comment-@@id">
             <div class="d-flex ml-3 post-comment-avatar post-plain-comment-avatar">
-                <img src="@@avatar.get?m=crop&w=100&h=100&q=high" class="post-comment-avatar-image post-plain-comment-avatar-image">
+                <img src="@@avatar.get?m=crop&w=100&h=100&q=high" class="post-comment-avatar-image post-plain-comment-avatar-image" loading="lazy" decoding="async" width="100" height="100">
             </div>
             <div class="media-body">
                 <h5 class="post-comment-author post-@@mode-comment-author">
-                    <img src='@@region.format("/site/resources/flags/{0}.gif")' class="post-comment-author-flag post-@@mode-comment-author-flag">
+                    <img src='@@region.format("/site/resources/flags/{0}.gif")' class="post-comment-author-flag post-@@mode-comment-author-flag" loading="lazy" decoding="async">
                     <if terms="@@website.empty()">
                         <span class="post-comment-name post-@@mode-comment-name">
                             @@name.default("ناشناس")
