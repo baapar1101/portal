@@ -21,89 +21,105 @@
 				</div>
 			</if>
 
-			<if terms="@@user.guest">
-				<div class="qo-guest alert alert-danger">
-					برای ثبت سفارش سریع باید وارد حساب کاربری خود شوید.
-					<a href="/site/user/authentication?returnurl=@@url" class="btn btn-sm btn-primary mr-2">ورود به حساب</a>
-				</div>
-			</if>
+			<div id="qo-app" class="qo" data-guest="@@user.guest">
 
-			<div id="qo-app" class="qo">
-
-				<!-- کادرهای ورودی -->
-				<div class="qo-inputs">
-					<div class="qo-input-block qo-input-code">
-						<label for="qo-code" class="qo-input-label">
-							<i class="fa fa-barcode ml-half"></i>
-							کد کالا یا بارکد
+				<!-- نوار ابزار: جست‌وجو، مرتب‌سازی، فیلتر موجودی -->
+				<div class="qo-toolbar">
+					<div class="qo-toolbar-search">
+						<i class="fa fa-search qo-toolbar-icon"></i>
+						<label for="qo-search" class="sr-only">جستجو در مدل‌ها</label>
+						<input type="search" id="qo-search" class="form-control qo-toolbar-input"
+							autocomplete="off" placeholder="جستجو در مدل‌ها">
+					</div>
+					<div class="qo-toolbar-controls">
+						<label for="qo-sort" class="sr-only">مرتب‌سازی</label>
+						<select id="qo-sort" class="form-control qo-toolbar-select">
+							<option value="default">مرتب‌سازی: پیش‌فرض</option>
+							<option value="price-asc">ارزان‌ترین</option>
+							<option value="price-desc">گران‌ترین</option>
+							<option value="title">بر اساس نام</option>
+						</select>
+						<label class="qo-toolbar-toggle">
+							<input type="checkbox" id="qo-available">
+							<span>فقط کالاهای موجود</span>
 						</label>
-						<input type="text" id="qo-code" class="form-control qo-input"
-							autocomplete="off" inputmode="text" enterkeyhint="done"
-							placeholder="اسکن کنید یا کد را بنویسید و Enter بزنید">
-						<span class="qo-input-hint">با هر Enter یک ردیف اضافه می‌شود و کادر برای اسکن بعدی آماده می‌ماند.</span>
-					</div>
-
-					<div class="qo-input-block qo-input-search qo-finder">
-						<label for="qo-search" class="qo-input-label">
-							<i class="fa fa-search ml-half"></i>
-							جست‌وجوی نام کالا
-						</label>
-						<input type="text" id="qo-search" class="form-control qo-input"
-							autocomplete="off" role="combobox" aria-autocomplete="list"
-							aria-controls="qo-results" aria-expanded="false"
-							placeholder="بخشی از نام کالا را بنویسید">
-						<div id="qo-results" class="qo-results" role="listbox" hidden></div>
-						<span class="qo-input-hint">با کلیدهای بالا و پایین انتخاب کنید و Enter بزنید.</span>
-					</div>
-
-					<div class="qo-input-block qo-input-bulk">
-						<button type="button" id="qo-bulk-toggle" class="btn btn-light btn-block qo-bulk-toggle">
-							<i class="fa fa-list-ul ml-half"></i>
-							افزودن گروهی از فهرست
-						</button>
-					</div>
-				</div>
-
-				<!-- افزودن گروهی -->
-				<div id="qo-bulk" class="qo-bulk" hidden>
-					<label for="qo-bulk-text" class="qo-input-label">هر خط یک کالا: کد یا نام، سپس تعداد</label>
-					<textarea id="qo-bulk-text" class="form-control qo-bulk-text" rows="6"
-						placeholder="مثال:&#10;A-1024، 3&#10;B-9917، 12&#10;شارژر انکر 20 وات، 5"></textarea>
-					<div class="qo-bulk-actions">
-						<button type="button" id="qo-bulk-submit" class="btn btn-primary">افزودن به فهرست</button>
-						<button type="button" id="qo-bulk-cancel" class="btn btn-light">انصراف</button>
 					</div>
 				</div>
 
 				<div id="qo-notice" class="qo-notice" role="status" aria-live="polite" hidden></div>
-				<div id="qo-progress" class="qo-progress" role="status" aria-live="polite" hidden></div>
 
-				<!-- ردیف‌های سفارش -->
+				<!-- فهرست کالاها: توسط ویجت محصولات پر می‌شود -->
 				<div class="qo-table">
 					<div class="qo-thead" aria-hidden="true">
 						<span class="qo-th qo-th-product">کالا</span>
-						<span class="qo-th qo-th-price">قیمت واحد</span>
+						<span class="qo-th qo-th-price">قیمت</span>
 						<span class="qo-th qo-th-qty">تعداد</span>
-						<span class="qo-th qo-th-total">جمع ردیف</span>
-						<span class="qo-th qo-th-action"></span>
+						<span class="qo-th qo-th-total">جمع</span>
 					</div>
-					<div id="qo-rows" class="qo-rows"></div>
+
+					<div id="qo-rows" class="qo-rows">
+						<widget type="products" name="quick:products" section="خرید سریع">
+							<loop src="@@items">
+								<div class="qo-row" data-id="@@id" data-title="@@title" data-outofstock='@@outofstock.whenever("1","0")'>
+									<div class="qo-cell qo-cell-product">
+										<a href="@@url" class="qo-thumb-link" target="_blank" rel="noopener">
+											<img src='@@image.default("/site/resources/images/empty.jpg")?m=crop&w=96&h=96&q=high'
+												class="qo-thumb" alt="@@title" loading="lazy" decoding="async" width="96" height="96">
+										</a>
+										<div class="qo-product-text">
+											<a href="@@url" class="qo-title" target="_blank" rel="noopener">@@title</a>
+											<span class="qo-variant-wrap" hidden></span>
+											<span class="qo-stock-warn" hidden></span>
+										</div>
+									</div>
+
+									<div class="qo-cell qo-cell-price">
+										<span class="qo-label">قیمت</span>
+										<if terms="@@outofstock.false()">
+											<if terms='@@discount.morethan("0")'>
+												<span class="qo-compare">@@compareprice</span>
+												<span class="qo-discount">@@discount٪</span>
+											</if>
+											<span class="qo-value qo-unit-price">@@price <small>تومان</small></span>
+										</if>
+										<if terms="@@outofstock">
+											<span class="qo-outofstock">ناموجود</span>
+										</if>
+									</div>
+
+									<div class="qo-cell qo-cell-qty">
+										<span class="qo-label">تعداد</span>
+										<if terms="@@outofstock.false()">
+											<button type="button" class="btn btn-primary qo-add">افزودن</button>
+											<div class="qo-stepper" hidden>
+												<button type="button" class="qo-step" data-act="dec" aria-label="کاهش تعداد">−</button>
+												<input type="number" class="qo-qty" value="1" min="1" inputmode="numeric" aria-label="تعداد @@title">
+												<button type="button" class="qo-step" data-act="inc" aria-label="افزایش تعداد">+</button>
+											</div>
+										</if>
+									</div>
+
+									<div class="qo-cell qo-cell-total">
+										<span class="qo-label">جمع</span>
+										<span class="qo-value qo-line-total">—</span>
+									</div>
+								</div>
+							</loop>
+						</widget>
+					</div>
+
+					<div id="qo-empty" class="qo-empty" hidden>
+						<p class="qo-empty-title">نتیجه‌ای با مشخصات مورد نظر شما پیدا نشد</p>
+						<button type="button" id="qo-reset" class="btn btn-light btn-sm">حذف فیلترها</button>
+					</div>
 				</div>
 
 				<!-- جمع‌بندی چسبان -->
-				<div class="qo-summary">
+				<div class="qo-summary" id="qo-summary">
 					<div class="qo-summary-numbers">
 						<span class="qo-summary-item">
-							<span class="qo-summary-label">ردیف</span>
-							<span class="qo-summary-value" id="qo-sum-lines">۰</span>
-						</span>
-						<span class="qo-summary-item">
-							<span class="qo-summary-label">تعداد کل</span>
+							<span class="qo-summary-label">اقلام سبد</span>
 							<span class="qo-summary-value" id="qo-sum-count">۰</span>
-						</span>
-						<span class="qo-summary-item qo-summary-saved" id="qo-sum-saved-wrap" hidden>
-							<span class="qo-summary-label">سود شما</span>
-							<span class="qo-summary-value" id="qo-sum-saved">۰</span>
 						</span>
 						<span class="qo-summary-item qo-summary-total">
 							<span class="qo-summary-label">جمع کل</span>
@@ -112,10 +128,30 @@
 						</span>
 					</div>
 					<div class="qo-summary-actions">
-						<button type="button" id="qo-clear" class="btn btn-light qo-clear" disabled>پاک کردن</button>
-						<button type="button" id="qo-submit" class="btn btn-primary qo-submit" disabled>
-							ثبت در سبد خرید
-						</button>
+						<a href="/site/cart" class="btn btn-light qo-view-cart">مشاهدهٔ سبد</a>
+						<a href="/site/cart/checkout" class="btn btn-primary qo-submit" id="qo-checkout">ادامه و تسویه</a>
+					</div>
+				</div>
+
+				<!-- گفت‌وگوی تأیید حذف -->
+				<div class="qo-dialog" id="qo-confirm" role="dialog" aria-modal="true" aria-labelledby="qo-confirm-title" hidden>
+					<div class="qo-dialog-box">
+						<p class="qo-dialog-title" id="qo-confirm-title">از حذف کالا از سبد خرید خود اطمینان دارید؟</p>
+						<div class="qo-dialog-actions">
+							<button type="button" class="btn btn-primary" id="qo-confirm-yes">بله، مطمئنم</button>
+							<button type="button" class="btn btn-light" id="qo-confirm-no">انصراف</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- گیت ورود -->
+				<div class="qo-dialog" id="qo-auth" role="dialog" aria-modal="true" aria-labelledby="qo-auth-title" hidden>
+					<div class="qo-dialog-box">
+						<p class="qo-dialog-title" id="qo-auth-title">برای افزودن محصول به سبد خرید، وارد حساب کاربری خود شوید.</p>
+						<div class="qo-dialog-actions">
+							<a href="/site/user/authentication" class="btn btn-primary">ورود یا ثبت‌نام</a>
+							<button type="button" class="btn btn-light" id="qo-auth-close">انصراف</button>
+						</div>
 					</div>
 				</div>
 
@@ -125,6 +161,6 @@
 </main>
 <!--/main-->
 
-<script src="@@theme/js/quick-order.js?v=1.0" defer></script>
+<script src="@@theme/js/quick-order.js?v=2.0" defer></script>
 
 <include name="layouts/footer.html" />

@@ -509,89 +509,47 @@ a:hover { color: var(--p-brand); }
 .table th { color: var(--p-ink-2); font-weight: 600; border-color: var(--p-line); }
 .table td { border-color: var(--p-line); }
 
-
 /* =========================================================================
-   بخش سوم — صفحهٔ خرید سریع (دفترچه سفارش)
+   بخش سوم — صفحهٔ خرید سریع
    کلاس‌های .qo-* فقط در layouts/pages/html/quick-order.html استفاده می‌شوند
    ========================================================================= */
 
-.qo { position: relative; padding-bottom: 96px; }
-.qo-guest { border-radius: var(--p-radius); }
+.qo { position: relative; padding-bottom: 40px; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
 
-/* ---------------------------------------------------------- کادرهای ورودی */
-.qo-inputs {
-  display: grid;
-  grid-template-columns: 1.1fr 1.4fr auto;
-  gap: 14px;
-  align-items: start;
+/* ---------------------------------------------------------------- نوار ابزار */
+.qo-toolbar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   background: var(--p-surface);
   border: 1px solid var(--p-line);
   border-radius: var(--p-radius);
-  padding: 18px;
+  padding: 14px 16px;
   margin-bottom: 16px;
 }
-.qo-input-label { display: block; font-size: 13px; font-weight: 600; color: var(--p-ink); margin-bottom: 7px; }
-.qo-input { font-size: 15px; }
-.qo-input-code .qo-input {
-  border-color: var(--p-action);
-  box-shadow: 0 0 0 3px rgba(14,124,134,.10);
-  font-weight: 600;
+.qo-toolbar-search { position: relative; flex: 1 1 260px; }
+.qo-toolbar-icon {
+  position: absolute; top: 50%; right: 14px; transform: translateY(-50%);
+  color: var(--p-ink-3); font-size: 14px; pointer-events: none;
 }
-.qo-input-hint { display: block; margin-top: 6px; font-size: 12px; color: var(--p-ink-3); line-height: 1.8; }
-.qo-input-bulk { align-self: end; }
-.qo-bulk-toggle { white-space: nowrap; }
+.qo-toolbar-input { padding-right: 38px; border-radius: var(--p-radius-pill); }
+.qo-toolbar-controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.qo-toolbar-select { width: auto; min-width: 170px; }
+.qo-toolbar-toggle {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--p-ink-2); margin: 0; cursor: pointer;
+}
 
-/* --------------------------------------------------------- پیشنهاد جست‌وجو */
-.qo-finder { position: relative; }
-.qo-results {
-  position: absolute;
-  top: calc(100% - 18px);
-  right: 0; left: 0;
-  z-index: 30;
-  max-height: 330px;
-  overflow-y: auto;
-  background: var(--p-surface);
-  border: 1px solid var(--p-line);
-  border-radius: var(--p-radius-sm);
-  box-shadow: var(--p-shadow-2);
-}
-.qo-result {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 9px 12px;
-  background: none; border: 0; border-bottom: 1px solid var(--p-line);
-  text-align: right; font-size: 14px; color: var(--p-ink); cursor: pointer;
-}
-.qo-result:last-child { border-bottom: 0; }
-.qo-result:hover, .qo-result.active { background: #F3F6FA; }
-.qo-result img { border-radius: 6px; background: #F7F9FC; flex: 0 0 auto; }
-.qo-result-title { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.qo-result-sku { font-size: 12px; color: var(--p-ink-3); }
-
-/* ------------------------------------------------------------ افزودن گروهی */
-.qo-bulk {
-  background: var(--p-surface);
-  border: 1px solid var(--p-line);
-  border-radius: var(--p-radius);
-  padding: 18px;
-  margin-bottom: 16px;
-}
-.qo-bulk-text { font-family: inherit; line-height: 2; }
-.qo-bulk-actions { display: flex; gap: 10px; margin-top: 12px; }
-
-/* ------------------------------------------------------------ پیام‌ها */
-.qo-notice, .qo-progress {
-  border-radius: var(--p-radius-sm);
-  padding: 11px 15px;
-  font-size: 14px;
-  margin-bottom: 14px;
-}
+/* ------------------------------------------------------------------ پیام‌ها */
+.qo-notice { border-radius: var(--p-radius-sm); padding: 11px 15px; font-size: 14px; margin-bottom: 14px; }
 .qo-notice-success { background: #E8F6EE; color: #1B6B42; }
 .qo-notice-error   { background: var(--p-brand-soft); color: var(--p-brand-dark); }
 .qo-notice-warn    { background: #FFF6E5; color: #8A5A00; }
 .qo-notice-info    { background: #EEF1F6; color: var(--p-ink-2); }
-.qo-progress       { background: #EEF1F6; color: var(--p-ink-2); }
 
-/* --------------------------------------------------------- جدول ردیف‌ها */
+/* ------------------------------------------------------------ فهرست کالاها */
 .qo-table {
   background: var(--p-surface);
   border: 1px solid var(--p-line);
@@ -600,7 +558,7 @@ a:hover { color: var(--p-brand); }
 }
 .qo-thead, .qo-row {
   display: grid;
-  grid-template-columns: minmax(0,1fr) 130px 150px 140px 90px;
+  grid-template-columns: minmax(0,1fr) 170px 170px 130px;
   align-items: center;
   gap: 12px;
 }
@@ -613,29 +571,48 @@ a:hover { color: var(--p-brand); }
 .qo-row {
   padding: 14px 16px;
   border-bottom: 1px solid var(--p-line);
-  transition: background-color .3s ease;
+  transition: background-color .25s ease, opacity .25s ease;
 }
 .qo-row:last-child { border-bottom: 0; }
-.qo-row-flash { background: #FFF9E0; }
-.qo-row-ok { background: #F3FBF6; }
-.qo-row-error { background: var(--p-brand-soft); }
+.qo-row:hover { background: #FBFCFE; }
+.qo-row-active { background: #F4FAF7; }
+.qo-row-busy { opacity: .55; pointer-events: none; }
 
 .qo-cell-product { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.qo-thumb { width: 48px; height: 48px; object-fit: contain; border-radius: 8px; background: #F7F9FC; flex: 0 0 auto; }
-.qo-thumb-empty { display: block; }
-.qo-product-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-.qo-title { font-size: 14px; font-weight: 500; color: var(--p-ink); overflow: hidden; text-overflow: ellipsis; }
-.qo-sku { font-size: 12px; color: var(--p-ink-3); }
-.qo-variant { height: 32px; padding: 0 8px; font-size: 12px; max-width: 220px; }
-.qo-variant-static { font-size: 12px; color: var(--p-ink-2); }
+.qo-thumb { width: 52px; height: 52px; object-fit: contain; border-radius: 8px; background: #F7F9FC; }
+.qo-thumb-link { flex: 0 0 auto; line-height: 0; }
+.qo-product-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.qo-title { font-size: 14px; font-weight: 500; color: var(--p-ink); line-height: 1.8; }
+.qo-title:hover { color: var(--p-brand); }
+.qo-variant { height: 32px; padding: 0 8px; font-size: 12px; max-width: 230px; }
+.qo-stock-warn { font-size: 11px; color: var(--p-brand); }
 
+.qo-cell-price { display: flex; flex-direction: column; gap: 2px; }
+.qo-compare { font-size: 12px; color: var(--p-ink-3); text-decoration: line-through; }
+.qo-discount {
+  align-self: flex-start;
+  padding: 2px 8px; border-radius: var(--p-radius-pill);
+  background: var(--p-brand-soft); color: var(--p-brand);
+  border: 1px solid rgba(200,30,54,.18);
+  font-size: 11px; font-weight: 700;
+}
+.qo-value { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--p-ink); }
+.qo-value small { font-size: 11px; font-weight: 500; color: var(--p-ink-3); }
+.qo-outofstock {
+  display: inline-block; align-self: flex-start;
+  padding: 3px 10px; border-radius: var(--p-radius-pill);
+  background: #EEF1F6; color: var(--p-ink-2); font-size: 12px;
+}
 .qo-label { display: none; font-size: 12px; color: var(--p-ink-3); }
-.qo-value { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.qo-line-total { color: var(--p-ink); }
 
-.qo-stepper { display: inline-flex; align-items: center; border: 1px solid var(--p-line); border-radius: var(--p-radius-sm); overflow: hidden; }
+/* ------------------------------------------------------------- شمارنده */
+.qo-add { min-width: 108px; }
+.qo-stepper {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--p-line); border-radius: var(--p-radius-sm); overflow: hidden;
+}
 .qo-step {
-  width: 36px; height: 40px;
+  width: 38px; height: 40px;
   background: #F7F9FC; border: 0;
   font-size: 18px; color: var(--p-ink); cursor: pointer; line-height: 1;
 }
@@ -644,75 +621,76 @@ a:hover { color: var(--p-brand); }
   width: 58px; height: 40px;
   border: 0; border-inline: 1px solid var(--p-line);
   text-align: center; font-size: 15px; font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  -moz-appearance: textfield;
+  font-variant-numeric: tabular-nums; -moz-appearance: textfield;
 }
 .qo-qty::-webkit-outer-spin-button, .qo-qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.qo-stock-warn { display: block; margin-top: 5px; font-size: 11px; color: var(--p-brand); }
-
-.qo-remove { background: none; border: 0; color: var(--p-ink-3); font-size: 13px; padding: 4px 6px; cursor: pointer; }
-.qo-remove:hover { color: var(--p-brand); }
-.qo-row-msg { display: block; font-size: 11px; color: var(--p-brand-dark); }
 
 .qo-empty { padding: 48px 20px; text-align: center; }
-.qo-empty-title { font-size: 16px; font-weight: 600; color: var(--p-ink); margin-bottom: 6px; }
-.qo-empty-hint { font-size: 13px; color: var(--p-ink-3); margin: 0; }
+.qo-empty-title { font-size: 15px; font-weight: 600; color: var(--p-ink); margin-bottom: 12px; }
 
-/* ------------------------------------------------------ جمع‌بندی چسبان */
+/* -------------------------------------------------------- جمع‌بندی چسبان */
 .qo-summary {
-  position: sticky;
-  bottom: 0;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  padding: 14px 18px;
+  position: sticky; bottom: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+  margin-top: 16px; padding: 14px 18px;
   background: rgba(255,255,255,.96);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   border: 1px solid var(--p-line);
   border-radius: var(--p-radius);
   box-shadow: var(--p-shadow-2);
+  opacity: .55; transition: opacity .25s ease;
 }
-.qo-summary-numbers { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.qo-has-items .qo-summary { opacity: 1; }
+.qo-summary-numbers { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
 .qo-summary-item { display: flex; flex-direction: column; gap: 2px; }
 .qo-summary-label { font-size: 12px; color: var(--p-ink-3); }
 .qo-summary-value { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--p-ink); }
-.qo-summary-total .qo-summary-value { font-size: 22px; }
 .qo-summary-total { flex-direction: row; align-items: baseline; gap: 6px; }
+.qo-summary-total .qo-summary-value { font-size: 22px; }
 .qo-summary-currency { font-size: 12px; color: var(--p-ink-3); }
-.qo-summary-saved .qo-summary-value { color: var(--p-brand); }
 .qo-summary-actions { display: flex; gap: 10px; }
-.qo-submit { min-width: 190px; }
+.qo-submit { min-width: 170px; }
 
-.qo-busy { pointer-events: none; opacity: .75; }
-.qo-busy .qo-progress { pointer-events: auto; }
+/* ---------------------------------------------------------- گفت‌وگوها */
+.qo-dialog {
+  position: fixed; inset: 0; z-index: 1050;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; background: rgba(20,25,34,.45);
+}
+.qo-dialog[hidden] { display: none; }
+.qo-dialog-box {
+  width: 100%; max-width: 420px;
+  background: var(--p-surface);
+  border-radius: var(--p-radius);
+  box-shadow: var(--p-shadow-2);
+  padding: 24px;
+  text-align: center;
+}
+.qo-dialog-title { font-size: 16px; font-weight: 600; line-height: 2; margin-bottom: 18px; color: var(--p-ink); }
+.qo-dialog-actions { display: flex; gap: 10px; justify-content: center; }
+body.qo-dialog-open { overflow: hidden; }
 
 /* -------------------------------------------------------------- موبایل */
 @media (max-width: 991.98px) {
-  .qo-inputs { grid-template-columns: 1fr; }
+  .qo-toolbar { flex-direction: column; align-items: stretch; }
+  .qo-toolbar-controls { justify-content: space-between; }
+  .qo-toolbar-select { flex: 1; min-width: 0; }
   .qo-thead { display: none; }
   .qo-row {
     grid-template-columns: 1fr auto;
     grid-template-areas:
       "product product"
       "price   qty"
-      "total   action";
-    gap: 10px 12px;
-    padding: 14px;
+      "total   total";
+    gap: 10px 12px; padding: 14px;
   }
   .qo-cell-product { grid-area: product; }
   .qo-cell-price   { grid-area: price; }
-  .qo-cell-qty     { grid-area: qty; justify-self: start; }
-  .qo-cell-total   { grid-area: total; }
-  .qo-cell-action  { grid-area: action; justify-self: end; }
+  .qo-cell-qty     { grid-area: qty; justify-self: end; }
+  .qo-cell-total   { grid-area: total; display: flex; justify-content: space-between; align-items: baseline; }
   .qo-label { display: block; }
   .qo-summary { flex-direction: column; align-items: stretch; }
-  .qo-summary-numbers { justify-content: space-between; gap: 12px; }
   .qo-summary-actions .btn { flex: 1; }
   .qo-step { width: 44px; }
-  .qo-qty { width: 64px; }
 }

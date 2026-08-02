@@ -1,18 +1,23 @@
-/* quick-order.js — موتور «دفترچه سفارش سریع»
+/* quick-order.js — v2 — «خرید سریع» برای مشتری
    ---------------------------------------------------------------------------
-   عمداً وانیلا نوشته شده و به AngularJS دست نمی‌زند: باندل app.js موقع
-   DOMContentLoaded خودش را bootstrap می‌کند و ثبت کنترلر بعد از آن قابل‌اعتماد
-   نیست. این فایل فقط مستقیم با REST API خود سایت‌ساز حرف می‌زند:
+   مدل کار عمداً با نسخهٔ قبل فرق دارد:
+   ردیف‌ها را سرور با <widget type="products"> رندر می‌کند (پس عنوان، تصویر و
+   قیمت دقیقاً همان چیزی است که بقیهٔ سایت نشان می‌دهد و مدیر هم می‌تواند از
+   پنل انتخاب کند چه کالاهایی اینجا بیایند). این فایل فقط سه کار می‌کند:
 
-     GET    /site/api/v1/search?q=&type=product
-     GET    /site/api/v1/store/products/{id}
-     POST   /site/api/v1/cart            { variant_id, quantity }
+     ۱. hydrate: شناسهٔ تنوع، موجودی و قیمت عددی هر ردیف را یک‌جا می‌گیرد
+        GET /site/api/v1/store/products/bulk?id=1,2,3
+     ۲. sync: شمارنده‌ها را با سبد واقعی هم‌گام می‌کند
+        GET /site/api/v1/cart
+     ۳. mutate: هر تغییر شمارنده را در سبد واقعی می‌نویسد
+        POST /site/api/v1/cart {variant_id, quantity}
+        PUT  /site/api/v1/cart/{item} {quantity}
+        DELETE /site/api/v1/cart/{item}
 
-   ⚠ نقطه‌ای که باید یک بار با پاسخ واقعی سرور تطبیق داده شود: تابع‌های
-   mapSearchItem و mapProduct پایین. نام فیلدها را از روی کاربرد موجود در قالب
-   حدس زده‌ام (title / image / url / price / stock / variants). اگر ساختار
-   پاسخ فرق داشت، فقط همین دو تابع را عوض کنید — بقیهٔ فایل دست‌نخورده می‌ماند.
-   برای دیدن ساختار واقعی: در کنسول مرورگر QuickOrder.debug = true بگذارید. */
+   جست‌وجو، مرتب‌سازی و فیلتر موجودی همگی سمت کلاینت روی همان ردیف‌های
+   رندرشده انجام می‌شوند — بدون هیچ درخواست شبکه‌ای.
+
+   ⚠ تنها نقطهٔ نیازمند تطبیق: mapProduct و mapCartItem پایین. */
 
 (function () {
 	'use strict';
@@ -21,398 +26,194 @@
 	if (!root) return;
 
 	var API = {
-		search:  '/site/api/v1/search',
-		product: '/site/api/v1/store/products/',
-		cart:    '/site/api/v1/cart'
+		bulk: '/site/api/v1/store/products/bulk',
+		cart: '/site/api/v1/cart'
 	};
 
-	var CONFIG = {
-		currency:      'تومان',
-		storageKey:    'qo:draft:v1',
-		searchDelay:   250,
-		maxRows:       200,
-		redirectAfter: '/cart'      // بعد از ثبت موفق
-	};
+	var CONFIG = { debounce: 450, chunk: 40 };
 
-	var state = { rows: [], busy: false, results: [], activeResult: -1 };
+	var rows = [];          // { el, id, title, price, stock, variants, variantId, cartItemId, quantity }
+	var cartTotal = 0, cartCount = 0;
+	var isGuest = root.dataset.guest === 'true' || root.dataset.guest === '1';
 
 	/* ------------------------------------------------------------ کمکی‌ها */
 
 	function $(sel, ctx) { return (ctx || root).querySelector(sel); }
+	function all(sel, ctx) { return Array.prototype.slice.call((ctx || root).querySelectorAll(sel)); }
 	function cookie(name) {
 		var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
 		return m ? decodeURIComponent(m.pop()) : '';
 	}
+	function money(v) { return (Number(v) || 0).toLocaleString('fa-IR'); }
 
-	/* هدر XSRF را دقیقاً مثل $http انگولار می‌فرستیم تا سرور درخواست را رد نکند */
 	function request(method, url, body) {
 		var headers = { 'Accept': 'application/json' };
 		var token = cookie('XSRF-TOKEN');
 		if (token) headers['X-XSRF-TOKEN'] = token;
 		if (body) headers['Content-Type'] = 'application/json;charset=utf-8';
 
-		return fetch(url, {
-			method: method,
-			headers: headers,
-			credentials: 'same-origin',
-			body: body ? JSON.stringify(body) : undefined
-		}).then(function (res) {
-			return res.json().catch(function () { return {}; }).then(function (data) {
-				if (window.QuickOrder && window.QuickOrder.debug) console.log(method, url, data);
-				if (!res.ok) throw new Error((data && (data.message || data.error)) || 'خطای سرور (' + res.status + ')');
-				return data;
+		return fetch(url, { method: method, headers: headers, credentials: 'same-origin',
+			body: body ? JSON.stringify(body) : undefined })
+			.then(function (res) {
+				return res.json().catch(function () { return {}; }).then(function (data) {
+					if (window.QuickOrder && window.QuickOrder.debug) console.log(method, url, res.status, data);
+					if (res.status === 401 || res.status === 403) { var e = new Error('auth'); e.auth = true; throw e; }
+					if (!res.ok) throw new Error((data && (data.message || data.error)) || 'خطا در ارتباط با سرور');
+					return data;
+				});
 			});
-		});
-	}
-
-	function money(value) {
-		var n = Number(value) || 0;
-		return n.toLocaleString('fa-IR');
-	}
-
-	function esc(str) {
-		return String(str == null ? '' : str)
-			.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 	}
 
 	/* ------------------------------------- آداپتور پاسخ سرور (نقطهٔ تطبیق) */
 
-	function mapSearchItem(raw) {
-		return {
-			id:        raw.id || raw.product_id || raw.productId,
-			variantId: raw.variant_id || raw.variantId || null,
-			title:     raw.title || raw.name || '',
-			image:     raw.image || raw.thumbnail || '',
-			url:       raw.url || '',
-			sku:       raw.sku || raw.code || raw.barcode || '',
-			price:     raw.price != null ? raw.price : null,
-			stock:     raw.stock != null ? raw.stock : null
-		};
-	}
-
 	function mapProduct(raw) {
-		var p = (raw && raw.result) || raw || {};
-		var variants = p.variants || p.variant || [];
+		var variants = raw.variants || [];
 		if (!Array.isArray(variants)) variants = [variants];
 		return {
-			id:      p.id,
-			title:   p.title || p.name || '',
-			image:   p.image || '',
-			url:     p.url || '',
+			id: raw.id,
 			variants: variants.map(function (v) {
 				return {
-					id:           v.id || v.variant_id,
-					title:        v.title || v.name || '',
-					price:        Number(v.price) || 0,
-					comparePrice: Number(v.compare_price) || 0,
-					stock:        v.stock == null ? null : Number(v.stock),
-					sku:          v.sku || v.code || v.barcode || ''
+					id:    v.id || v.variant_id,
+					title: v.title || v.name || '',
+					price: Number(v.price) || 0,
+					stock: v.stock == null ? null : Number(v.stock),
+					max:   v.max_order == null ? null : Number(v.max_order)
 				};
 			})
 		};
 	}
 
-	/* ------------------------------------------------------------ ردیف‌ها */
-
-	function rowKey(productId, variantId) { return productId + ':' + (variantId || 0); }
-
-	function findRow(productId, variantId) {
-		var key = rowKey(productId, variantId);
-		for (var i = 0; i < state.rows.length; i++) if (state.rows[i].key === key) return state.rows[i];
-		return null;
+	function mapCartItem(raw) {
+		return {
+			itemId:    raw.id,
+			variantId: raw.variant_id || (raw.variant && raw.variant.id) || null,
+			productId: raw.product_id || (raw.product && raw.product.id) || null,
+			quantity:  Number(raw.quantity) || 0
+		};
 	}
 
-	function addProductById(productId, quantity, preferSku) {
-		return request('GET', API.product + encodeURIComponent(productId)).then(function (data) {
-			var p = mapProduct(data);
-			if (!p.variants.length) throw new Error('این کالا تنوع قابل‌سفارشی ندارد.');
+	/* ------------------------------------------------------------ راه‌اندازی */
 
-			var variant = p.variants[0];
-			if (preferSku) {
-				for (var i = 0; i < p.variants.length; i++) {
-					if (p.variants[i].sku && String(p.variants[i].sku) === String(preferSku)) { variant = p.variants[i]; break; }
-				}
-			}
-			pushRow(p, variant, quantity || 1);
+	function collectRows() {
+		rows = all('.qo-row').map(function (el) {
+			return {
+				el: el,
+				id: el.dataset.id,
+				title: el.dataset.title || '',
+				outofstock: el.dataset.outofstock === '1',
+				price: 0, stock: null, max: null,
+				variants: [], variantId: null,
+				cartItemId: null, quantity: 0
+			};
 		});
 	}
 
-	function pushRow(product, variant, quantity) {
-		var existing = findRow(product.id, variant.id);
-		if (existing) {
-			setQuantity(existing, existing.quantity + (quantity || 1));
-			flash(existing.key);
-			return;
-		}
-		if (state.rows.length >= CONFIG.maxRows) {
-			notify('بیش از ' + CONFIG.maxRows + ' ردیف در یک سفارش ممکن نیست.', 'error');
-			return;
-		}
-		state.rows.unshift({
-			key:       rowKey(product.id, variant.id),
-			productId: product.id,
-			variantId: variant.id,
-			title:     product.title,
-			image:     product.image,
-			url:       product.url,
-			variants:  product.variants,
-			variantTitle: variant.title,
-			price:        variant.price,
-			comparePrice: variant.comparePrice,
-			stock:        variant.stock,
-			sku:          variant.sku,
-			quantity:     Math.max(1, quantity || 1),
-			status:       ''
-		});
-		render();
-		save();
-		notify('«' + product.title + '» اضافه شد.', 'success');
-	}
+	function hydrate() {
+		var ids = rows.filter(function (r) { return r.id; }).map(function (r) { return r.id; });
+		if (!ids.length) return Promise.resolve();
 
-	function setQuantity(row, value) {
-		var q = parseInt(value, 10);
-		if (isNaN(q) || q < 1) q = 1;
-		if (row.stock != null && row.stock > 0 && q > row.stock) {
-			q = row.stock;
-			notify('موجودی «' + row.title + '» ' + money(row.stock) + ' عدد است.', 'warn');
-		}
-		row.quantity = q;
-		render();
-		save();
-	}
+		var chunks = [];
+		for (var i = 0; i < ids.length; i += CONFIG.chunk) chunks.push(ids.slice(i, i + CONFIG.chunk));
 
-	function removeRow(key) {
-		state.rows = state.rows.filter(function (r) { return r.key !== key; });
-		render();
-		save();
-	}
-
-	function switchVariant(row, variantId) {
-		var v = row.variants.filter(function (x) { return String(x.id) === String(variantId); })[0];
-		if (!v) return;
-		removeRow(row.key);
-		pushRow({ id: row.productId, title: row.title, image: row.image, url: row.url, variants: row.variants }, v, row.quantity);
-	}
-
-	/* ------------------------------------------------------------ ذخیره */
-
-	function save() {
-		try {
-			localStorage.setItem(CONFIG.storageKey, JSON.stringify(state.rows));
-		} catch (e) { /* حالت ناشناس مرورگر — بی‌خیال */ }
-	}
-
-	function restore() {
-		try {
-			var raw = localStorage.getItem(CONFIG.storageKey);
-			if (raw) state.rows = JSON.parse(raw) || [];
-		} catch (e) { state.rows = []; }
-	}
-
-	/* ------------------------------------------------------------ جست‌وجو */
-
-	var searchTimer;
-	function runSearch(query) {
-		clearTimeout(searchTimer);
-		if (!query || query.length < 2) { state.results = []; renderResults(); return; }
-		searchTimer = setTimeout(function () {
-			request('GET', API.search + '?type=product&q=' + encodeURIComponent(query))
-				.then(function (data) {
-					var list = (data && (data.result || data.results || data.items)) || [];
-					state.results = list.map(mapSearchItem).filter(function (x) { return x.id; });
-					state.activeResult = -1;
-					renderResults();
-				})
-				.catch(function (err) { notify(err.message, 'error'); });
-		}, CONFIG.searchDelay);
-	}
-
-	/* کد کالا / بارکد: اسکنر معمولاً کاراکترها را تایپ و بعد Enter می‌زند */
-	function submitCode(code) {
-		code = String(code || '').trim();
-		if (!code) return;
-		var input = $('#qo-code');
-		input.disabled = true;
-
-		request('GET', API.search + '?type=product&q=' + encodeURIComponent(code))
-			.then(function (data) {
-				var list = ((data && (data.result || data.results || data.items)) || []).map(mapSearchItem);
-				if (!list.length) throw new Error('کالایی با کد «' + code + '» پیدا نشد.');
-				var exact = list.filter(function (x) { return x.sku && String(x.sku) === code; })[0];
-				return addProductById((exact || list[0]).id, 1, code);
-			})
-			.catch(function (err) { notify(err.message, 'error'); })
-			.then(function () {
-				input.disabled = false;
-				input.value = '';
-				input.focus();          // آمادهٔ اسکن بعدی
-			});
-	}
-
-	/* --------------------------------------------------------- افزودن گروهی
-	   هر خط: کد یا نام، سپس جداکنندهٔ (کاما / تب / فاصله) و تعداد */
-	function bulkAdd(text) {
-		var lines = String(text || '').split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
-		if (!lines.length) return;
-
-		var queue = lines.map(function (line) {
-			var parts = line.split(/[,\t;]+|\s{2,}|\s+(?=\d+$)/);
-			var qty = parseInt(parts[parts.length - 1], 10);
-			var code = parts.length > 1 && !isNaN(qty) ? parts.slice(0, -1).join(' ').trim() : line;
-			return { code: code, qty: !isNaN(qty) && parts.length > 1 ? qty : 1 };
-		});
-
-		var failed = [];
-		setBusy(true, 'در حال افزودن ' + money(queue.length) + ' ردیف…');
-
-		queue.reduce(function (chain, item) {
+		return chunks.reduce(function (chain, chunk) {
 			return chain.then(function () {
-				return request('GET', API.search + '?type=product&q=' + encodeURIComponent(item.code))
+				return request('GET', API.bulk + '?id=' + encodeURIComponent(chunk.join(',')))
 					.then(function (data) {
-						var list = ((data && (data.result || data.results || data.items)) || []).map(mapSearchItem);
-						if (!list.length) throw new Error(item.code);
-						var exact = list.filter(function (x) { return x.sku && String(x.sku) === item.code; })[0];
-						return addProductById((exact || list[0]).id, item.qty, item.code);
+						var list = (data && (data.result || data.results || data.items)) || data || [];
+						if (!Array.isArray(list)) list = [list];
+						list.map(mapProduct).forEach(applyProduct);
 					})
-					.catch(function () { failed.push(item.code); });
+					.catch(function () { /* hydration اختیاری است؛ صفحه بدون آن هم نمایش داده می‌شود */ });
 			});
-		}, Promise.resolve()).then(function () {
-			setBusy(false);
-			$('#qo-bulk-text').value = '';
-			toggleBulk(false);
-			if (failed.length) notify('پیدا نشد: ' + failed.join('، '), 'error');
-			else notify('همهٔ ردیف‌ها اضافه شدند.', 'success');
-		});
+		}, Promise.resolve());
 	}
 
-	/* ------------------------------------------------------ ثبت در سبد خرید */
+	function applyProduct(p) {
+		var row = rows.filter(function (r) { return String(r.id) === String(p.id); })[0];
+		if (!row || !p.variants.length) return;
 
-	function submitOrder() {
-		if (!state.rows.length || state.busy) return;
-		var pending = state.rows.slice();
-		var failed = [];
-		setBusy(true, 'در حال ثبت ' + money(pending.length) + ' ردیف در سبد…');
+		row.variants = p.variants;
+		var v = p.variants[0];
+		row.variantId = v.id;
+		row.price = v.price;
+		row.stock = v.stock;
+		row.max = v.max;
 
-		pending.reduce(function (chain, row) {
-			return chain.then(function () {
-				return request('POST', API.cart, { variant_id: row.variantId, quantity: row.quantity })
-					.then(function () { row.status = 'ok'; })
-					.catch(function (err) { row.status = 'error'; row.error = err.message; failed.push(row); })
-					.then(function () { renderSummary(); });
-			});
-		}, Promise.resolve()).then(function () {
-			setBusy(false);
-			render();
-			if (!failed.length) {
-				try { localStorage.removeItem(CONFIG.storageKey); } catch (e) {}
-				notify('سفارش در سبد ثبت شد. در حال انتقال…', 'success');
-				setTimeout(function () { window.location.href = CONFIG.redirectAfter; }, 700);
-			} else {
-				notify(money(failed.length) + ' ردیف ثبت نشد. ردیف‌های قرمز را بررسی کنید.', 'error');
-			}
-		});
-	}
-
-	/* ------------------------------------------------------------- رندر */
-
-	function totals() {
-		var count = 0, sum = 0, compare = 0;
-		state.rows.forEach(function (r) {
-			count += r.quantity;
-			sum += (Number(r.price) || 0) * r.quantity;
-			compare += (Number(r.comparePrice) || Number(r.price) || 0) * r.quantity;
-		});
-		return { lines: state.rows.length, count: count, sum: sum, saved: Math.max(0, compare - sum) };
-	}
-
-	function render() {
-		var body = $('#qo-rows');
-
-		if (!state.rows.length) {
-			body.innerHTML =
-				'<div class="qo-empty">' +
-					'<p class="qo-empty-title">هنوز کالایی اضافه نکرده‌اید</p>' +
-					'<p class="qo-empty-hint">کد کالا را اسکن کنید یا نام آن را در کادر بالا بنویسید.</p>' +
-				'</div>';
-			renderSummary();
-			return;
+		if (p.variants.length > 1) {
+			var wrap = $('.qo-variant-wrap', row.el);
+			wrap.hidden = false;
+			wrap.innerHTML = '<select class="form-control qo-variant" aria-label="انتخاب تنوع ' + row.title + '">' +
+				p.variants.map(function (x) {
+					return '<option value="' + x.id + '">' + (x.title || 'پیش‌فرض') + '</option>';
+				}).join('') + '</select>';
 		}
+		renderRow(row);
+	}
 
-		body.innerHTML = state.rows.map(function (r) {
-			var lineTotal = (Number(r.price) || 0) * r.quantity;
-			var lowStock = r.stock != null && r.stock > 0 && r.stock <= 5;
+	function syncCart() {
+		return request('GET', API.cart).then(function (data) {
+			var items = (data && (data.result || data.items)) || [];
+			if (!Array.isArray(items)) items = [];
+			items = items.map(mapCartItem);
 
-			var variantSelect = r.variants && r.variants.length > 1
-				? '<select class="form-control qo-variant" data-key="' + esc(r.key) + '" aria-label="انتخاب تنوع">' +
-					r.variants.map(function (v) {
-						return '<option value="' + esc(v.id) + '"' + (String(v.id) === String(r.variantId) ? ' selected' : '') + '>' +
-							esc(v.title || 'پیش‌فرض') + '</option>';
-					}).join('') + '</select>'
-				: (r.variantTitle ? '<span class="qo-variant-static">' + esc(r.variantTitle) + '</span>' : '');
+			rows.forEach(function (row) {
+				var hit = items.filter(function (it) {
+					return (row.variantId && String(it.variantId) === String(row.variantId)) ||
+					       (it.productId && String(it.productId) === String(row.id));
+				})[0];
+				row.cartItemId = hit ? hit.itemId : null;
+				row.quantity   = hit ? hit.quantity : 0;
+				renderRow(row);
+			});
 
-			return '' +
-			'<div class="qo-row' + (r.status === 'error' ? ' qo-row-error' : '') + (r.status === 'ok' ? ' qo-row-ok' : '') + '" data-key="' + esc(r.key) + '">' +
-				'<div class="qo-cell qo-cell-product">' +
-					(r.image ? '<img src="' + esc(r.image) + '?m=crop&w=96&h=96&q=high" class="qo-thumb" alt="" loading="lazy" decoding="async" width="96" height="96">' : '<span class="qo-thumb qo-thumb-empty"></span>') +
-					'<div class="qo-product-text">' +
-						(r.url ? '<a href="' + esc(r.url) + '" class="qo-title" target="_blank" rel="noopener">' + esc(r.title) + '</a>'
-						       : '<span class="qo-title">' + esc(r.title) + '</span>') +
-						(r.sku ? '<span class="qo-sku">کد: ' + esc(r.sku) + '</span>' : '') +
-						variantSelect +
-					'</div>' +
-				'</div>' +
-				'<div class="qo-cell qo-cell-price"><span class="qo-label">قیمت واحد</span><span class="qo-value">' + money(r.price) + '</span></div>' +
-				'<div class="qo-cell qo-cell-qty">' +
-					'<span class="qo-label">تعداد</span>' +
-					'<div class="qo-stepper">' +
-						'<button type="button" class="qo-step" data-act="dec" data-key="' + esc(r.key) + '" aria-label="کاهش تعداد">−</button>' +
-						'<input type="number" class="qo-qty" value="' + r.quantity + '" min="1"' + (r.stock ? ' max="' + r.stock + '"' : '') + ' data-key="' + esc(r.key) + '" aria-label="تعداد ' + esc(r.title) + '" inputmode="numeric">' +
-						'<button type="button" class="qo-step" data-act="inc" data-key="' + esc(r.key) + '" aria-label="افزایش تعداد">+</button>' +
-					'</div>' +
-					(lowStock ? '<span class="qo-stock-warn">تنها ' + money(r.stock) + ' عدد موجود</span>' : '') +
-				'</div>' +
-				'<div class="qo-cell qo-cell-total"><span class="qo-label">جمع ردیف</span><span class="qo-value qo-line-total">' + money(lineTotal) + '</span></div>' +
-				'<div class="qo-cell qo-cell-action">' +
-					'<button type="button" class="qo-remove" data-key="' + esc(r.key) + '" aria-label="حذف ' + esc(r.title) + '">حذف</button>' +
-					(r.status === 'error' ? '<span class="qo-row-msg">' + esc(r.error || 'ثبت نشد') + '</span>' : '') +
-				'</div>' +
-			'</div>';
-		}).join('');
+			readTotals(data);
+		}).catch(function () { /* مهمان یا سبد خالی */ });
+	}
 
+	function readTotals(data) {
+		var d = data || {};
+		cartTotal = Number(d.total || d.sum || (d.result && d.result.total) || 0);
+		cartCount = rows.reduce(function (n, r) { return n + r.quantity; }, 0);
+		if (!cartTotal) cartTotal = rows.reduce(function (n, r) { return n + r.price * r.quantity; }, 0);
 		renderSummary();
 	}
 
+	/* ------------------------------------------------------------ نمایش */
+
+	function renderRow(row) {
+		var addBtn  = $('.qo-add', row.el);
+		var stepper = $('.qo-stepper', row.el);
+		var qtyInput = $('.qo-qty', row.el);
+		var total = $('.qo-line-total', row.el);
+		var warn = $('.qo-stock-warn', row.el);
+
+		if (!addBtn || !stepper) return;
+
+		if (row.quantity > 0) {
+			addBtn.hidden = true;
+			stepper.hidden = false;
+			if (qtyInput && document.activeElement !== qtyInput) qtyInput.value = row.quantity;
+			total.textContent = row.price ? money(row.price * row.quantity) : '—';
+			row.el.classList.add('qo-row-active');
+		} else {
+			addBtn.hidden = false;
+			stepper.hidden = true;
+			total.textContent = '—';
+			row.el.classList.remove('qo-row-active');
+		}
+
+		if (warn) {
+			if (row.stock != null && row.stock > 0 && row.stock <= 5) {
+				warn.hidden = false;
+				warn.textContent = 'تنها ' + money(row.stock) + ' عدد موجود';
+			} else warn.hidden = true;
+		}
+	}
+
 	function renderSummary() {
-		var t = totals();
-		$('#qo-sum-lines').textContent = money(t.lines);
-		$('#qo-sum-count').textContent = money(t.count);
-		$('#qo-sum-total').textContent = money(t.sum);
-		var savedEl = $('#qo-sum-saved-wrap');
-		if (t.saved > 0) { savedEl.hidden = false; $('#qo-sum-saved').textContent = money(t.saved); }
-		else savedEl.hidden = true;
-		$('#qo-submit').disabled = !t.lines || state.busy;
-		$('#qo-clear').disabled = !t.lines || state.busy;
-	}
-
-	function renderResults() {
-		var box = $('#qo-results');
-		if (!state.results.length) { box.hidden = true; box.innerHTML = ''; return; }
-		box.hidden = false;
-		box.innerHTML = state.results.map(function (item, i) {
-			return '<button type="button" class="qo-result' + (i === state.activeResult ? ' active' : '') + '" data-id="' + esc(item.id) + '" role="option">' +
-				(item.image ? '<img src="' + esc(item.image) + '?m=crop&w=64&h=64&q=high" alt="" width="32" height="32" loading="lazy">' : '') +
-				'<span class="qo-result-title">' + esc(item.title) + '</span>' +
-				(item.sku ? '<span class="qo-result-sku">' + esc(item.sku) + '</span>' : '') +
-			'</button>';
-		}).join('');
-	}
-
-	function flash(key) {
-		var el = root.querySelector('.qo-row[data-key="' + key + '"]');
-		if (!el) return;
-		el.classList.add('qo-row-flash');
-		setTimeout(function () { el.classList.remove('qo-row-flash'); }, 700);
+		$('#qo-sum-count').textContent = money(cartCount);
+		$('#qo-sum-total').textContent = money(cartTotal);
+		root.classList.toggle('qo-has-items', cartCount > 0);
 	}
 
 	function notify(message, kind) {
@@ -421,113 +222,175 @@
 		el.className = 'qo-notice qo-notice-' + (kind || 'info');
 		el.hidden = false;
 		clearTimeout(notify.timer);
-		notify.timer = setTimeout(function () { el.hidden = true; }, 5000);
+		notify.timer = setTimeout(function () { el.hidden = true; }, 4500);
 	}
 
-	function setBusy(busy, message) {
-		state.busy = busy;
-		root.classList.toggle('qo-busy', busy);
-		var bar = $('#qo-progress');
-		bar.hidden = !busy;
-		if (message) bar.textContent = message;
+	/* --------------------------------------------------- نوشتن در سبد واقعی */
+
+	var timers = {};
+
+	function pushQuantity(row) {
+		clearTimeout(timers[row.id]);
+		timers[row.id] = setTimeout(function () {
+			row.el.classList.add('qo-row-busy');
+
+			var done = function (data) {
+				row.el.classList.remove('qo-row-busy');
+				readTotals(data);
+			};
+			var fail = function (err) {
+				row.el.classList.remove('qo-row-busy');
+				if (err && err.auth) { openDialog('#qo-auth'); row.quantity = 0; renderRow(row); return; }
+				notify(err.message || 'ثبت تغییر ناموفق بود.', 'error');
+				syncCart();
+			};
+
+			if (row.quantity <= 0 && row.cartItemId) {
+				request('DELETE', API.cart + '/' + row.cartItemId).then(function (d) {
+					row.cartItemId = null; done(d);
+				}).catch(fail);
+			} else if (row.cartItemId) {
+				request('PUT', API.cart + '/' + row.cartItemId, { quantity: row.quantity }).then(done).catch(fail);
+			} else if (row.quantity > 0) {
+				request('POST', API.cart, { variant_id: row.variantId, quantity: row.quantity })
+					.then(function (d) {
+						var item = (d && (d.result || d.item)) || {};
+						if (item.id) row.cartItemId = item.id;
+						done(d);
+						if (!row.cartItemId) syncCart();   // شناسهٔ ردیف را از سبد بگیر
+					}).catch(fail);
+			}
+		}, CONFIG.debounce);
+	}
+
+	function setQuantity(row, value) {
+		var q = parseInt(value, 10);
+		if (isNaN(q) || q < 0) q = 0;
+
+		var cap = row.max != null && row.max > 0 ? row.max : (row.stock != null && row.stock > 0 ? row.stock : null);
+		if (cap != null && q > cap) {
+			q = cap;
+			notify('حداکثر تعداد مجاز ' + money(cap) + ' عدد است.', 'warn');
+		}
+
+		row.quantity = q;
+		cartCount = rows.reduce(function (n, r) { return n + r.quantity; }, 0);
+		cartTotal = rows.reduce(function (n, r) { return n + r.price * r.quantity; }, 0);
+		renderRow(row);
 		renderSummary();
+		pushQuantity(row);
 	}
 
-	function toggleBulk(show) {
-		var panel = $('#qo-bulk');
-		panel.hidden = show === false ? true : (show === true ? false : !panel.hidden);
-		if (!panel.hidden) $('#qo-bulk-text').focus();
+	/* ------------------------------------------------- جست‌وجو / مرتب‌سازی */
+
+	function applyView() {
+		var query = ($('#qo-search').value || '').trim().toLowerCase();
+		var onlyAvailable = $('#qo-available').checked;
+		var sort = $('#qo-sort').value;
+		var visible = 0;
+
+		rows.forEach(function (row) {
+			var match = !query || row.title.toLowerCase().indexOf(query) > -1;
+			if (onlyAvailable && row.outofstock) match = false;
+			row.el.hidden = !match;
+			if (match) visible++;
+		});
+
+		if (sort !== 'default') {
+			var container = $('#qo-rows');
+			var sorted = rows.slice().sort(function (a, b) {
+				if (sort === 'price-asc')  return (a.price || Infinity) - (b.price || Infinity);
+				if (sort === 'price-desc') return (b.price || 0) - (a.price || 0);
+				return a.title.localeCompare(b.title, 'fa');
+			});
+			sorted.forEach(function (r) { container.appendChild(r.el); });
+		}
+
+		$('#qo-empty').hidden = visible > 0;
 	}
+
+	function resetView() {
+		$('#qo-search').value = '';
+		$('#qo-available').checked = false;
+		$('#qo-sort').value = 'default';
+		applyView();
+	}
+
+	/* ---------------------------------------------------------- گفت‌وگوها */
+
+	var pendingRemoval = null;
+
+	function openDialog(sel) { $(sel).hidden = false; document.body.classList.add('qo-dialog-open'); }
+	function closeDialog(sel) { $(sel).hidden = true; document.body.classList.remove('qo-dialog-open'); }
 
 	/* ------------------------------------------------------------ رویدادها */
 
 	root.addEventListener('click', function (e) {
-		var t = e.target.closest('button');
-		if (!t) return;
+		var btn = e.target.closest('button, a');
+		if (!btn) return;
+		var rowEl = e.target.closest('.qo-row');
+		var row = rowEl ? rows.filter(function (r) { return r.el === rowEl; })[0] : null;
 
-		if (t.classList.contains('qo-step')) {
-			var row = state.rows.filter(function (r) { return r.key === t.dataset.key; })[0];
-			if (row) setQuantity(row, row.quantity + (t.dataset.act === 'inc' ? 1 : -1));
-		} else if (t.classList.contains('qo-remove')) {
-			removeRow(t.dataset.key);
-		} else if (t.classList.contains('qo-result')) {
-			addProductById(t.dataset.id, 1).catch(function (err) { notify(err.message, 'error'); });
-			$('#qo-search').value = '';
-			state.results = []; renderResults();
-			$('#qo-code').focus();
-		} else if (t.id === 'qo-submit') {
-			submitOrder();
-		} else if (t.id === 'qo-clear') {
-			if (confirm('همهٔ ردیف‌های این سفارش پاک شود؟')) { state.rows = []; render(); save(); }
-		} else if (t.id === 'qo-bulk-toggle') {
-			toggleBulk();
-		} else if (t.id === 'qo-bulk-submit') {
-			bulkAdd($('#qo-bulk-text').value);
-		} else if (t.id === 'qo-bulk-cancel') {
-			toggleBulk(false);
-		}
-	});
-
-	root.addEventListener('input', function (e) {
-		if (e.target.id === 'qo-search') runSearch(e.target.value);
-		else if (e.target.classList.contains('qo-qty')) {
-			var row = state.rows.filter(function (r) { return r.key === e.target.dataset.key; })[0];
-			if (row) { row.quantity = Math.max(1, parseInt(e.target.value, 10) || 1); save(); renderSummary(); }
+		if (btn.classList.contains('qo-add') && row) {
+			if (isGuest) { openDialog('#qo-auth'); return; }
+			if (!row.variantId) { notify('اطلاعات این کالا هنوز بارگذاری نشده؛ چند لحظه بعد دوباره تلاش کنید.', 'warn'); return; }
+			setQuantity(row, 1);
+		} else if (btn.classList.contains('qo-step') && row) {
+			var next = row.quantity + (btn.dataset.act === 'inc' ? 1 : -1);
+			if (next <= 0) { pendingRemoval = row; openDialog('#qo-confirm'); return; }
+			setQuantity(row, next);
+		} else if (btn.id === 'qo-confirm-yes') {
+			closeDialog('#qo-confirm');
+			if (pendingRemoval) { setQuantity(pendingRemoval, 0); pendingRemoval = null; }
+		} else if (btn.id === 'qo-confirm-no') {
+			closeDialog('#qo-confirm'); pendingRemoval = null;
+		} else if (btn.id === 'qo-auth-close') {
+			closeDialog('#qo-auth');
+		} else if (btn.id === 'qo-reset') {
+			resetView();
 		}
 	});
 
 	root.addEventListener('change', function (e) {
-		if (e.target.classList.contains('qo-variant')) {
-			var row = state.rows.filter(function (r) { return r.key === e.target.dataset.key; })[0];
-			if (row) switchVariant(row, e.target.value);
+		if (e.target.id === 'qo-sort' || e.target.id === 'qo-available') applyView();
+		else if (e.target.classList.contains('qo-variant')) {
+			var rowEl = e.target.closest('.qo-row');
+			var row = rows.filter(function (r) { return r.el === rowEl; })[0];
+			if (!row) return;
+			var v = row.variants.filter(function (x) { return String(x.id) === e.target.value; })[0];
+			if (!v) return;
+			if (row.quantity > 0) setQuantity(row, 0);   // تنوع قبلی از سبد برداشته شود
+			row.variantId = v.id; row.price = v.price; row.stock = v.stock; row.max = v.max;
+			row.cartItemId = null;
+			renderRow(row);
 		} else if (e.target.classList.contains('qo-qty')) {
-			var r2 = state.rows.filter(function (r) { return r.key === e.target.dataset.key; })[0];
-			if (r2) setQuantity(r2, e.target.value);
+			var el = e.target.closest('.qo-row');
+			var r = rows.filter(function (x) { return x.el === el; })[0];
+			if (r) setQuantity(r, e.target.value);
 		}
 	});
 
-	root.addEventListener('keydown', function (e) {
-		if (e.target.id === 'qo-code' && e.key === 'Enter') {
-			e.preventDefault();
-			submitCode(e.target.value);
-			return;
-		}
+	var searchTimer;
+	root.addEventListener('input', function (e) {
 		if (e.target.id === 'qo-search') {
-			if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-				e.preventDefault();
-				if (!state.results.length) return;
-				state.activeResult += (e.key === 'ArrowDown' ? 1 : -1);
-				if (state.activeResult < 0) state.activeResult = state.results.length - 1;
-				if (state.activeResult >= state.results.length) state.activeResult = 0;
-				renderResults();
-			} else if (e.key === 'Enter') {
-				e.preventDefault();
-				var pick = state.results[state.activeResult < 0 ? 0 : state.activeResult];
-				if (pick) {
-					addProductById(pick.id, 1).catch(function (err) { notify(err.message, 'error'); });
-					e.target.value = '';
-					state.results = []; renderResults();
-				}
-			} else if (e.key === 'Escape') {
-				state.results = []; renderResults();
-			}
+			clearTimeout(searchTimer);
+			searchTimer = setTimeout(applyView, 180);
+		} else if (e.target.classList.contains('qo-qty')) {
+			var el = e.target.closest('.qo-row');
+			var r = rows.filter(function (x) { return x.el === el; })[0];
+			if (r && e.target.value !== '') setQuantity(r, e.target.value);
 		}
 	});
 
-	/* بستن فهرست پیشنهادها با کلیک بیرون */
-	document.addEventListener('click', function (e) {
-		if (!e.target.closest('.qo-finder')) { state.results = []; renderResults(); }
+	document.addEventListener('keydown', function (e) {
+		if (e.key !== 'Escape') return;
+		if (!$('#qo-confirm').hidden) { closeDialog('#qo-confirm'); pendingRemoval = null; }
+		if (!$('#qo-auth').hidden) closeDialog('#qo-auth');
 	});
 
-	/* هشدار خروج با سفارش نیمه‌کاره */
-	window.addEventListener('beforeunload', function (e) {
-		if (state.rows.length && !state.busy) { e.preventDefault(); e.returnValue = ''; }
-	});
+	window.QuickOrder = { debug: false, rows: rows, sync: syncCart };
 
-	window.QuickOrder = { debug: false, state: state };
-
-	restore();
-	render();
-	var code = $('#qo-code');
-	if (code && window.matchMedia('(min-width: 768px)').matches) code.focus();
+	collectRows();
+	renderSummary();
+	hydrate().then(syncCart);
 })();
