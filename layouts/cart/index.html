@@ -37,14 +37,15 @@
 															</button>
 														</div>
 														<div class="input-group-prepend" ng-if="item.quantity > 1">
-															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity-1;update(item)" style="cursor: pointer" ng-disabled="item.progress">
+															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity-1;update(item)" style="cursor: pointer" ng-disabled="item.progress" aria-label="کاهش تعداد">
 																<i class="fa fa-fw fa-minus" ng-hide="item.progress"></i>
 																<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
 															</button>
 														</div>
-														<input type="number" name="quantity" class="form-control cart-item-quantity-input text-center" min="1" max="{{item.product.variant.max}}" ng-model="item.quantity" ng-model-options="{debounce: 1000}" ng-change="update(item)" ng-disabled="progress" required>
+														<label for="cart-item-quantity-{{item.id}}" class="sr-only">تعداد</label>
+														<input type="number" id="cart-item-quantity-{{item.id}}" name="quantity" class="form-control cart-item-quantity-input text-center" min="1" max="{{item.product.variant.max}}" ng-model="item.quantity" ng-model-options="{debounce: 1000}" ng-change="update(item)" ng-disabled="progress" required>
 														<div class="input-group-append">
-															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity+1;update(item)" style="cursor: pointer" ng-disabled="item.progress">
+															<button type="button" class="input-group-text px-1 px-sm-2" ng-click="item.quantity = item.quantity+1;update(item)" style="cursor: pointer" ng-disabled="item.progress" aria-label="افزایش تعداد">
 																<i class="fa fa-fw fa-plus" ng-hide="item.progress"></i>
 																<i class="fa fa-fw fa-refresh fa-spin" ng-show="item.progress"></i>
 															</button>
