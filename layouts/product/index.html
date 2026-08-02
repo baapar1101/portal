@@ -598,6 +598,49 @@
 </main>
 <!--/main-->
 
+<!-- schema -->
+<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Product",
+		"name": "@@title"
+		<if terms="@@image.exists()">
+		, "image": "@@image?m=thumb&w=1200&h=1200&q=veryhigh"
+		</if>
+		<if terms="@@metadescription.exists()">
+		, "description": "@@metadescription"
+		</if>
+		<if terms="@@sku.exists()">
+		, "sku": "@@sku"
+		</if>
+		<if terms="@@category.exists()">
+		, "category": "@@category.title"
+		</if>
+		<if terms="@@filters.any()">
+			<loop src="@@filters">
+				<if terms='@@parentid.equal("id of brand filter")'>
+		, "brand": { "@type": "Brand", "name": "@@title" }
+				</if>
+			</loop>
+		</if>
+		<if terms="@@price.exists">
+		, "offers": {
+			"@type": "Offer",
+			"url": "@@canonicalurl",
+			"price": "@@price.number",
+			"priceCurrency": "IRR",
+			<if terms="@@outofstock">
+			"availability": "https://schema.org/OutOfStock",
+			</if>
+			<if terms="@@outofstock.false()">
+			"availability": "https://schema.org/InStock",
+			</if>
+			"seller": { "@type": "Organization", "name": "@@config.title" }
+		}
+		</if>
+	}
+</script>
+
 <if terms="@@inquiry.false()">
 	<include name="layouts/product/partials/addtocart.html" />
 </if>
